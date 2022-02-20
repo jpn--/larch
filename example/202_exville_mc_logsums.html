@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>202: Exampville Mode Choice Logsums &#8212; v5.5.10</title>
+    <title>202: Exampville Mode Choice Logsums &#8212; PRE-RELEASE DEV DOCS</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -88,7 +88,7 @@
       <img src="../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.5.10</h1>
+      <h1 class="site-logo" id="site-title">PRE-RELEASE DEV DOCS</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -189,6 +189,31 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../api/generated/larch.Dataset.construct.html">
        larch.Dataset.construct
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_table.html">
+       larch.Dataset.from_table
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_omx.html">
+       larch.Dataset.from_omx
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_omx_3d.html">
+       larch.Dataset.from_omx_3d
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_zarr.html">
+       larch.Dataset.from_zarr
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_named_objects.html">
+       larch.Dataset.from_named_objects
       </a>
      </li>
      <li class="toctree-l3">
@@ -319,6 +344,21 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.root_node_name.html">
+       larch.DataTree.root_node_name
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.subspaces.html">
+       larch.DataTree.subspaces
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.relationships_are_digitized.html">
+       larch.DataTree.relationships_are_digitized
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/generated/larch.DataTree.n_cases.html">
        larch.DataTree.n_cases
       </a>
@@ -339,8 +379,28 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.add_dataset.html">
+       larch.DataTree.add_dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.add_relationship.html">
+       larch.DataTree.add_relationship
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.digitize_relationships.html">
+       larch.DataTree.digitize_relationships
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/generated/larch.DataTree.query_cases.html">
        larch.DataTree.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.replace_datasets.html">
+       larch.DataTree.replace_datasets
       </a>
      </li>
      <li class="toctree-l3">
@@ -1408,7 +1468,7 @@ example, where we will estimate a destination choice model.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">lx</span><span class="o">.</span><span class="n">DataArray</span><span class="o">.</span><span class="n">from_zarr</span><span class="p">(</span><span class="s1">&#39;/tmp/logsums.zarr.zip&#39;</span><span class="p">)</span>
 
@@ -1446,10 +1506,7 @@ example, where we will estimate a destination choice model.</p>
 <span class="g g-Whitespace">    </span><span class="mi">783</span> <span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">784</span> <span class="k">return</span> <span class="n">ds</span>
 
-<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xarray/backends/api.py:481,</span> in <span class="ni">open_dataset</span><span class="nt">(filename_or_obj, engine, chunks, cache, decode_cf, mask_and_scale, decode_times, decode_timedelta, use_cftime, concat_characters, decode_coords, drop_variables, backend_kwargs, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">478</span> <span class="k">if</span> <span class="n">engine</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">479</span>     <span class="n">engine</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">guess_engine</span><span class="p">(</span><span class="n">filename_or_obj</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">481</span> <span class="n">backend</span> <span class="o">=</span> <span class="n">plugins</span><span class="o">.</span><span class="n">get_backend</span><span class="p">(</span><span class="n">engine</span><span class="p">)</span>
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xarray/backends/api.py:495,</span> in <span class="ni">open_dataset</span><span class="nt">(filename_or_obj, engine, chunks, cache, decode_cf, mask_and_scale, decode_times, decode_timedelta, use_cftime, concat_characters, decode_coords, drop_variables, backend_kwargs, *args, **kwargs)</span>
 <span class="g g-Whitespace">    </span><span class="mi">483</span> <span class="n">decoders</span> <span class="o">=</span> <span class="n">_resolve_decoders_kwargs</span><span class="p">(</span>
 <span class="g g-Whitespace">    </span><span class="mi">484</span>     <span class="n">decode_cf</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">485</span>     <span class="n">open_backend_dataset_parameters</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">open_dataset_parameters</span><span class="p">,</span>
@@ -1457,17 +1514,83 @@ example, where we will estimate a destination choice model.</p>
 <span class="g g-Whitespace">    </span><span class="mi">491</span>     <span class="n">decode_coords</span><span class="o">=</span><span class="n">decode_coords</span><span class="p">,</span>
 <span class="g g-Whitespace">    </span><span class="mi">492</span> <span class="p">)</span>
 <span class="g g-Whitespace">    </span><span class="mi">494</span> <span class="n">overwrite_encoded_chunks</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;overwrite_encoded_chunks&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">495</span> <span class="n">backend_ds</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">496</span>     <span class="n">filename_or_obj</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">497</span>     <span class="n">drop_variables</span><span class="o">=</span><span class="n">drop_variables</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">498</span>     <span class="o">**</span><span class="n">decoders</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">499</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">500</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">501</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">_dataset_from_backend_dataset</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">502</span>     <span class="n">backend_ds</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">503</span>     <span class="n">filename_or_obj</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">510</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">511</span> <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">512</span> <span class="k">return</span> <span class="n">ds</span>
 
-<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xarray/backends/plugins.py:163,</span> in <span class="ni">get_backend</span><span class="nt">(engine)</span>
-<span class="g g-Whitespace">    </span><span class="mi">161</span>     <span class="n">engines</span> <span class="o">=</span> <span class="n">list_engines</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">162</span>     <span class="k">if</span> <span class="n">engine</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">engines</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">163</span>         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">164</span>             <span class="sa">f</span><span class="s2">&quot;unrecognized engine </span><span class="si">{</span><span class="n">engine</span><span class="si">}</span><span class="s2"> must be one of: </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">engines</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">165</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">166</span>     <span class="n">backend</span> <span class="o">=</span> <span class="n">engines</span><span class="p">[</span><span class="n">engine</span><span class="p">]</span>
-<span class="g g-Whitespace">    </span><span class="mi">167</span> <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="nb">type</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">engine</span><span class="p">,</span> <span class="n">BackendEntrypoint</span><span class="p">):</span>
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xarray/backends/zarr.py:817,</span> in <span class="ni">ZarrBackendEntrypoint.open_dataset</span><span class="nt">(self, filename_or_obj, mask_and_scale, decode_times, concat_characters, decode_coords, drop_variables, use_cftime, decode_timedelta, group, mode, synchronizer, consolidated, chunk_store, storage_options, stacklevel)</span>
+<span class="g g-Whitespace">    </span><span class="mi">797</span> <span class="k">def</span> <span class="nf">open_dataset</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">798</span>     <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">799</span>     <span class="n">filename_or_obj</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">813</span>     <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">814</span> <span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">816</span>     <span class="n">filename_or_obj</span> <span class="o">=</span> <span class="n">_normalize_path</span><span class="p">(</span><span class="n">filename_or_obj</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">817</span>     <span class="n">store</span> <span class="o">=</span> <span class="n">ZarrStore</span><span class="o">.</span><span class="n">open_group</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">818</span>         <span class="n">filename_or_obj</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">819</span>         <span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">820</span>         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">821</span>         <span class="n">synchronizer</span><span class="o">=</span><span class="n">synchronizer</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">822</span>         <span class="n">consolidated</span><span class="o">=</span><span class="n">consolidated</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">823</span>         <span class="n">consolidate_on_close</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">824</span>         <span class="n">chunk_store</span><span class="o">=</span><span class="n">chunk_store</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">825</span>         <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">826</span>         <span class="n">stacklevel</span><span class="o">=</span><span class="n">stacklevel</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">827</span>     <span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">829</span>     <span class="n">store_entrypoint</span> <span class="o">=</span> <span class="n">StoreBackendEntrypoint</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">830</span>     <span class="k">with</span> <span class="n">close_on_error</span><span class="p">(</span><span class="n">store</span><span class="p">):</span>
 
-<span class="ne">ValueError</span>: unrecognized engine zarr must be one of: [&#39;scipy&#39;, &#39;store&#39;]
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xarray/backends/zarr.py:365,</span> in <span class="ni">ZarrStore.open_group</span><span class="nt">(cls, store, mode, synchronizer, group, consolidated, consolidate_on_close, chunk_store, storage_options, append_dim, write_region, safe_chunks, stacklevel)</span>
+<span class="g g-Whitespace">    </span><span class="mi">363</span> <span class="k">if</span> <span class="n">consolidated</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">364</span>     <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">365</span>         <span class="n">zarr_group</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open_consolidated</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="o">**</span><span class="n">open_kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">366</span>     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">367</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">368</span>             <span class="s2">&quot;Failed to open Zarr store with consolidated metadata, &quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">369</span>             <span class="s2">&quot;falling back to try reading non-consolidated metadata. &quot;</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">380</span>             <span class="n">stacklevel</span><span class="o">=</span><span class="n">stacklevel</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">381</span>         <span class="p">)</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/zarr/convenience.py:1182,</span> in <span class="ni">open_consolidated</span><span class="nt">(store, metadata_key, mode, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1179</span> <span class="kn">from</span> <span class="nn">.storage</span> <span class="kn">import</span> <span class="n">ConsolidatedMetadataStore</span>
+<span class="g g-Whitespace">   </span><span class="mi">1181</span> <span class="c1"># normalize parameters</span>
+<span class="ne">-&gt; </span><span class="mi">1182</span> <span class="n">store</span> <span class="o">=</span> <span class="n">normalize_store_arg</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storage_options&quot;</span><span class="p">))</span>
+<span class="g g-Whitespace">   </span><span class="mi">1183</span> <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;r+&#39;</span><span class="p">}:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1184</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid mode, expected either &#39;r&#39; or &#39;r+&#39;; found </span><span class="si">{!r}</span><span class="s2">&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">1185</span>                      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/zarr/storage.py:119,</span> in <span class="ni">normalize_store_arg</span><span class="nt">(store, clobber, storage_options, mode)</span>
+<span class="g g-Whitespace">    </span><span class="mi">117</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;storage_options passed with non-fsspec path&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">118</span> <span class="k">if</span> <span class="n">store</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.zip&#39;</span><span class="p">):</span>
+<span class="ne">--&gt; </span><span class="mi">119</span>     <span class="k">return</span> <span class="n">ZipStore</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">120</span> <span class="k">elif</span> <span class="n">store</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.n5&#39;</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">121</span>     <span class="kn">from</span> <span class="nn">zarr.n5</span> <span class="kn">import</span> <span class="n">N5Store</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/zarr/storage.py:1507,</span> in <span class="ni">ZipStore.__init__</span><span class="nt">(self, path, compression, allowZip64, mode, dimension_separator)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1504</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutex</span> <span class="o">=</span> <span class="n">RLock</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1506</span> <span class="c1"># open zip file</span>
+<span class="ne">-&gt; </span><span class="mi">1507</span> <span class="bp">self</span><span class="o">.</span><span class="n">zf</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="n">compression</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1508</span>                           <span class="n">allowZip64</span><span class="o">=</span><span class="n">allowZip64</span><span class="p">)</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/zipfile.py:1239,</span> in <span class="ni">ZipFile.__init__</span><span class="nt">(self, file, mode, compression, allowZip64, compresslevel, strict_timestamps)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1237</span> <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1238</span>     <span class="k">try</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1239</span>         <span class="bp">self</span><span class="o">.</span><span class="n">fp</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">filemode</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1240</span>     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1241</span>         <span class="k">if</span> <span class="n">filemode</span> <span class="ow">in</span> <span class="n">modeDict</span><span class="p">:</span>
+
+<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/tmp/logsums.zarr.zip&#39;
 </pre></div>
 </div>
 </div>

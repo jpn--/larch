@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>107: Latent Class Models &#8212; v5.5.10</title>
+    <title>107: Latent Class Models &#8212; PRE-RELEASE DEV DOCS</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -88,7 +88,7 @@
       <img src="../../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.5.10</h1>
+      <h1 class="site-logo" id="site-title">PRE-RELEASE DEV DOCS</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -189,6 +189,31 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../../api/generated/larch.Dataset.construct.html">
        larch.Dataset.construct
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.Dataset.from_table.html">
+       larch.Dataset.from_table
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.Dataset.from_omx.html">
+       larch.Dataset.from_omx
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.Dataset.from_omx_3d.html">
+       larch.Dataset.from_omx_3d
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.Dataset.from_zarr.html">
+       larch.Dataset.from_zarr
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.Dataset.from_named_objects.html">
+       larch.Dataset.from_named_objects
       </a>
      </li>
      <li class="toctree-l3">
@@ -319,6 +344,21 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.DataTree.root_node_name.html">
+       larch.DataTree.root_node_name
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.DataTree.subspaces.html">
+       larch.DataTree.subspaces
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.DataTree.relationships_are_digitized.html">
+       larch.DataTree.relationships_are_digitized
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../../api/generated/larch.DataTree.n_cases.html">
        larch.DataTree.n_cases
       </a>
@@ -339,8 +379,28 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.DataTree.add_dataset.html">
+       larch.DataTree.add_dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.DataTree.add_relationship.html">
+       larch.DataTree.add_relationship
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.DataTree.digitize_relationships.html">
+       larch.DataTree.digitize_relationships
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../../api/generated/larch.DataTree.query_cases.html">
        larch.DataTree.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../../api/generated/larch.DataTree.replace_datasets.html">
+       larch.DataTree.replace_datasets
       </a>
      </li>
      <li class="toctree-l3">
@@ -1234,12 +1294,6 @@ from Biogeme.</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/larch/larch/larch/dataset.py:36: UserWarning: larch.dataset requires the sharrow library
-  warnings.warn(&quot;larch.dataset requires the sharrow library&quot;)
-</pre></div>
-</div>
-</div>
 </div>
 <p>The swissmetro dataset used in this example is conveniently bundled with Larch,
 accessible using the <code class="docutils literal notranslate"><span class="pre">data_warehouse</span></code> module.  We’ll load this file using
@@ -1757,7 +1811,7 @@ in Jupyter, a live-view report of the parmeters and log likelihood is displayed.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><h3>Iteration 056 [Optimization terminated successfully.] </h3></div><div class="output text_html"><p>Best LL = -5208.498065961453</p></div><div class="output text_html"><div>
+<div class="output text_html"><h3>Iteration 056 [Optimization terminated successfully.] </h3></div><div class="output text_html"><p>Best LL = -5208.498065961455</p></div><div class="output text_html"><div>
 <style scoped>
     .dataframe tbody tr th:only-of-type {
         vertical-align: middle;
@@ -1856,7 +1910,7 @@ in Jupyter, a live-view report of the parmeters and log likelihood is displayed.
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div><table style="margin-top:1px;"><tr><th>key</th><th style="text-align:left;">value</th></tr><tr><td>loglike</td><td style="text-align:left;">-5208.498065961453</td></tr><tr><td>x</td><td style="text-align:left;"><table border="1" class="dataframe">
+<div class="output text_html"><div><table style="margin-top:1px;"><tr><th>key</th><th style="text-align:left;">value</th></tr><tr><td>loglike</td><td style="text-align:left;">-5208.498065961455</td></tr><tr><td>x</td><td style="text-align:left;"><table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
       <th></th>
@@ -1885,10 +1939,10 @@ in Jupyter, a live-view report of the parmeters and log likelihood is displayed.
       <td>1.094291</td>
     </tr>
   </tbody>
-</table></td></tr><tr><td>tolerance</td><td style="text-align:left;">8.736059377236486e-06</td></tr><tr><td>steps</td><td style="text-align:left;"><pre>array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
+</table></td></tr><tr><td>tolerance</td><td style="text-align:left;">8.736059377245034e-06</td></tr><tr><td>steps</td><td style="text-align:left;"><pre>array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
        1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1., 1.,
-       1., 1., 1., 1., 1.])</pre></td></tr><tr><td>message</td><td style="text-align:left;">'Optimization terminated successfully.'</td></tr><tr><td>elapsed_time</td><td style="text-align:left;">0:00:04.838005</td></tr><tr><td>method</td><td style="text-align:left;">'bhhh'</td></tr><tr><td>n_cases</td><td style="text-align:left;">6768</td></tr><tr><td>iteration_number</td><td style="text-align:left;">56</td></tr><tr><td>logloss</td><td style="text-align:left;">0.769577137405652</td></tr></table></div></div></div>
+       1., 1., 1., 1., 1.])</pre></td></tr><tr><td>message</td><td style="text-align:left;">'Optimization terminated successfully.'</td></tr><tr><td>elapsed_time</td><td style="text-align:left;">0:00:05.299587</td></tr><tr><td>method</td><td style="text-align:left;">'bhhh'</td></tr><tr><td>n_cases</td><td style="text-align:left;">6768</td></tr><tr><td>iteration_number</td><td style="text-align:left;">56</td></tr><tr><td>logloss</td><td style="text-align:left;">0.7695771374056523</td></tr></table></div></div></div>
 </div>
 <p>To complete our analysis, we can compute the log likelihood at “null” parameters.</p>
 <div class="cell docutils container">
@@ -2185,9 +2239,9 @@ headings, two hashes for lower levels, etc.)</p>
       <td></td>
       <td>-2.797798</td>
       <td>0.175613</td>
-      <td>-15.931613</td>
+      <td>-15.931615</td>
       <td>0.343313</td>
-      <td>-8.149404</td>
+      <td>-8.149406</td>
     </tr>
     <tr>
       <th>W_OTHER</th>
@@ -2200,9 +2254,9 @@ headings, two hashes for lower levels, etc.)</p>
       <td></td>
       <td>1.094291</td>
       <td>0.116461</td>
-      <td>9.396198</td>
-      <td>0.231431</td>
-      <td>4.728378</td>
+      <td>9.396204</td>
+      <td>0.231430</td>
+      <td>4.728384</td>
     </tr>
   </tbody>
 </table>

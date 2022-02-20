@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>101: Swissmetro MNL Mode Choice &#8212; v5.5.10</title>
+    <title>101: Swissmetro MNL Mode Choice &#8212; PRE-RELEASE DEV DOCS</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -88,7 +88,7 @@
       <img src="../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.5.10</h1>
+      <h1 class="site-logo" id="site-title">PRE-RELEASE DEV DOCS</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -189,6 +189,31 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../api/generated/larch.Dataset.construct.html">
        larch.Dataset.construct
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_table.html">
+       larch.Dataset.from_table
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_omx.html">
+       larch.Dataset.from_omx
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_omx_3d.html">
+       larch.Dataset.from_omx_3d
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_zarr.html">
+       larch.Dataset.from_zarr
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_named_objects.html">
+       larch.Dataset.from_named_objects
       </a>
      </li>
      <li class="toctree-l3">
@@ -319,6 +344,21 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.root_node_name.html">
+       larch.DataTree.root_node_name
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.subspaces.html">
+       larch.DataTree.subspaces
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.relationships_are_digitized.html">
+       larch.DataTree.relationships_are_digitized
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/generated/larch.DataTree.n_cases.html">
        larch.DataTree.n_cases
       </a>
@@ -339,8 +379,28 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.add_dataset.html">
+       larch.DataTree.add_dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.add_relationship.html">
+       larch.DataTree.add_relationship
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.digitize_relationships.html">
+       larch.DataTree.digitize_relationships
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/generated/larch.DataTree.query_cases.html">
        larch.DataTree.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.replace_datasets.html">
+       larch.DataTree.replace_datasets
       </a>
      </li>
      <li class="toctree-l3">
@@ -1881,7 +1941,7 @@ dl.xr-attrs {
   stroke: currentColor;
   fill: currentColor;
 }
-</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
+</style><pre class='xr-text-repr-fallback'>&lt;larch.Dataset&gt;
 Dimensions:    (CASEID: 6768, _altid_: 3)
 Coordinates:
   * CASEID     (CASEID) int64 0 1 2 3 4 5 6 ... 8445 8446 8447 8448 8449 8450
@@ -1903,7 +1963,7 @@ Data variables: (12/28)
     CHOICE     (CASEID) int64 2 2 2 2 2 2 2 1 2 2 2 2 ... 2 2 1 1 1 1 1 1 1 1 1
 Attributes:
     _caseid_:  CASEID
-    _altid_:   _altid_</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-b9c529e9-b779-4f20-8d9a-36a04078747c' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-b9c529e9-b779-4f20-8d9a-36a04078747c' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>CASEID</span>: 6768</li><li><span class='xr-has-index'>_altid_</span>: 3</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-0fc6f77a-41b8-4898-9d7d-19b34188db6c' class='xr-section-summary-in' type='checkbox'  checked><label for='section-0fc6f77a-41b8-4898-9d7d-19b34188db6c' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>CASEID</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 ... 8447 8448 8449 8450</div><input id='attrs-b80d7e8a-9778-41c5-81df-b2b72c59d378' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b80d7e8a-9778-41c5-81df-b2b72c59d378' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9d083305-f4b5-4144-aa41-5cb93803fa6b' class='xr-var-data-in' type='checkbox'><label for='data-9d083305-f4b5-4144-aa41-5cb93803fa6b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([   0,    1,    2, ..., 8448, 8449, 8450])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>_altid_</span></div><div class='xr-var-dims'>(_altid_)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 2 3</div><input id='attrs-067e513c-1b31-45d0-aa67-44a6eaf2cbd3' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-067e513c-1b31-45d0-aa67-44a6eaf2cbd3' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d86d0f51-330c-4cbc-9dca-1c5afad51261' class='xr-var-data-in' type='checkbox'><label for='data-d86d0f51-330c-4cbc-9dca-1c5afad51261' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 2, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>alt_names</span></div><div class='xr-var-dims'>(_altid_)</div><div class='xr-var-dtype'>&lt;U5</div><div class='xr-var-preview xr-preview'>&#x27;Train&#x27; &#x27;SM&#x27; &#x27;Car&#x27;</div><input id='attrs-040bd3c5-fa33-4a30-a468-dd308c225644' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-040bd3c5-fa33-4a30-a468-dd308c225644' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-6bf79efa-7bb2-4375-a91c-812a14fd0182' class='xr-var-data-in' type='checkbox'><label for='data-6bf79efa-7bb2-4375-a91c-812a14fd0182' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;Train&#x27;, &#x27;SM&#x27;, &#x27;Car&#x27;], dtype=&#x27;&lt;U5&#x27;)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-441156f4-44d2-4c8b-972b-edac7602550a' class='xr-section-summary-in' type='checkbox'  ><label for='section-441156f4-44d2-4c8b-972b-edac7602550a' class='xr-section-summary' >Data variables: <span>(28)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>GROUP</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 2 ... 3 3 3 3 3 3 3 3</div><input id='attrs-c25b7e86-db49-460b-9c2f-fae69a3492f6' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c25b7e86-db49-460b-9c2f-fae69a3492f6' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-7eab64ba-006b-45f8-87db-e22d2cc2d2bf' class='xr-var-data-in' type='checkbox'><label for='data-7eab64ba-006b-45f8-87db-e22d2cc2d2bf' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SURVEY</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-1df10377-f487-48fd-bab1-8ab96357427f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-1df10377-f487-48fd-bab1-8ab96357427f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-290684d7-93b8-4a10-ae10-49ea515c05e4' class='xr-var-data-in' type='checkbox'><label for='data-290684d7-93b8-4a10-ae10-49ea515c05e4' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SP</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-c3cf1ebf-c43c-415e-bbeb-8e44d0b8b147' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c3cf1ebf-c43c-415e-bbeb-8e44d0b8b147' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-0c387bdc-07e6-41bd-ba9d-66e5893f88ed' class='xr-var-data-in' type='checkbox'><label for='data-0c387bdc-07e6-41bd-ba9d-66e5893f88ed' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>ID</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 ... 939 939 939 939 939</div><input id='attrs-4509a006-4109-41bd-8c12-18143697e5ce' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-4509a006-4109-41bd-8c12-18143697e5ce' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9f52e44a-c0bc-4ee6-8845-ce71b7f7bf4c' class='xr-var-data-in' type='checkbox'><label for='data-9f52e44a-c0bc-4ee6-8845-ce71b7f7bf4c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([  1,   1,   1, ..., 939, 939, 939])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>PURPOSE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 3 3 3 3 3 3 3 3</div><input id='attrs-43c1d053-ac9e-4947-ac0d-16d41c9db497' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-43c1d053-ac9e-4947-ac0d-16d41c9db497' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-736409ef-c22c-4c24-8d8f-0721eac71af5' class='xr-var-data-in' type='checkbox'><label for='data-736409ef-c22c-4c24-8d8f-0721eac71af5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>FIRST</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-d1d4e98c-0ea9-4f3f-912a-ea29e7090329' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d1d4e98c-0ea9-4f3f-912a-ea29e7090329' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-4b3871f8-7a83-4ccc-ad65-f038cb182b13' class='xr-var-data-in' type='checkbox'><label for='data-4b3871f8-7a83-4ccc-ad65-f038cb182b13' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TICKET</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 7 7 7 7 7 7 7 7</div><input id='attrs-5dc416c9-ca60-4093-8410-2a55af0700f4' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-5dc416c9-ca60-4093-8410-2a55af0700f4' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-6a6e916c-0512-4ebc-a79b-42f0fa0a65e4' class='xr-var-data-in' type='checkbox'><label for='data-6a6e916c-0512-4ebc-a79b-42f0fa0a65e4' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 7, 7, 7])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>WHO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 3 3 3 3 3 3 3 3</div><input id='attrs-583a9283-0c53-4ec0-8e63-03273ec20978' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-583a9283-0c53-4ec0-8e63-03273ec20978' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ad5df853-5464-4d14-9056-3055457a7ece' class='xr-var-data-in' type='checkbox'><label for='data-ad5df853-5464-4d14-9056-3055457a7ece' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>LUGGAGE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-969e04a9-9518-46c0-9fbe-c6a787f6d49d' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-969e04a9-9518-46c0-9fbe-c6a787f6d49d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-70b04b5d-c459-4760-a1a3-8d117328b489' class='xr-var-data-in' type='checkbox'><label for='data-70b04b5d-c459-4760-a1a3-8d117328b489' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>AGE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>3 3 3 3 3 3 3 3 ... 5 5 5 5 5 5 5 5</div><input id='attrs-92c5d979-6c33-4b9d-853d-286d77b35859' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-92c5d979-6c33-4b9d-853d-286d77b35859' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-a119f5d7-7314-4b10-96ca-08e6beaa0d2e' class='xr-var-data-in' type='checkbox'><label for='data-a119f5d7-7314-4b10-96ca-08e6beaa0d2e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([3, 3, 3, ..., 5, 5, 5])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>MALE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-d17e1a23-2834-4d4d-9f51-68ae2a259796' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d17e1a23-2834-4d4d-9f51-68ae2a259796' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-76c1a33d-e934-4e0f-8d51-b84b3fa0ecfb' class='xr-var-data-in' type='checkbox'><label for='data-76c1a33d-e934-4e0f-8d51-b84b3fa0ecfb' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>INCOME</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 2 ... 2 2 2 2 2 2 2 2</div><input id='attrs-f98118b2-cd70-480f-94f5-74fc4433391d' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-f98118b2-cd70-480f-94f5-74fc4433391d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-b2fa0d39-cff9-47a1-bc66-b86c6e22e8e5' class='xr-var-data-in' type='checkbox'><label for='data-b2fa0d39-cff9-47a1-bc66-b86c6e22e8e5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 2, 2, 2])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>GA</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0</div><input id='attrs-bb510377-77e1-4890-91f4-e1463ca9e987' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-bb510377-77e1-4890-91f4-e1463ca9e987' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-19a39f9c-153b-47f4-bba3-ade4f2c0eadb' class='xr-var-data-in' type='checkbox'><label for='data-19a39f9c-153b-47f4-bba3-ade4f2c0eadb' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 0, 0, 0])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>ORIGIN</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 2 ... 1 1 1 1 1 1 1 1</div><input id='attrs-030df3f2-51aa-4aa2-bb5e-c1ba19e9e702' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-030df3f2-51aa-4aa2-bb5e-c1ba19e9e702' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-bda95c83-ec65-47db-82b4-558f1a731261' class='xr-var-data-in' type='checkbox'><label for='data-bda95c83-ec65-47db-82b4-558f1a731261' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>DEST</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 2 2 2 2 2 2 2 2</div><input id='attrs-ee8b8168-322a-4017-bc29-0e6733d9047a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-ee8b8168-322a-4017-bc29-0e6733d9047a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-7f55064e-b160-4212-84d4-c6c286e3dbd2' class='xr-var-data-in' type='checkbox'><label for='data-7f55064e-b160-4212-84d4-c6c286e3dbd2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 2, 2, 2])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_AV</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-c23a89dc-2b97-44a9-bee6-c058849fc4fe' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c23a89dc-2b97-44a9-bee6-c058849fc4fe' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-67618280-034c-4250-a202-0bdd54ea7c6b' class='xr-var-data-in' type='checkbox'><label for='data-67618280-034c-4250-a202-0bdd54ea7c6b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CAR_AV</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-696fd63b-8d96-432d-a875-085df11d67ca' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-696fd63b-8d96-432d-a875-085df11d67ca' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9b08f81a-1292-40c1-bd4c-20983a29c739' class='xr-var-data-in' type='checkbox'><label for='data-9b08f81a-1292-40c1-bd4c-20983a29c739' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_AV</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-43fb19e2-a9c2-44fc-b6f5-39daae596593' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-43fb19e2-a9c2-44fc-b6f5-39daae596593' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-75a37a78-15cd-48b8-a44a-1efe586774b2' class='xr-var-data-in' type='checkbox'><label for='data-75a37a78-15cd-48b8-a44a-1efe586774b2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_TT</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>112 103 130 103 ... 108 108 128 108</div><input id='attrs-b09f7c1c-e71e-435a-93bd-eeb05352971b' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b09f7c1c-e71e-435a-93bd-eeb05352971b' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5a6b6292-6425-43d9-aaa2-b8729ff552d0' class='xr-var-data-in' type='checkbox'><label for='data-5a6b6292-6425-43d9-aaa2-b8729ff552d0' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([112, 103, 130, ..., 108, 128, 108])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_CO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>48 48 48 40 36 ... 13 12 16 16 13</div><input id='attrs-bc830877-51cc-4acd-a2ec-23ff77253fed' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-bc830877-51cc-4acd-a2ec-23ff77253fed' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-855781b2-e51b-4e37-a805-b658c79c1474' class='xr-var-data-in' type='checkbox'><label for='data-855781b2-e51b-4e37-a805-b658c79c1474' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([48, 48, 48, ..., 16, 16, 13])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_HE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>120 30 60 30 60 ... 30 30 60 30 60</div><input id='attrs-75518ce7-e62b-42c4-8a4b-e2421d925b2a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-75518ce7-e62b-42c4-8a4b-e2421d925b2a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-fd8a88c1-e08d-4a49-bf4c-8eb211fca9f9' class='xr-var-data-in' type='checkbox'><label for='data-fd8a88c1-e08d-4a49-bf4c-8eb211fca9f9' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([120,  30,  60, ...,  60,  30,  60])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_TT</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>63 60 67 63 63 ... 50 53 50 53 53</div><input id='attrs-d5d24715-45ac-495a-8a8b-466443f99e4f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d5d24715-45ac-495a-8a8b-466443f99e4f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-3cc634f8-29f7-4ad7-8330-7301b2f1c1f9' class='xr-var-data-in' type='checkbox'><label for='data-3cc634f8-29f7-4ad7-8330-7301b2f1c1f9' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([63, 60, 67, ..., 50, 53, 53])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_CO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>52 49 58 52 42 ... 17 16 16 17 21</div><input id='attrs-ea423371-238f-47f5-aaa1-67660a138540' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-ea423371-238f-47f5-aaa1-67660a138540' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f559db71-49d1-4b66-aa76-dc678908ed97' class='xr-var-data-in' type='checkbox'><label for='data-f559db71-49d1-4b66-aa76-dc678908ed97' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([52, 49, 58, ..., 16, 17, 21])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_HE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>20 10 30 20 20 ... 30 10 20 30 30</div><input id='attrs-11764364-1a9e-461a-9a0c-34990111e666' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-11764364-1a9e-461a-9a0c-34990111e666' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d289bb44-6903-4096-ab3b-fc6a23e7f03d' class='xr-var-data-in' type='checkbox'><label for='data-d289bb44-6903-4096-ab3b-fc6a23e7f03d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([20, 10, 30, ..., 20, 30, 30])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_SEATS</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0</div><input id='attrs-a0fb1f14-9842-425c-a5ed-b2fd15beb371' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-a0fb1f14-9842-425c-a5ed-b2fd15beb371' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-1f759598-e1e3-45ad-ad8e-f1a170950fa9' class='xr-var-data-in' type='checkbox'><label for='data-1f759598-e1e3-45ad-ad8e-f1a170950fa9' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 0, 0, 0])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CAR_TT</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>117 117 117 72 90 ... 80 80 80 100</div><input id='attrs-3d1fe512-5137-4fc3-a4c7-463397721261' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-3d1fe512-5137-4fc3-a4c7-463397721261' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d97990c0-6a57-4135-9489-5c742d4baa40' class='xr-var-data-in' type='checkbox'><label for='data-d97990c0-6a57-4135-9489-5c742d4baa40' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([117, 117, 117, ...,  80,  80, 100])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CAR_CO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>65 84 52 52 84 ... 64 80 64 104 80</div><input id='attrs-d07bf8b0-d965-4af9-921e-c36666107678' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d07bf8b0-d965-4af9-921e-c36666107678' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-bfeae161-b036-4573-943b-d123b5894dc3' class='xr-var-data-in' type='checkbox'><label for='data-bfeae161-b036-4573-943b-d123b5894dc3' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([ 65,  84,  52, ...,  64, 104,  80])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CHOICE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-62bf273b-9925-45a4-a64a-c5ea80870c47' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-62bf273b-9925-45a4-a64a-c5ea80870c47' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-53a41f0f-13fe-483e-8f5a-127c52af26a1' class='xr-var-data-in' type='checkbox'><label for='data-53a41f0f-13fe-483e-8f5a-127c52af26a1' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 1, 1, 1])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-a0a3f29b-e86b-4822-befe-b433f91531d4' class='xr-section-summary-in' type='checkbox'  checked><label for='section-a0a3f29b-e86b-4822-befe-b433f91531d4' class='xr-section-summary' >Attributes: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div></li></ul></div></div></div></div>
+    _altid_:   _altid_</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>larch.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-3e0fc849-fcd9-4d5e-b937-c4141f191fcb' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-3e0fc849-fcd9-4d5e-b937-c4141f191fcb' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>CASEID</span>: 6768</li><li><span class='xr-has-index'>_altid_</span>: 3</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-7dde0c4b-fc23-439d-8310-b32fed95dff8' class='xr-section-summary-in' type='checkbox'  checked><label for='section-7dde0c4b-fc23-439d-8310-b32fed95dff8' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>CASEID</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 2 3 4 ... 8447 8448 8449 8450</div><input id='attrs-597959e3-9529-4b01-9aad-57b4504cd544' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-597959e3-9529-4b01-9aad-57b4504cd544' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-53da407d-c59e-4780-bc80-3e3188cd517e' class='xr-var-data-in' type='checkbox'><label for='data-53da407d-c59e-4780-bc80-3e3188cd517e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([   0,    1,    2, ..., 8448, 8449, 8450])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>_altid_</span></div><div class='xr-var-dims'>(_altid_)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 2 3</div><input id='attrs-9fd085f5-01dd-4884-9b24-d45f139925e3' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-9fd085f5-01dd-4884-9b24-d45f139925e3' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5678d0b0-d045-4331-8c52-88f54dce4060' class='xr-var-data-in' type='checkbox'><label for='data-5678d0b0-d045-4331-8c52-88f54dce4060' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 2, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>alt_names</span></div><div class='xr-var-dims'>(_altid_)</div><div class='xr-var-dtype'>&lt;U5</div><div class='xr-var-preview xr-preview'>&#x27;Train&#x27; &#x27;SM&#x27; &#x27;Car&#x27;</div><input id='attrs-3553a2ec-3f55-4aff-9385-5b95e7866577' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-3553a2ec-3f55-4aff-9385-5b95e7866577' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-7ae4815e-6207-4a00-a410-1787aa29194d' class='xr-var-data-in' type='checkbox'><label for='data-7ae4815e-6207-4a00-a410-1787aa29194d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([&#x27;Train&#x27;, &#x27;SM&#x27;, &#x27;Car&#x27;], dtype=&#x27;&lt;U5&#x27;)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-0b6acf1a-a16f-427a-bda9-ec1512782cca' class='xr-section-summary-in' type='checkbox'  ><label for='section-0b6acf1a-a16f-427a-bda9-ec1512782cca' class='xr-section-summary' >Data variables: <span>(28)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>GROUP</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 2 ... 3 3 3 3 3 3 3 3</div><input id='attrs-a1ae1e25-5ae9-47b0-add9-0f65be3fedb5' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-a1ae1e25-5ae9-47b0-add9-0f65be3fedb5' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-fbe56ffe-1c8b-4508-ba1b-057bb7ae0ce6' class='xr-var-data-in' type='checkbox'><label for='data-fbe56ffe-1c8b-4508-ba1b-057bb7ae0ce6' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SURVEY</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-78569da6-7cdf-4e45-82ba-4396d9a8d8f2' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-78569da6-7cdf-4e45-82ba-4396d9a8d8f2' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2f22963e-794b-4f4c-bd3a-bbb0c047d25b' class='xr-var-data-in' type='checkbox'><label for='data-2f22963e-794b-4f4c-bd3a-bbb0c047d25b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SP</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-ca0616ee-577a-4637-98ee-16a823931374' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-ca0616ee-577a-4637-98ee-16a823931374' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-806ac78d-f866-4672-b8ee-b4911f78b594' class='xr-var-data-in' type='checkbox'><label for='data-806ac78d-f866-4672-b8ee-b4911f78b594' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>ID</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 ... 939 939 939 939 939</div><input id='attrs-dbfd7979-0307-4935-bedb-f41d0c5a1376' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-dbfd7979-0307-4935-bedb-f41d0c5a1376' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-014773f6-3e5d-4a85-9009-179eeac88aa1' class='xr-var-data-in' type='checkbox'><label for='data-014773f6-3e5d-4a85-9009-179eeac88aa1' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([  1,   1,   1, ..., 939, 939, 939])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>PURPOSE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 3 3 3 3 3 3 3 3</div><input id='attrs-7cae268b-de7a-4211-adb5-e357288049b3' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-7cae268b-de7a-4211-adb5-e357288049b3' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-79f17305-0143-4e4d-81df-429cf4c8b3f2' class='xr-var-data-in' type='checkbox'><label for='data-79f17305-0143-4e4d-81df-429cf4c8b3f2' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>FIRST</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-d54d9af5-f7a7-4ac9-a60f-a2803b4f6d6a' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-d54d9af5-f7a7-4ac9-a60f-a2803b4f6d6a' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-3716bd33-c618-4af9-802f-9351af65cf7c' class='xr-var-data-in' type='checkbox'><label for='data-3716bd33-c618-4af9-802f-9351af65cf7c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TICKET</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 7 7 7 7 7 7 7 7</div><input id='attrs-ab4cc446-8a3d-4ef8-8f7c-73450d0cfdcb' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-ab4cc446-8a3d-4ef8-8f7c-73450d0cfdcb' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-f7fc75e7-129f-4b4c-a5bd-47733f670f0b' class='xr-var-data-in' type='checkbox'><label for='data-f7fc75e7-129f-4b4c-a5bd-47733f670f0b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 7, 7, 7])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>WHO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 3 3 3 3 3 3 3 3</div><input id='attrs-75169c77-1c73-4183-bcab-72432f3f5291' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-75169c77-1c73-4183-bcab-72432f3f5291' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-655a37fc-d6db-4fcb-ba16-b21677fe8c9c' class='xr-var-data-in' type='checkbox'><label for='data-655a37fc-d6db-4fcb-ba16-b21677fe8c9c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 3, 3, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>LUGGAGE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-924a7d8f-eee0-41e2-96fc-e079e27b442f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-924a7d8f-eee0-41e2-96fc-e079e27b442f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-83681346-d87b-40f7-abce-af61dceaf543' class='xr-var-data-in' type='checkbox'><label for='data-83681346-d87b-40f7-abce-af61dceaf543' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>AGE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>3 3 3 3 3 3 3 3 ... 5 5 5 5 5 5 5 5</div><input id='attrs-4e057395-5400-40b9-a20a-e9a9e614fa0c' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-4e057395-5400-40b9-a20a-e9a9e614fa0c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-af2ae74e-df91-492e-bc24-0e3bbcf85bfb' class='xr-var-data-in' type='checkbox'><label for='data-af2ae74e-df91-492e-bc24-0e3bbcf85bfb' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([3, 3, 3, ..., 5, 5, 5])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>MALE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 1 1 1 1 1 1 1 1</div><input id='attrs-c1bca922-046a-492c-82ac-0528ff808215' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-c1bca922-046a-492c-82ac-0528ff808215' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-48f12124-c892-4761-b2e9-1af3508bdf02' class='xr-var-data-in' type='checkbox'><label for='data-48f12124-c892-4761-b2e9-1af3508bdf02' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>INCOME</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 2 ... 2 2 2 2 2 2 2 2</div><input id='attrs-3dfaa6aa-7683-4685-8ab3-71ac20a0d565' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-3dfaa6aa-7683-4685-8ab3-71ac20a0d565' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-0ce75d00-6567-4e1b-9b01-77af48c2235a' class='xr-var-data-in' type='checkbox'><label for='data-0ce75d00-6567-4e1b-9b01-77af48c2235a' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 2, 2, 2])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>GA</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0</div><input id='attrs-7da395e0-31f9-4e40-852c-1179855345a7' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-7da395e0-31f9-4e40-852c-1179855345a7' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-980620cf-ac6b-46e8-85d9-14d6ecff7312' class='xr-var-data-in' type='checkbox'><label for='data-980620cf-ac6b-46e8-85d9-14d6ecff7312' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 0, 0, 0])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>ORIGIN</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 2 ... 1 1 1 1 1 1 1 1</div><input id='attrs-936505fc-d18e-4429-94a9-cafb29924852' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-936505fc-d18e-4429-94a9-cafb29924852' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-2e9c02dc-11a0-4a11-b72e-f153eb80df9f' class='xr-var-data-in' type='checkbox'><label for='data-2e9c02dc-11a0-4a11-b72e-f153eb80df9f' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>DEST</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 2 2 2 2 2 2 2 2</div><input id='attrs-938c47d2-d1aa-41ba-861c-00a0549af77d' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-938c47d2-d1aa-41ba-861c-00a0549af77d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-937240e3-bd27-4602-8f60-b70cf666363e' class='xr-var-data-in' type='checkbox'><label for='data-937240e3-bd27-4602-8f60-b70cf666363e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 2, 2, 2])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_AV</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-a8299578-2aba-475b-89e3-936c25e2b057' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-a8299578-2aba-475b-89e3-936c25e2b057' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-8eb71293-25d6-4174-8e18-a71ffc0dd9bf' class='xr-var-data-in' type='checkbox'><label for='data-8eb71293-25d6-4174-8e18-a71ffc0dd9bf' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CAR_AV</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-5473366e-d8bf-4f91-ad02-3e162c2e95b8' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-5473366e-d8bf-4f91-ad02-3e162c2e95b8' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-357818c6-42c2-493a-b8d6-7a167027a02d' class='xr-var-data-in' type='checkbox'><label for='data-357818c6-42c2-493a-b8d6-7a167027a02d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_AV</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 1 1 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-9b3e9bbe-e741-4eec-985a-3887c632dfa7' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-9b3e9bbe-e741-4eec-985a-3887c632dfa7' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-1ac552b4-fcd8-4f8f-a6ff-f56f471fe082' class='xr-var-data-in' type='checkbox'><label for='data-1ac552b4-fcd8-4f8f-a6ff-f56f471fe082' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([1, 1, 1, ..., 1, 1, 1])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_TT</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>112 103 130 103 ... 108 108 128 108</div><input id='attrs-0a2079cb-2813-4b3c-a3a6-3bfa0717dc68' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-0a2079cb-2813-4b3c-a3a6-3bfa0717dc68' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-45b845d2-56ad-4164-be00-92357603c42c' class='xr-var-data-in' type='checkbox'><label for='data-45b845d2-56ad-4164-be00-92357603c42c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([112, 103, 130, ..., 108, 128, 108])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_CO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>48 48 48 40 36 ... 13 12 16 16 13</div><input id='attrs-621faa5d-fa59-45d7-a2d2-8c6eb4f1c13e' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-621faa5d-fa59-45d7-a2d2-8c6eb4f1c13e' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-547c22a5-25aa-4548-a46b-f2846fa507ca' class='xr-var-data-in' type='checkbox'><label for='data-547c22a5-25aa-4548-a46b-f2846fa507ca' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([48, 48, 48, ..., 16, 16, 13])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>TRAIN_HE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>120 30 60 30 60 ... 30 30 60 30 60</div><input id='attrs-2b090aed-9ed3-4f73-b16b-baeed7596a9f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-2b090aed-9ed3-4f73-b16b-baeed7596a9f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-29527b3e-9dad-45c6-8709-3f132a5d0e91' class='xr-var-data-in' type='checkbox'><label for='data-29527b3e-9dad-45c6-8709-3f132a5d0e91' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([120,  30,  60, ...,  60,  30,  60])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_TT</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>63 60 67 63 63 ... 50 53 50 53 53</div><input id='attrs-8a71b650-d6ae-48bb-a9c1-92072433cd3f' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-8a71b650-d6ae-48bb-a9c1-92072433cd3f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-5a9527df-daa4-4002-b998-a474d06004a3' class='xr-var-data-in' type='checkbox'><label for='data-5a9527df-daa4-4002-b998-a474d06004a3' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([63, 60, 67, ..., 50, 53, 53])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_CO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>52 49 58 52 42 ... 17 16 16 17 21</div><input id='attrs-3a5853cf-17cd-4968-bb42-689077317183' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-3a5853cf-17cd-4968-bb42-689077317183' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ae546ba0-f0ae-4f77-a4de-74f1a4e14232' class='xr-var-data-in' type='checkbox'><label for='data-ae546ba0-f0ae-4f77-a4de-74f1a4e14232' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([52, 49, 58, ..., 16, 17, 21])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_HE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>20 10 30 20 20 ... 30 10 20 30 30</div><input id='attrs-b7916373-0863-41ae-b918-ecc59d4bdadd' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-b7916373-0863-41ae-b918-ecc59d4bdadd' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-200900e2-c02a-4c79-b9d8-2fb0c57dca63' class='xr-var-data-in' type='checkbox'><label for='data-200900e2-c02a-4c79-b9d8-2fb0c57dca63' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([20, 10, 30, ..., 20, 30, 30])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>SM_SEATS</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 0 0 0 0 0 0 0 ... 0 0 0 0 0 0 0 0</div><input id='attrs-cb1649e0-1b00-407c-8f13-c99e56004bf0' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-cb1649e0-1b00-407c-8f13-c99e56004bf0' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-16f5f505-952d-42f8-bbdf-6a5d6eb43f51' class='xr-var-data-in' type='checkbox'><label for='data-16f5f505-952d-42f8-bbdf-6a5d6eb43f51' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([0, 0, 0, ..., 0, 0, 0])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CAR_TT</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>117 117 117 72 90 ... 80 80 80 100</div><input id='attrs-be13fa8a-d8a5-4da0-82ce-9fe9009da699' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-be13fa8a-d8a5-4da0-82ce-9fe9009da699' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-b865946f-cdc4-45e8-af02-881e7bcb7634' class='xr-var-data-in' type='checkbox'><label for='data-b865946f-cdc4-45e8-af02-881e7bcb7634' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([117, 117, 117, ...,  80,  80, 100])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CAR_CO</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>65 84 52 52 84 ... 64 80 64 104 80</div><input id='attrs-e7d7bba1-046d-4dea-8762-b777eacc3d52' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-e7d7bba1-046d-4dea-8762-b777eacc3d52' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-935b7e2b-4ca7-419b-b8f8-d9b150762e47' class='xr-var-data-in' type='checkbox'><label for='data-935b7e2b-4ca7-419b-b8f8-d9b150762e47' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([ 65,  84,  52, ...,  64, 104,  80])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>CHOICE</span></div><div class='xr-var-dims'>(CASEID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>2 2 2 2 2 2 2 1 ... 1 1 1 1 1 1 1 1</div><input id='attrs-168f3ffe-6568-4d98-9eca-369a44b24c24' class='xr-var-attrs-in' type='checkbox' ><label for='attrs-168f3ffe-6568-4d98-9eca-369a44b24c24' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-e0a3f5c6-8b5c-4b0f-b952-4646a4b85a87' class='xr-var-data-in' type='checkbox'><label for='data-e0a3f5c6-8b5c-4b0f-b952-4646a4b85a87' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div><div class='xr-var-data'><pre>array([2, 2, 2, ..., 1, 1, 1])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-492cd287-fb19-44a2-bb41-335f8ffb853f' class='xr-section-summary-in' type='checkbox'  checked><label for='section-492cd287-fb19-44a2-bb41-335f8ffb853f' class='xr-section-summary' >Attributes: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>CASEID</dd><dt><span>_altid_ :</span></dt><dd>_altid_</dd></dl></div></li></ul></div></div></div></div>
 </div>
 <p>You might notice we have not carefully constructed this object to
 include only the relevant data or the various simple transformations
@@ -1917,54 +1977,6 @@ source to create these computational arrays.</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">datatree</span> <span class="o">=</span> <span class="n">ds</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1976,</span> in <span class="ni">NumbaModel.datatree</span><span class="nt">(self, tree)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1974</span>     <span class="bp">self</span><span class="o">.</span><span class="n">mangle</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1975</span> <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1976</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_datatree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">as_tree</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1977</span>     <span class="bp">self</span><span class="o">.</span><span class="n">mangle</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1978</span> <span class="k">else</span><span class="p">:</span>
-
-<span class="nn">File ~/work/larch/larch/larch/dataset.py:1057,</span> in <span class="ni">Dataset.as_tree</span><span class="nt">(self, label, exclude_dims)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1049</span>     <span class="n">tree</span><span class="o">.</span><span class="n">add_dataset</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1050</span>         <span class="s1">&#39;idcoVars&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1051</span>         <span class="n">ds</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1054</span>         <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1055</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1056</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1057</span>     <span class="n">tree</span> <span class="o">=</span> <span class="n">DataTree</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">label</span><span class="p">:</span> <span class="bp">self</span><span class="p">})</span>
-<span class="g g-Whitespace">   </span><span class="mi">1058</span> <span class="k">return</span> <span class="n">tree</span>
-
-<span class="nn">File ~/work/larch/larch/larch/dataset.py:1110,</span> in <span class="ni">DataTree.__init__</span><span class="nt">(self, graph, root_node_name, extra_funcs, extra_vars, cache_dir, relationships, force_digitization, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1099</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1100</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1101</span>     <span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1108</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1109</span> <span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1110</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1111</span>         <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1112</span>         <span class="n">root_node_name</span><span class="o">=</span><span class="n">root_node_name</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1113</span>         <span class="n">extra_funcs</span><span class="o">=</span><span class="n">extra_funcs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1114</span>         <span class="n">extra_vars</span><span class="o">=</span><span class="n">extra_vars</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1115</span>         <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1116</span>         <span class="n">relationships</span><span class="o">=</span><span class="n">relationships</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1117</span>         <span class="n">force_digitization</span><span class="o">=</span><span class="n">force_digitization</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1118</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1119</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="n">dim_order</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1121</span>     <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_CASEID</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-
-<span class="ne">TypeError</span>: object.__init__() takes exactly one argument (the instance to initialize)
-</pre></div>
-</div>
-</div>
 </div>
 <p>We can estimate the models and check the results match up with those given by Biogeme:</p>
 <div class="cell docutils container">
@@ -1975,173 +1987,61 @@ source to create these computational arrays.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/larch/larch/larch/numba/model.py:899: UserWarning: cannot initialize graph, must define alternatives somehow
-  warnings.warn(&#39;cannot initialize graph, must define alternatives somehow&#39;)
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
-<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
-
-<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
-
-<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
-
-<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">14</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">set_cap</span><span class="p">(</span><span class="mi">15</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">(</span><span class="n">method</span><span class="o">=</span><span class="s1">&#39;SLSQP&#39;</span><span class="p">)</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:622,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.set_cap</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
-<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
-
-<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
-</pre></div>
-</div>
-</div>
+<div class="output text_html"><div><table style="margin-top:1px;"><tr><th>key</th><th style="text-align:left;">value</th></tr><tr><td>x</td><td style="text-align:left;"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ASC_CAR</th>
+      <td>-0.155</td>
+    </tr>
+    <tr>
+      <th>ASC_TRAIN</th>
+      <td>-0.701</td>
+    </tr>
+    <tr>
+      <th>B_COST</th>
+      <td>-0.011</td>
+    </tr>
+    <tr>
+      <th>B_TIME</th>
+      <td>-0.013</td>
+    </tr>
+  </tbody>
+</table></td></tr><tr><td>loglike</td><td style="text-align:left;">-5331.252006918114</td></tr><tr><td>d_loglike</td><td style="text-align:left;"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ASC_CAR</th>
+      <td>0.011</td>
+    </tr>
+    <tr>
+      <th>ASC_TRAIN</th>
+      <td>-0.027</td>
+    </tr>
+    <tr>
+      <th>B_COST</th>
+      <td>-1.223</td>
+    </tr>
+    <tr>
+      <th>B_TIME</th>
+      <td>-1.843</td>
+    </tr>
+  </tbody>
+</table></td></tr><tr><td>nit</td><td style="text-align:left;">10</td></tr><tr><td>nfev</td><td style="text-align:left;">26</td></tr><tr><td>njev</td><td style="text-align:left;">10</td></tr><tr><td>status</td><td style="text-align:left;">0</td></tr><tr><td>message</td><td style="text-align:left;">'Optimization terminated successfully'</td></tr><tr><td>success</td><td style="text-align:left;">True</td></tr><tr><td>elapsed_time</td><td style="text-align:left;">0:00:00.233730</td></tr><tr><td>method</td><td style="text-align:left;">'SLSQP'</td></tr><tr><td>n_cases</td><td style="text-align:left;">6768</td></tr><tr><td>iteration_number</td><td style="text-align:left;">0</td></tr><tr><td>logloss</td><td style="text-align:left;">0.7877145400292721</td></tr><tr><td>__verbose_repr__</td><td style="text-align:left;">True</td></tr></table></div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>error in calculate_parameter_covariance
-Traceback (most recent call last):
-  File &quot;larch/model/abstract_model.pyx&quot;, line 1065, in larch.model.abstract_model.AbstractChoiceModel.calculate_parameter_covariance
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1773, in d2_loglike
-    return super().d2_loglike(
-  File &quot;larch/model/abstract_model.pyx&quot;, line 566, in larch.model.abstract_model.AbstractChoiceModel.d2_loglike
-  File &quot;larch/model/abstract_model.pyx&quot;, line 417, in larch.model.abstract_model.AbstractChoiceModel.loglike3
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1706, in loglike2
-    result_arrays, penalty = self._loglike_runner(
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1339, in _loglike_runner
-    args = self.__prepare_for_compute(
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1169, in __prepare_for_compute
-    raise MissingDataError(&#39;dataframes and datatree are both not set, maybe you need to call `load_data` first?&#39;)
-larch.exceptions.MissingDataError: dataframes and datatree are both not set, maybe you need to call `load_data` first?
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">MissingDataError</span><span class="g g-Whitespace">                          </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">16</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/abstract_model.pyx:1230,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.calculate_parameter_covariance</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/abstract_model.pyx:1065,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.calculate_parameter_covariance</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1773,</span> in <span class="ni">NumbaModel.d2_loglike</span><span class="nt">(self, x, start_case, stop_case, step_case, leave_out, keep_only, subsample)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1762</span> <span class="k">def</span> <span class="nf">d2_loglike</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1763</span>         <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1764</span>         <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1771</span>         <span class="n">subsample</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1772</span> <span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1773</span>     <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">d2_loglike</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1774</span>         <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1775</span>         <span class="n">start_case</span><span class="o">=</span><span class="n">start_case</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1776</span>         <span class="n">stop_case</span><span class="o">=</span><span class="n">stop_case</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1777</span>         <span class="n">step_case</span><span class="o">=</span><span class="n">step_case</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1778</span>         <span class="n">leave_out</span><span class="o">=</span><span class="n">leave_out</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1779</span>         <span class="n">keep_only</span><span class="o">=</span><span class="n">keep_only</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1780</span>         <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1781</span>     <span class="p">)</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/abstract_model.pyx:566,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.d2_loglike</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/abstract_model.pyx:417,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.loglike3</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1706,</span> in <span class="ni">NumbaModel.loglike2</span><span class="nt">(self, x, start_case, stop_case, step_case, persist, leave_out, keep_only, subsample, return_series, probability_only)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1692</span> <span class="k">def</span> <span class="nf">loglike2</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1693</span>         <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1694</span>         <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1704</span>         <span class="n">probability_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1705</span> <span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1706</span>     <span class="n">result_arrays</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loglike_runner</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1707</span>         <span class="n">x</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1708</span>         <span class="n">start_case</span><span class="o">=</span><span class="n">start_case</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1709</span>         <span class="n">stop_case</span><span class="o">=</span><span class="n">stop_case</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1710</span>         <span class="n">step_case</span><span class="o">=</span><span class="n">step_case</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1711</span>         <span class="n">return_gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1712</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1713</span>     <span class="n">result</span> <span class="o">=</span> <span class="n">dictx</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1714</span>         <span class="n">ll</span><span class="o">=</span><span class="n">result_arrays</span><span class="o">.</span><span class="n">loglike</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_normalization</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1715</span>         <span class="n">dll</span><span class="o">=</span><span class="n">result_arrays</span><span class="o">.</span><span class="n">d_loglike</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_normalization</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1716</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1717</span>     <span class="k">if</span> <span class="n">start_case</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">stop_case</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">step_case</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1339,</span> in <span class="ni">NumbaModel._loglike_runner</span><span class="nt">(self, x, only_utility, return_gradient, return_probability, return_bhhh, start_case, stop_case, step_case)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1327</span> <span class="k">def</span> <span class="nf">_loglike_runner</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1328</span>         <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1329</span>         <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1336</span>         <span class="n">step_case</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1337</span> <span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1338</span>     <span class="n">caseslice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start_case</span><span class="p">,</span> <span class="n">stop_case</span><span class="p">,</span> <span class="n">step_case</span><span class="p">)</span>
-<span class="ne">-&gt; </span><span class="mi">1339</span>     <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prepare_for_compute</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1340</span>         <span class="n">x</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1341</span>         <span class="n">allow_missing_ch</span><span class="o">=</span><span class="n">return_probability</span> <span class="ow">or</span> <span class="p">(</span><span class="n">only_utility</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">),</span>
-<span class="g g-Whitespace">   </span><span class="mi">1342</span>         <span class="n">caseslice</span><span class="o">=</span><span class="n">caseslice</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1343</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1344</span>     <span class="n">args_flags</span> <span class="o">=</span> <span class="n">args</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span>
-<span class="g g-Whitespace">   </span><span class="mi">1345</span>         <span class="n">only_utility</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1346</span>         <span class="n">return_probability</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1347</span>         <span class="n">return_gradient</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1348</span>         <span class="n">return_bhhh</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1349</span>     <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">),)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1350</span>     <span class="k">try</span><span class="p">:</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1169,</span> in <span class="ni">NumbaModel.__prepare_for_compute</span><span class="nt">(self, x, allow_missing_ch, allow_missing_av, caseslice)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1167</span> <span class="n">missing_ch</span><span class="p">,</span> <span class="n">missing_av</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span>
-<span class="g g-Whitespace">   </span><span class="mi">1168</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframes</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatree</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1169</span>     <span class="k">raise</span> <span class="n">MissingDataError</span><span class="p">(</span><span class="s1">&#39;dataframes and datatree are both not set, maybe you need to call `load_data` first?&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1170</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframes</span><span class="o">.</span><span class="n">is_computational_ready</span><span class="p">(</span><span class="n">activate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="g g-Whitespace">   </span><span class="mi">1171</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;DataFrames is not computational-ready&#39;</span><span class="p">)</span>
-
-<span class="ne">MissingDataError</span>: dataframes and datatree are both not set, maybe you need to call `load_data` first?
 </pre></div>
 </div>
 </div>
@@ -2153,93 +2053,78 @@ larch.exceptions.MissingDataError: dataframes and datatree are both not set, may
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>error in parameter_summary
-Traceback (most recent call last):
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 896, in graph
-    self.initialize_graph()
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 966, in initialize_graph
-    super().initialize_graph(
-  File &quot;larch/model/controller.pyx&quot;, line 1308, in larch.model.controller.Model5c.initialize_graph
-ValueError: must define dataframes, dataservice, or give alternative_codes explicitly
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &quot;larch/model/parameter_frame.pyx&quot;, line 848, in larch.model.parameter_frame.ParameterFrame.parameter_summary
-  File &quot;larch/model/parameter_frame.pyx&quot;, line 662, in larch.model.parameter_frame.ParameterFrame.pfo
-  File &quot;larch/model/parameter_frame.pyx&quot;, line 195, in larch.model.parameter_frame.ParameterFrame.pf.__get__
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1118, in unmangle
-    self.reflow_data_arrays()
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 977, in reflow_data_arrays
-    if self.graph is None:
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 900, in graph
-    raise RuntimeError(&#39;cannot initialize graph, must define alternatives somehow&#39;)
-RuntimeError: cannot initialize graph, must define alternatives somehow
-</pre></div>
-</div>
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
-<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
-
-<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
-
-<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
-
-<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:1008,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:848,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:662,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pfo</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
-<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
-
-<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
-</pre></div>
-</div>
-</div>
+<div class="output text_html"><style type="text/css">
+#T_2a23a th {
+  vertical-align: top;
+  text-align: left;
+}
+#T_2a23a td {
+  vertical-align: top;
+  text-align: left;
+}
+#T_2a23a_row0_col0, #T_2a23a_row0_col1, #T_2a23a_row0_col2, #T_2a23a_row0_col3, #T_2a23a_row0_col4, #T_2a23a_row1_col0, #T_2a23a_row1_col1, #T_2a23a_row1_col2, #T_2a23a_row1_col3, #T_2a23a_row1_col4, #T_2a23a_row2_col0, #T_2a23a_row2_col1, #T_2a23a_row2_col2, #T_2a23a_row2_col3, #T_2a23a_row2_col4, #T_2a23a_row3_col0, #T_2a23a_row3_col1, #T_2a23a_row3_col2, #T_2a23a_row3_col3, #T_2a23a_row3_col4 {
+  font-family: monospace;
+}
+</style>
+<table id="T_2a23a">
+  <thead>
+    <tr>
+      <th class="blank" >&nbsp;</th>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_2a23a_level0_col0" class="col_heading level0 col0" >Value</th>
+      <th id="T_2a23a_level0_col1" class="col_heading level0 col1" >Std Err</th>
+      <th id="T_2a23a_level0_col2" class="col_heading level0 col2" >t Stat</th>
+      <th id="T_2a23a_level0_col3" class="col_heading level0 col3" >Signif</th>
+      <th id="T_2a23a_level0_col4" class="col_heading level0 col4" >Null Value</th>
+    </tr>
+    <tr>
+      <th class="index_name level0" >Category</th>
+      <th class="index_name level1" >Parameter</th>
+      <th class="blank col0" >&nbsp;</th>
+      <th class="blank col1" >&nbsp;</th>
+      <th class="blank col2" >&nbsp;</th>
+      <th class="blank col3" >&nbsp;</th>
+      <th class="blank col4" >&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_2a23a_level0_row0" class="row_heading level0 row0" rowspan="2">ASCs</th>
+      <th id="T_2a23a_level1_row0" class="row_heading level1 row0" >ASC_CAR</th>
+      <td id="T_2a23a_row0_col0" class="data row0 col0" >-0.155</td>
+      <td id="T_2a23a_row0_col1" class="data row0 col1" > 0.0432</td>
+      <td id="T_2a23a_row0_col2" class="data row0 col2" >-3.58</td>
+      <td id="T_2a23a_row0_col3" class="data row0 col3" >***</td>
+      <td id="T_2a23a_row0_col4" class="data row0 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_2a23a_level1_row1" class="row_heading level1 row1" >ASC_TRAIN</th>
+      <td id="T_2a23a_row1_col0" class="data row1 col0" >-0.701</td>
+      <td id="T_2a23a_row1_col1" class="data row1 col1" > 0.0549</td>
+      <td id="T_2a23a_row1_col2" class="data row1 col2" >-12.78</td>
+      <td id="T_2a23a_row1_col3" class="data row1 col3" >***</td>
+      <td id="T_2a23a_row1_col4" class="data row1 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_2a23a_level0_row2" class="row_heading level0 row2" rowspan="2">LOS</th>
+      <th id="T_2a23a_level1_row2" class="row_heading level1 row2" >B_COST</th>
+      <td id="T_2a23a_row2_col0" class="data row2 col0" >-0.0108</td>
+      <td id="T_2a23a_row2_col1" class="data row2 col1" > 0.000518</td>
+      <td id="T_2a23a_row2_col2" class="data row2 col2" >-20.91</td>
+      <td id="T_2a23a_row2_col3" class="data row2 col3" >***</td>
+      <td id="T_2a23a_row2_col4" class="data row2 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_2a23a_level1_row3" class="row_heading level1 row3" >B_TIME</th>
+      <td id="T_2a23a_row3_col0" class="data row3 col0" >-0.0128</td>
+      <td id="T_2a23a_row3_col1" class="data row3 col1" > 0.000569</td>
+      <td id="T_2a23a_row3_col2" class="data row3 col2" >-22.46</td>
+      <td id="T_2a23a_row3_col3" class="data row3 col3" >***</td>
+      <td id="T_2a23a_row3_col4" class="data row3 col4" > 0.00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -2255,56 +2140,28 @@ RuntimeError: cannot initialize graph, must define alternatives somehow
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>error in parameter_summary
-Traceback (most recent call last):
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 896, in graph
-    self.initialize_graph()
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 966, in initialize_graph
-    super().initialize_graph(
-  File &quot;larch/model/controller.pyx&quot;, line 1308, in larch.model.controller.Model5c.initialize_graph
-ValueError: must define dataframes, dataservice, or give alternative_codes explicitly
-
-During handling of the above exception, another exception occurred:
-
-Traceback (most recent call last):
-  File &quot;larch/model/parameter_frame.pyx&quot;, line 848, in larch.model.parameter_frame.ParameterFrame.parameter_summary
-  File &quot;larch/model/parameter_frame.pyx&quot;, line 662, in larch.model.parameter_frame.ParameterFrame.pfo
-  File &quot;larch/model/parameter_frame.pyx&quot;, line 195, in larch.model.parameter_frame.ParameterFrame.pf.__get__
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 1118, in unmangle
-    self.reflow_data_arrays()
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 977, in reflow_data_arrays
-    if self.graph is None:
-  File &quot;/home/runner/work/larch/larch/larch/numba/model.py&quot;, line 900, in graph
-    raise RuntimeError(&#39;cannot initialize graph, must define alternatives somehow&#39;)
-RuntimeError: cannot initialize graph, must define alternatives somehow
-</pre></div>
-</div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/pandas/compat/_optional.py:126,</span> in <span class="ni">import_optional_dependency</span><span class="nt">(name, extra, errors, min_version)</span>
+<span class="g g-Whitespace">    </span><span class="mi">125</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">126</span>     <span class="n">module</span> <span class="o">=</span> <span class="n">importlib</span><span class="o">.</span><span class="n">import_module</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">127</span> <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
 
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
-<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/importlib/__init__.py:127,</span> in <span class="ni">import_module</span><span class="nt">(name, package)</span>
+<span class="g g-Whitespace">    </span><span class="mi">126</span>         <span class="n">level</span> <span class="o">+=</span> <span class="mi">1</span>
+<span class="ne">--&gt; </span><span class="mi">127</span> <span class="k">return</span> <span class="n">_bootstrap</span><span class="o">.</span><span class="n">_gcd_import</span><span class="p">(</span><span class="n">name</span><span class="p">[</span><span class="n">level</span><span class="p">:],</span> <span class="n">package</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span>
 
-<span class="nn">File ~/work/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+<span class="nn">File &lt;frozen importlib._bootstrap&gt;:1030,</span> in <span class="ni">_gcd_import</span><span class="nt">(name, package, level)</span>
 
-<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+<span class="nn">File &lt;frozen importlib._bootstrap&gt;:1007,</span> in <span class="ni">_find_and_load</span><span class="nt">(name, import_)</span>
+
+<span class="nn">File &lt;frozen importlib._bootstrap&gt;:984,</span> in <span class="ni">_find_and_load_unlocked</span><span class="nt">(name, import_)</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;tabulate&#39;
 
 <span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
 
-<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
+<span class="ne">ImportError</span><span class="g g-Whitespace">                               </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="k">assert</span> <span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">()</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">to_markdown</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;&quot;&quot;</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span><span class="s2"> |                       |   Value |   Std Err |   t Stat | Signif   |   Null Value |</span>
@@ -2315,37 +2172,21 @@ RuntimeError: cannot initialize graph, must define alternatives somehow
 <span class="g g-Whitespace">      </span><span class="mi">7</span><span class="s2"> | (&#39;LOS&#39;, &#39;B_TIME&#39;)     | -0.0128 |  0.000569 |   -22.46 | ***      |            0 |</span>
 <span class="g g-Whitespace">      </span><span class="mi">8</span><span class="s2"> &quot;&quot;&quot;</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
-<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:1008,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/pandas/core/frame.py:2728,</span> in <span class="ni">DataFrame.to_markdown</span><span class="nt">(self, buf, mode, index, storage_options, **kwargs)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2726</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;tablefmt&quot;</span><span class="p">,</span> <span class="s2">&quot;pipe&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2727</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">setdefault</span><span class="p">(</span><span class="s2">&quot;showindex&quot;</span><span class="p">,</span> <span class="n">index</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">2728</span> <span class="n">tabulate</span> <span class="o">=</span> <span class="n">import_optional_dependency</span><span class="p">(</span><span class="s2">&quot;tabulate&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2729</span> <span class="n">result</span> <span class="o">=</span> <span class="n">tabulate</span><span class="o">.</span><span class="n">tabulate</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2730</span> <span class="k">if</span> <span class="n">buf</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
 
-<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:848,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/pandas/compat/_optional.py:129,</span> in <span class="ni">import_optional_dependency</span><span class="nt">(name, extra, errors, min_version)</span>
+<span class="g g-Whitespace">    </span><span class="mi">127</span> <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">128</span>     <span class="k">if</span> <span class="n">errors</span> <span class="o">==</span> <span class="s2">&quot;raise&quot;</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">129</span>         <span class="k">raise</span> <span class="ne">ImportError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">130</span>     <span class="k">else</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">131</span>         <span class="k">return</span> <span class="kc">None</span>
 
-<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:662,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pfo</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
-<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
-<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
-<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
-<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
-
-<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
+<span class="ne">ImportError</span>: Missing optional dependency &#39;tabulate&#39;.  Use pip or conda to install tabulate.
 </pre></div>
 </div>
 </div>

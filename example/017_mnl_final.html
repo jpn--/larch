@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>17: MTC Expanded MNL Mode Choice &#8212; v5.5.10</title>
+    <title>17: MTC Expanded MNL Mode Choice &#8212; PRE-RELEASE DEV DOCS</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -88,7 +88,7 @@
       <img src="../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.5.10</h1>
+      <h1 class="site-logo" id="site-title">PRE-RELEASE DEV DOCS</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -189,6 +189,31 @@
      <li class="toctree-l3">
       <a class="reference internal" href="../api/generated/larch.Dataset.construct.html">
        larch.Dataset.construct
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_table.html">
+       larch.Dataset.from_table
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_omx.html">
+       larch.Dataset.from_omx
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_omx_3d.html">
+       larch.Dataset.from_omx_3d
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_zarr.html">
+       larch.Dataset.from_zarr
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.Dataset.from_named_objects.html">
+       larch.Dataset.from_named_objects
       </a>
      </li>
      <li class="toctree-l3">
@@ -319,6 +344,21 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.root_node_name.html">
+       larch.DataTree.root_node_name
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.subspaces.html">
+       larch.DataTree.subspaces
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.relationships_are_digitized.html">
+       larch.DataTree.relationships_are_digitized
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/generated/larch.DataTree.n_cases.html">
        larch.DataTree.n_cases
       </a>
@@ -339,8 +379,28 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.add_dataset.html">
+       larch.DataTree.add_dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.add_relationship.html">
+       larch.DataTree.add_relationship
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.digitize_relationships.html">
+       larch.DataTree.digitize_relationships
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="../api/generated/larch.DataTree.query_cases.html">
        larch.DataTree.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="../api/generated/larch.DataTree.replace_datasets.html">
+       larch.DataTree.replace_datasets
       </a>
      </li>
      <li class="toctree-l3">
@@ -1178,78 +1238,12 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">TypeError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">larch.numba</span> <span class="k">as</span> <span class="nn">lx</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">d</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">examples</span><span class="o">.</span><span class="n">MTC</span><span class="p">(</span><span class="nb">format</span><span class="o">=</span><span class="s1">&#39;dataset&#39;</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:880,</span> in <span class="ni">NumbaModel.__init__</span><span class="nt">(self, float_dtype, datatree, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">878</span> <span class="bp">self</span><span class="o">.</span><span class="n">constraint_sharpness</span> <span class="o">=</span> <span class="mf">0.0</span>
-<span class="g g-Whitespace">    </span><span class="mi">879</span> <span class="bp">self</span><span class="o">.</span><span class="n">_constraint_funcs</span> <span class="o">=</span> <span class="kc">None</span>
-<span class="ne">--&gt; </span><span class="mi">880</span> <span class="bp">self</span><span class="o">.</span><span class="n">datatree</span> <span class="o">=</span> <span class="n">datatree</span>
-
-<span class="nn">File ~/work/larch/larch/larch/numba/model.py:1976,</span> in <span class="ni">NumbaModel.datatree</span><span class="nt">(self, tree)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1974</span>     <span class="bp">self</span><span class="o">.</span><span class="n">mangle</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1975</span> <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">tree</span><span class="p">,</span> <span class="n">Dataset</span><span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1976</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_datatree</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">as_tree</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1977</span>     <span class="bp">self</span><span class="o">.</span><span class="n">mangle</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1978</span> <span class="k">else</span><span class="p">:</span>
-
-<span class="nn">File ~/work/larch/larch/larch/dataset.py:1057,</span> in <span class="ni">Dataset.as_tree</span><span class="nt">(self, label, exclude_dims)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1049</span>     <span class="n">tree</span><span class="o">.</span><span class="n">add_dataset</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1050</span>         <span class="s1">&#39;idcoVars&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1051</span>         <span class="n">ds</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1054</span>         <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1055</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1056</span> <span class="k">else</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1057</span>     <span class="n">tree</span> <span class="o">=</span> <span class="n">DataTree</span><span class="p">(</span><span class="o">**</span><span class="p">{</span><span class="n">label</span><span class="p">:</span> <span class="bp">self</span><span class="p">})</span>
-<span class="g g-Whitespace">   </span><span class="mi">1058</span> <span class="k">return</span> <span class="n">tree</span>
-
-<span class="nn">File ~/work/larch/larch/larch/dataset.py:1110,</span> in <span class="ni">DataTree.__init__</span><span class="nt">(self, graph, root_node_name, extra_funcs, extra_vars, cache_dir, relationships, force_digitization, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1099</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1100</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1101</span>     <span class="n">graph</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1108</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1109</span> <span class="p">):</span>
-<span class="ne">-&gt; </span><span class="mi">1110</span>     <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span>
-<span class="g g-Whitespace">   </span><span class="mi">1111</span>         <span class="n">graph</span><span class="o">=</span><span class="n">graph</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1112</span>         <span class="n">root_node_name</span><span class="o">=</span><span class="n">root_node_name</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1113</span>         <span class="n">extra_funcs</span><span class="o">=</span><span class="n">extra_funcs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1114</span>         <span class="n">extra_vars</span><span class="o">=</span><span class="n">extra_vars</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1115</span>         <span class="n">cache_dir</span><span class="o">=</span><span class="n">cache_dir</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1116</span>         <span class="n">relationships</span><span class="o">=</span><span class="n">relationships</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1117</span>         <span class="n">force_digitization</span><span class="o">=</span><span class="n">force_digitization</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1118</span>         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1119</span>     <span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="n">dim_order</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="g g-Whitespace">   </span><span class="mi">1121</span>     <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">_CASEID</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-
-<span class="ne">TypeError</span>: object.__init__() takes exactly one argument (the instance to initialize)
-</pre></div>
-</div>
-</div>
 </div>
 <p>We will use the usual choice and availability variables.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;avail&#39;</span>
 <span class="n">m</span><span class="o">.</span><span class="n">choice_ca_var</span> <span class="o">=</span> <span class="s1">&#39;chose&#39;</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">availability_var</span> <span class="o">=</span> <span class="s1">&#39;avail&#39;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">m</span><span class="o">.</span><span class="n">choice_ca_var</span> <span class="o">=</span> <span class="s1">&#39;chose&#39;</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1267,22 +1261,6 @@
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span>
-<span class="ne">----&gt; </span><span class="mi">3</span> <span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;totcost/hhinc&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;costbyincome&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;tottime * (altnum &lt;= 4)&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;motorized_time&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;tottime * (altnum &gt;= 5)&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;nonmotorized_time&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;ovtt/dist * (altnum &lt;= 4)&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;motorized_ovtbydist&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <p>The “totcost/hhinc” data is computed once as a new variable when loading the model data.
 The same applies for tottime filtered by motorized modes (we harness the convenient fact
@@ -1291,17 +1269,6 @@ that all the motorized modes have identifying numbers 4 or less), and “ovtt/di
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]:</span>
     <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">]:</span>
-<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">a</span><span class="p">))</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1338,25 +1305,6 @@ For example, we can say that vehbywrk_SR2 will be equal to vehbywrk_SR.</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">a</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">altid</span><span class="p">)</span>
-<span class="ne">----&gt; </span><span class="mi">4</span>     <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">a</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>         <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;vehbywrk&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;vehbywrk_SR&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>         <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;wkccbd+wknccbd&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;wkcbd_&quot;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>         <span class="o">+</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;wkempden&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;wkempden_&quot;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>         <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_&quot;</span><span class="o">+</span><span class="n">name</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span>     <span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;alt_names&#39;</span><span class="p">][</span><span class="mi">3</span><span class="p">:]:</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">name</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <p>We didn’t explicitly define our parameters first, which is fine; Larch will
 find them in the utility functions (or elsewhere in more complex models).
@@ -1374,21 +1322,6 @@ like this:</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">ordering</span> <span class="o">=</span> <span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="p">(</span><span class="s1">&#39;LOS&#39;</span><span class="p">,</span> <span class="s2">&quot;.*cost.*&quot;</span><span class="p">,</span> <span class="s2">&quot;.*time.*&quot;</span><span class="p">,</span> <span class="s2">&quot;.*dist.*&quot;</span><span class="p">,),</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="p">(</span><span class="s1">&#39;Zonal&#39;</span><span class="p">,</span> <span class="s2">&quot;wkcbd.*&quot;</span><span class="p">,</span> <span class="s2">&quot;wkempden.*&quot;</span><span class="p">,),</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="p">(</span><span class="s1">&#39;Household&#39;</span><span class="p">,</span> <span class="s2">&quot;hhinc.*&quot;</span><span class="p">,</span> <span class="s2">&quot;vehbywrk.*&quot;</span><span class="p">,),</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="p">(</span><span class="s1">&#39;ASCs&#39;</span><span class="p">,</span> <span class="s2">&quot;ASC.*&quot;</span><span class="p">,),</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <p>Each item in parameter_ordering is a tuple, with a label and one or more regular expressions,
 which will be compared against
@@ -1403,15 +1336,120 @@ regex, it will appear in the ordering only for the first match.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
-</pre></div>
-</div>
-</div>
+<div class="output text_html"><div><table style="margin-top:1px;"><tr><th>key</th><th style="text-align:left;">value</th></tr><tr><td>loglike</td><td style="text-align:left;">-3444.185105027836</td></tr><tr><td>x</td><td style="text-align:left;"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>ASC_Bike</th>
+      <td>-1.629</td>
+    </tr>
+    <tr>
+      <th>ASC_SR2</th>
+      <td>-1.808</td>
+    </tr>
+    <tr>
+      <th>ASC_SR3+</th>
+      <td>-3.434</td>
+    </tr>
+    <tr>
+      <th>ASC_Transit</th>
+      <td>-0.685</td>
+    </tr>
+    <tr>
+      <th>ASC_Walk</th>
+      <td>0.068</td>
+    </tr>
+    <tr>
+      <th>costbyincome</th>
+      <td>-0.052</td>
+    </tr>
+    <tr>
+      <th>hhinc#4</th>
+      <td>-0.005</td>
+    </tr>
+    <tr>
+      <th>hhinc#5</th>
+      <td>-0.009</td>
+    </tr>
+    <tr>
+      <th>hhinc#6</th>
+      <td>-0.006</td>
+    </tr>
+    <tr>
+      <th>motorized_ovtbydist</th>
+      <td>-0.133</td>
+    </tr>
+    <tr>
+      <th>motorized_time</th>
+      <td>-0.020</td>
+    </tr>
+    <tr>
+      <th>nonmotorized_time</th>
+      <td>-0.045</td>
+    </tr>
+    <tr>
+      <th>vehbywrk_Bike</th>
+      <td>-0.702</td>
+    </tr>
+    <tr>
+      <th>vehbywrk_SR</th>
+      <td>-0.317</td>
+    </tr>
+    <tr>
+      <th>vehbywrk_Transit</th>
+      <td>-0.946</td>
+    </tr>
+    <tr>
+      <th>vehbywrk_Walk</th>
+      <td>-0.722</td>
+    </tr>
+    <tr>
+      <th>wkcbd_Bike</th>
+      <td>0.489</td>
+    </tr>
+    <tr>
+      <th>wkcbd_SR2</th>
+      <td>0.260</td>
+    </tr>
+    <tr>
+      <th>wkcbd_SR3+</th>
+      <td>1.069</td>
+    </tr>
+    <tr>
+      <th>wkcbd_Transit</th>
+      <td>1.309</td>
+    </tr>
+    <tr>
+      <th>wkcbd_Walk</th>
+      <td>0.102</td>
+    </tr>
+    <tr>
+      <th>wkempden_Bike</th>
+      <td>0.002</td>
+    </tr>
+    <tr>
+      <th>wkempden_SR2</th>
+      <td>0.002</td>
+    </tr>
+    <tr>
+      <th>wkempden_SR3+</th>
+      <td>0.002</td>
+    </tr>
+    <tr>
+      <th>wkempden_Transit</th>
+      <td>0.003</td>
+    </tr>
+    <tr>
+      <th>wkempden_Walk</th>
+      <td>0.003</td>
+    </tr>
+  </tbody>
+</table></td></tr><tr><td>tolerance</td><td style="text-align:left;">6.023065906796563e-06</td></tr><tr><td>steps</td><td style="text-align:left;">array([1., 1., 1., 1., 1., 1., 1., 1., 1., 1.])</td></tr><tr><td>message</td><td style="text-align:left;">'Optimization terminated successfully.'</td></tr><tr><td>elapsed_time</td><td style="text-align:left;">0:00:00.362192</td></tr><tr><td>method</td><td style="text-align:left;">'bhhh'</td></tr><tr><td>n_cases</td><td style="text-align:left;">5029</td></tr><tr><td>iteration_number</td><td style="text-align:left;">0</td></tr><tr><td>logloss</td><td style="text-align:left;">0.6848648051357796</td></tr><tr><td>__verbose_repr__</td><td style="text-align:left;">True</td></tr></table></div></div></div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1421,16 +1459,256 @@ regex, it will appear in the ordering only for the first match.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
-</pre></div>
-</div>
-</div>
+<div class="output text_html"><style type="text/css">
+#T_955a2 th {
+  vertical-align: top;
+  text-align: left;
+}
+#T_955a2 td {
+  vertical-align: top;
+  text-align: left;
+}
+#T_955a2_row0_col0, #T_955a2_row0_col1, #T_955a2_row0_col2, #T_955a2_row0_col3, #T_955a2_row0_col4, #T_955a2_row1_col0, #T_955a2_row1_col1, #T_955a2_row1_col2, #T_955a2_row1_col3, #T_955a2_row1_col4, #T_955a2_row2_col0, #T_955a2_row2_col1, #T_955a2_row2_col2, #T_955a2_row2_col3, #T_955a2_row2_col4, #T_955a2_row3_col0, #T_955a2_row3_col1, #T_955a2_row3_col2, #T_955a2_row3_col3, #T_955a2_row3_col4, #T_955a2_row4_col0, #T_955a2_row4_col1, #T_955a2_row4_col2, #T_955a2_row4_col3, #T_955a2_row4_col4, #T_955a2_row5_col0, #T_955a2_row5_col1, #T_955a2_row5_col2, #T_955a2_row5_col3, #T_955a2_row5_col4, #T_955a2_row6_col0, #T_955a2_row6_col1, #T_955a2_row6_col2, #T_955a2_row6_col3, #T_955a2_row6_col4, #T_955a2_row7_col0, #T_955a2_row7_col1, #T_955a2_row7_col2, #T_955a2_row7_col3, #T_955a2_row7_col4, #T_955a2_row8_col0, #T_955a2_row8_col1, #T_955a2_row8_col2, #T_955a2_row8_col3, #T_955a2_row8_col4, #T_955a2_row9_col0, #T_955a2_row9_col1, #T_955a2_row9_col2, #T_955a2_row9_col3, #T_955a2_row9_col4, #T_955a2_row10_col0, #T_955a2_row10_col1, #T_955a2_row10_col2, #T_955a2_row10_col3, #T_955a2_row10_col4, #T_955a2_row11_col0, #T_955a2_row11_col1, #T_955a2_row11_col2, #T_955a2_row11_col3, #T_955a2_row11_col4, #T_955a2_row12_col0, #T_955a2_row12_col1, #T_955a2_row12_col2, #T_955a2_row12_col3, #T_955a2_row12_col4, #T_955a2_row13_col0, #T_955a2_row13_col1, #T_955a2_row13_col2, #T_955a2_row13_col3, #T_955a2_row13_col4, #T_955a2_row14_col0, #T_955a2_row14_col1, #T_955a2_row14_col2, #T_955a2_row14_col3, #T_955a2_row14_col4, #T_955a2_row15_col0, #T_955a2_row15_col1, #T_955a2_row15_col2, #T_955a2_row15_col3, #T_955a2_row15_col4, #T_955a2_row16_col0, #T_955a2_row16_col1, #T_955a2_row16_col2, #T_955a2_row16_col3, #T_955a2_row16_col4, #T_955a2_row17_col0, #T_955a2_row17_col1, #T_955a2_row17_col2, #T_955a2_row17_col3, #T_955a2_row17_col4, #T_955a2_row18_col0, #T_955a2_row18_col1, #T_955a2_row18_col2, #T_955a2_row18_col3, #T_955a2_row18_col4, #T_955a2_row19_col0, #T_955a2_row19_col1, #T_955a2_row19_col2, #T_955a2_row19_col3, #T_955a2_row19_col4, #T_955a2_row20_col0, #T_955a2_row20_col1, #T_955a2_row20_col2, #T_955a2_row20_col3, #T_955a2_row20_col4, #T_955a2_row21_col0, #T_955a2_row21_col1, #T_955a2_row21_col2, #T_955a2_row21_col3, #T_955a2_row21_col4, #T_955a2_row22_col0, #T_955a2_row22_col1, #T_955a2_row22_col2, #T_955a2_row22_col3, #T_955a2_row22_col4, #T_955a2_row23_col0, #T_955a2_row23_col1, #T_955a2_row23_col2, #T_955a2_row23_col3, #T_955a2_row23_col4, #T_955a2_row24_col0, #T_955a2_row24_col1, #T_955a2_row24_col2, #T_955a2_row24_col3, #T_955a2_row24_col4, #T_955a2_row25_col0, #T_955a2_row25_col1, #T_955a2_row25_col2, #T_955a2_row25_col3, #T_955a2_row25_col4 {
+  font-family: monospace;
+}
+</style>
+<table id="T_955a2">
+  <thead>
+    <tr>
+      <th class="blank" >&nbsp;</th>
+      <th class="blank level0" >&nbsp;</th>
+      <th id="T_955a2_level0_col0" class="col_heading level0 col0" >Value</th>
+      <th id="T_955a2_level0_col1" class="col_heading level0 col1" >Std Err</th>
+      <th id="T_955a2_level0_col2" class="col_heading level0 col2" >t Stat</th>
+      <th id="T_955a2_level0_col3" class="col_heading level0 col3" >Signif</th>
+      <th id="T_955a2_level0_col4" class="col_heading level0 col4" >Null Value</th>
+    </tr>
+    <tr>
+      <th class="index_name level0" >Category</th>
+      <th class="index_name level1" >Parameter</th>
+      <th class="blank col0" >&nbsp;</th>
+      <th class="blank col1" >&nbsp;</th>
+      <th class="blank col2" >&nbsp;</th>
+      <th class="blank col3" >&nbsp;</th>
+      <th class="blank col4" >&nbsp;</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th id="T_955a2_level0_row0" class="row_heading level0 row0" rowspan="4">LOS</th>
+      <th id="T_955a2_level1_row0" class="row_heading level1 row0" >costbyincome</th>
+      <td id="T_955a2_row0_col0" class="data row0 col0" >-0.0524</td>
+      <td id="T_955a2_row0_col1" class="data row0 col1" > 0.0104</td>
+      <td id="T_955a2_row0_col2" class="data row0 col2" >-5.04</td>
+      <td id="T_955a2_row0_col3" class="data row0 col3" >***</td>
+      <td id="T_955a2_row0_col4" class="data row0 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row1" class="row_heading level1 row1" >motorized_time</th>
+      <td id="T_955a2_row1_col0" class="data row1 col0" >-0.0202</td>
+      <td id="T_955a2_row1_col1" class="data row1 col1" > 0.00381</td>
+      <td id="T_955a2_row1_col2" class="data row1 col2" >-5.29</td>
+      <td id="T_955a2_row1_col3" class="data row1 col3" >***</td>
+      <td id="T_955a2_row1_col4" class="data row1 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row2" class="row_heading level1 row2" >nonmotorized_time</th>
+      <td id="T_955a2_row2_col0" class="data row2 col0" >-0.0454</td>
+      <td id="T_955a2_row2_col1" class="data row2 col1" > 0.00577</td>
+      <td id="T_955a2_row2_col2" class="data row2 col2" >-7.88</td>
+      <td id="T_955a2_row2_col3" class="data row2 col3" >***</td>
+      <td id="T_955a2_row2_col4" class="data row2 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row3" class="row_heading level1 row3" >motorized_ovtbydist</th>
+      <td id="T_955a2_row3_col0" class="data row3 col0" >-0.133</td>
+      <td id="T_955a2_row3_col1" class="data row3 col1" > 0.0196</td>
+      <td id="T_955a2_row3_col2" class="data row3 col2" >-6.76</td>
+      <td id="T_955a2_row3_col3" class="data row3 col3" >***</td>
+      <td id="T_955a2_row3_col4" class="data row3 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level0_row4" class="row_heading level0 row4" rowspan="10">Zonal</th>
+      <th id="T_955a2_level1_row4" class="row_heading level1 row4" >wkcbd_Bike</th>
+      <td id="T_955a2_row4_col0" class="data row4 col0" > 0.489</td>
+      <td id="T_955a2_row4_col1" class="data row4 col1" > 0.361</td>
+      <td id="T_955a2_row4_col2" class="data row4 col2" > 1.36</td>
+      <td id="T_955a2_row4_col3" class="data row4 col3" ></td>
+      <td id="T_955a2_row4_col4" class="data row4 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row5" class="row_heading level1 row5" >wkcbd_SR2</th>
+      <td id="T_955a2_row5_col0" class="data row5 col0" > 0.260</td>
+      <td id="T_955a2_row5_col1" class="data row5 col1" > 0.123</td>
+      <td id="T_955a2_row5_col2" class="data row5 col2" > 2.11</td>
+      <td id="T_955a2_row5_col3" class="data row5 col3" >*</td>
+      <td id="T_955a2_row5_col4" class="data row5 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row6" class="row_heading level1 row6" >wkcbd_SR3+</th>
+      <td id="T_955a2_row6_col0" class="data row6 col0" > 1.07</td>
+      <td id="T_955a2_row6_col1" class="data row6 col1" > 0.191</td>
+      <td id="T_955a2_row6_col2" class="data row6 col2" > 5.59</td>
+      <td id="T_955a2_row6_col3" class="data row6 col3" >***</td>
+      <td id="T_955a2_row6_col4" class="data row6 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row7" class="row_heading level1 row7" >wkcbd_Transit</th>
+      <td id="T_955a2_row7_col0" class="data row7 col0" > 1.31</td>
+      <td id="T_955a2_row7_col1" class="data row7 col1" > 0.166</td>
+      <td id="T_955a2_row7_col2" class="data row7 col2" > 7.90</td>
+      <td id="T_955a2_row7_col3" class="data row7 col3" >***</td>
+      <td id="T_955a2_row7_col4" class="data row7 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row8" class="row_heading level1 row8" >wkcbd_Walk</th>
+      <td id="T_955a2_row8_col0" class="data row8 col0" > 0.102</td>
+      <td id="T_955a2_row8_col1" class="data row8 col1" > 0.252</td>
+      <td id="T_955a2_row8_col2" class="data row8 col2" > 0.40</td>
+      <td id="T_955a2_row8_col3" class="data row8 col3" ></td>
+      <td id="T_955a2_row8_col4" class="data row8 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row9" class="row_heading level1 row9" >wkempden_Bike</th>
+      <td id="T_955a2_row9_col0" class="data row9 col0" > 0.00193</td>
+      <td id="T_955a2_row9_col1" class="data row9 col1" > 0.00122</td>
+      <td id="T_955a2_row9_col2" class="data row9 col2" > 1.59</td>
+      <td id="T_955a2_row9_col3" class="data row9 col3" ></td>
+      <td id="T_955a2_row9_col4" class="data row9 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row10" class="row_heading level1 row10" >wkempden_SR2</th>
+      <td id="T_955a2_row10_col0" class="data row10 col0" > 0.00158</td>
+      <td id="T_955a2_row10_col1" class="data row10 col1" > 0.000390</td>
+      <td id="T_955a2_row10_col2" class="data row10 col2" > 4.04</td>
+      <td id="T_955a2_row10_col3" class="data row10 col3" >***</td>
+      <td id="T_955a2_row10_col4" class="data row10 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row11" class="row_heading level1 row11" >wkempden_SR3+</th>
+      <td id="T_955a2_row11_col0" class="data row11 col0" > 0.00226</td>
+      <td id="T_955a2_row11_col1" class="data row11 col1" > 0.000452</td>
+      <td id="T_955a2_row11_col2" class="data row11 col2" > 4.99</td>
+      <td id="T_955a2_row11_col3" class="data row11 col3" >***</td>
+      <td id="T_955a2_row11_col4" class="data row11 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row12" class="row_heading level1 row12" >wkempden_Transit</th>
+      <td id="T_955a2_row12_col0" class="data row12 col0" > 0.00313</td>
+      <td id="T_955a2_row12_col1" class="data row12 col1" > 0.000361</td>
+      <td id="T_955a2_row12_col2" class="data row12 col2" > 8.68</td>
+      <td id="T_955a2_row12_col3" class="data row12 col3" >***</td>
+      <td id="T_955a2_row12_col4" class="data row12 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row13" class="row_heading level1 row13" >wkempden_Walk</th>
+      <td id="T_955a2_row13_col0" class="data row13 col0" > 0.00289</td>
+      <td id="T_955a2_row13_col1" class="data row13 col1" > 0.000742</td>
+      <td id="T_955a2_row13_col2" class="data row13 col2" > 3.90</td>
+      <td id="T_955a2_row13_col3" class="data row13 col3" >***</td>
+      <td id="T_955a2_row13_col4" class="data row13 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level0_row14" class="row_heading level0 row14" rowspan="7">Household</th>
+      <th id="T_955a2_level1_row14" class="row_heading level1 row14" >hhinc#4</th>
+      <td id="T_955a2_row14_col0" class="data row14 col0" >-0.00532</td>
+      <td id="T_955a2_row14_col1" class="data row14 col1" > 0.00198</td>
+      <td id="T_955a2_row14_col2" class="data row14 col2" >-2.69</td>
+      <td id="T_955a2_row14_col3" class="data row14 col3" >**</td>
+      <td id="T_955a2_row14_col4" class="data row14 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row15" class="row_heading level1 row15" >hhinc#5</th>
+      <td id="T_955a2_row15_col0" class="data row15 col0" >-0.00864</td>
+      <td id="T_955a2_row15_col1" class="data row15 col1" > 0.00515</td>
+      <td id="T_955a2_row15_col2" class="data row15 col2" >-1.68</td>
+      <td id="T_955a2_row15_col3" class="data row15 col3" ></td>
+      <td id="T_955a2_row15_col4" class="data row15 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row16" class="row_heading level1 row16" >hhinc#6</th>
+      <td id="T_955a2_row16_col0" class="data row16 col0" >-0.00600</td>
+      <td id="T_955a2_row16_col1" class="data row16 col1" > 0.00315</td>
+      <td id="T_955a2_row16_col2" class="data row16 col2" >-1.90</td>
+      <td id="T_955a2_row16_col3" class="data row16 col3" ></td>
+      <td id="T_955a2_row16_col4" class="data row16 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row17" class="row_heading level1 row17" >vehbywrk_Bike</th>
+      <td id="T_955a2_row17_col0" class="data row17 col0" >-0.702</td>
+      <td id="T_955a2_row17_col1" class="data row17 col1" > 0.258</td>
+      <td id="T_955a2_row17_col2" class="data row17 col2" >-2.72</td>
+      <td id="T_955a2_row17_col3" class="data row17 col3" >**</td>
+      <td id="T_955a2_row17_col4" class="data row17 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row18" class="row_heading level1 row18" >vehbywrk_SR</th>
+      <td id="T_955a2_row18_col0" class="data row18 col0" >-0.317</td>
+      <td id="T_955a2_row18_col1" class="data row18 col1" > 0.0666</td>
+      <td id="T_955a2_row18_col2" class="data row18 col2" >-4.75</td>
+      <td id="T_955a2_row18_col3" class="data row18 col3" >***</td>
+      <td id="T_955a2_row18_col4" class="data row18 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row19" class="row_heading level1 row19" >vehbywrk_Transit</th>
+      <td id="T_955a2_row19_col0" class="data row19 col0" >-0.946</td>
+      <td id="T_955a2_row19_col1" class="data row19 col1" > 0.118</td>
+      <td id="T_955a2_row19_col2" class="data row19 col2" >-8.00</td>
+      <td id="T_955a2_row19_col3" class="data row19 col3" >***</td>
+      <td id="T_955a2_row19_col4" class="data row19 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row20" class="row_heading level1 row20" >vehbywrk_Walk</th>
+      <td id="T_955a2_row20_col0" class="data row20 col0" >-0.722</td>
+      <td id="T_955a2_row20_col1" class="data row20 col1" > 0.169</td>
+      <td id="T_955a2_row20_col2" class="data row20 col2" >-4.26</td>
+      <td id="T_955a2_row20_col3" class="data row20 col3" >***</td>
+      <td id="T_955a2_row20_col4" class="data row20 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level0_row21" class="row_heading level0 row21" rowspan="5">ASCs</th>
+      <th id="T_955a2_level1_row21" class="row_heading level1 row21" >ASC_Bike</th>
+      <td id="T_955a2_row21_col0" class="data row21 col0" >-1.63</td>
+      <td id="T_955a2_row21_col1" class="data row21 col1" > 0.427</td>
+      <td id="T_955a2_row21_col2" class="data row21 col2" >-3.81</td>
+      <td id="T_955a2_row21_col3" class="data row21 col3" >***</td>
+      <td id="T_955a2_row21_col4" class="data row21 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row22" class="row_heading level1 row22" >ASC_SR2</th>
+      <td id="T_955a2_row22_col0" class="data row22 col0" >-1.81</td>
+      <td id="T_955a2_row22_col1" class="data row22 col1" > 0.106</td>
+      <td id="T_955a2_row22_col2" class="data row22 col2" >-17.03</td>
+      <td id="T_955a2_row22_col3" class="data row22 col3" >***</td>
+      <td id="T_955a2_row22_col4" class="data row22 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row23" class="row_heading level1 row23" >ASC_SR3+</th>
+      <td id="T_955a2_row23_col0" class="data row23 col0" >-3.43</td>
+      <td id="T_955a2_row23_col1" class="data row23 col1" > 0.152</td>
+      <td id="T_955a2_row23_col2" class="data row23 col2" >-22.61</td>
+      <td id="T_955a2_row23_col3" class="data row23 col3" >***</td>
+      <td id="T_955a2_row23_col4" class="data row23 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row24" class="row_heading level1 row24" >ASC_Transit</th>
+      <td id="T_955a2_row24_col0" class="data row24 col0" >-0.685</td>
+      <td id="T_955a2_row24_col1" class="data row24 col1" > 0.248</td>
+      <td id="T_955a2_row24_col2" class="data row24 col2" >-2.76</td>
+      <td id="T_955a2_row24_col3" class="data row24 col3" >**</td>
+      <td id="T_955a2_row24_col4" class="data row24 col4" > 0.00</td>
+    </tr>
+    <tr>
+      <th id="T_955a2_level1_row25" class="row_heading level1 row25" >ASC_Walk</th>
+      <td id="T_955a2_row25_col0" class="data row25 col0" > 0.0683</td>
+      <td id="T_955a2_row25_col1" class="data row25 col1" > 0.348</td>
+      <td id="T_955a2_row25_col2" class="data row25 col2" > 0.20</td>
+      <td id="T_955a2_row25_col3" class="data row25 col3" ></td>
+      <td id="T_955a2_row25_col4" class="data row25 col4" > 0.00</td>
+    </tr>
+  </tbody>
+</table>
+</div></div>
 </div>
 </div>
 

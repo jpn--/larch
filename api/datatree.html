@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DataTree &#8212; v5.5.10</title>
+    <title>DataTree &#8212; PRE-RELEASE DEV DOCS</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -88,7 +88,7 @@
       <img src="../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.5.10</h1>
+      <h1 class="site-logo" id="site-title">PRE-RELEASE DEV DOCS</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -189,6 +189,31 @@
      <li class="toctree-l3">
       <a class="reference internal" href="generated/larch.Dataset.construct.html">
        larch.Dataset.construct
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.Dataset.from_table.html">
+       larch.Dataset.from_table
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.Dataset.from_omx.html">
+       larch.Dataset.from_omx
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.Dataset.from_omx_3d.html">
+       larch.Dataset.from_omx_3d
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.Dataset.from_zarr.html">
+       larch.Dataset.from_zarr
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.Dataset.from_named_objects.html">
+       larch.Dataset.from_named_objects
       </a>
      </li>
      <li class="toctree-l3">
@@ -319,6 +344,21 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.DataTree.root_node_name.html">
+       larch.DataTree.root_node_name
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.DataTree.subspaces.html">
+       larch.DataTree.subspaces
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.DataTree.relationships_are_digitized.html">
+       larch.DataTree.relationships_are_digitized
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="generated/larch.DataTree.n_cases.html">
        larch.DataTree.n_cases
       </a>
@@ -339,8 +379,28 @@
       </a>
      </li>
      <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.DataTree.add_dataset.html">
+       larch.DataTree.add_dataset
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.DataTree.add_relationship.html">
+       larch.DataTree.add_relationship
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.DataTree.digitize_relationships.html">
+       larch.DataTree.digitize_relationships
+      </a>
+     </li>
+     <li class="toctree-l3">
       <a class="reference internal" href="generated/larch.DataTree.query_cases.html">
        larch.DataTree.query_cases
+      </a>
+     </li>
+     <li class="toctree-l3">
+      <a class="reference internal" href="generated/larch.DataTree.replace_datasets.html">
+       larch.DataTree.replace_datasets
       </a>
      </li>
      <li class="toctree-l3">
@@ -1223,16 +1283,25 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/larch.DataTree.n_cases.html#larch.DataTree.n_cases" title="larch.DataTree.n_cases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.n_cases</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/larch.DataTree.root_node_name.html#larch.DataTree.root_node_name" title="larch.DataTree.root_node_name"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.root_node_name</span></code></a></p></td>
+<td><p>The root node for this data tree, which is only ever a parent.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/larch.DataTree.subspaces.html#larch.DataTree.subspaces" title="larch.DataTree.subspaces"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.subspaces</span></code></a></p></td>
+<td><p>Direct access to node Dataset objects by name.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/larch.DataTree.relationships_are_digitized.html#larch.DataTree.relationships_are_digitized" title="larch.DataTree.relationships_are_digitized"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.relationships_are_digitized</span></code></a></p></td>
+<td><p>Whether all relationships are digital (by position).</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/larch.DataTree.n_cases.html#larch.DataTree.n_cases" title="larch.DataTree.n_cases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.n_cases</span></code></a></p></td>
 <td><p>The size of the _caseid_ dimension of the root Dataset.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/larch.DataTree.n_alts.html#larch.DataTree.n_alts" title="larch.DataTree.n_alts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.n_alts</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/larch.DataTree.n_alts.html#larch.DataTree.n_alts" title="larch.DataTree.n_alts"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.n_alts</span></code></a></p></td>
 <td><p>The size of the _altid_ dimension of the root Dataset.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/larch.DataTree.CASEID.html#larch.DataTree.CASEID" title="larch.DataTree.CASEID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.CASEID</span></code></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/larch.DataTree.CASEID.html#larch.DataTree.CASEID" title="larch.DataTree.CASEID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.CASEID</span></code></a></p></td>
 <td><p>The _caseid_ dimension of the root Dataset.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="generated/larch.DataTree.ALTID.html#larch.DataTree.ALTID" title="larch.DataTree.ALTID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.ALTID</span></code></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/larch.DataTree.ALTID.html#larch.DataTree.ALTID" title="larch.DataTree.ALTID"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.ALTID</span></code></a></p></td>
 <td><p>The _altid_ dimension of the root Dataset.</p></td>
 </tr>
 </tbody>
@@ -1246,8 +1315,20 @@
 <col style="width: 90%" />
 </colgroup>
 <tbody>
-<tr class="row-odd"><td><p><a class="reference internal" href="generated/larch.DataTree.query_cases.html#larch.DataTree.query_cases" title="larch.DataTree.query_cases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.query_cases</span></code></a>(*args, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/larch.DataTree.add_dataset.html#larch.DataTree.add_dataset" title="larch.DataTree.add_dataset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.add_dataset</span></code></a>(name, dataset[, ...])</p></td>
+<td><p>Add a new Dataset node to this DataTree.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/larch.DataTree.add_relationship.html#larch.DataTree.add_relationship" title="larch.DataTree.add_relationship"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.add_relationship</span></code></a>(*args, **kwargs)</p></td>
+<td><p>Add a relationship to this DataTree.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/larch.DataTree.digitize_relationships.html#larch.DataTree.digitize_relationships" title="larch.DataTree.digitize_relationships"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.digitize_relationships</span></code></a>([inplace, ...])</p></td>
+<td><p>Convert all label-based relationships into position-based.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="generated/larch.DataTree.query_cases.html#larch.DataTree.query_cases" title="larch.DataTree.query_cases"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.query_cases</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Return a new DataTree, with a query filter applied to the root Dataset.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="generated/larch.DataTree.replace_datasets.html#larch.DataTree.replace_datasets" title="larch.DataTree.replace_datasets"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.replace_datasets</span></code></a>([other, validate, ...])</p></td>
+<td><p>Replace one or more datasets in the nodes of this tree.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="generated/larch.DataTree.setup_flow.html#larch.DataTree.setup_flow" title="larch.DataTree.setup_flow"><code class="xref py py-obj docutils literal notranslate"><span class="pre">DataTree.setup_flow</span></code></a>(*args, **kwargs)</p></td>
 <td><p>Set up a new Flow for analysis using the structure of this DataTree.</p></td>
