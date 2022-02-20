@@ -6,6 +6,7 @@ repos:
   - id: check-yaml
     exclude: conda-recipe/meta.yaml
   - id: end-of-file-fixer
+    exclude: .*\.ipynb
   - id: trailing-whitespace
 
 - repo: https://github.com/kynan/nbstripout
