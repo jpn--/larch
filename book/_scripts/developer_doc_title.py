@@ -12,7 +12,11 @@ config_file = Path(
     )
 )
 
+if len(sys.argv) >= 2:
+    title = sys.argv[1]
+else:
+    title = "DEVELOPMENT DOCS"
 yaml = YAML(typ="rt")  # default, if not specfied, is 'rt' (round-trip)
 content = yaml.load(config_file)
-content["title"] = sys.argv[-1]
+content["title"] = title
 yaml.dump(content, config_file)
