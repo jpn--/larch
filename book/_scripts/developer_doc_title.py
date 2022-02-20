@@ -1,9 +1,8 @@
 import os
 from pathlib import Path
+import sys
 
 from ruamel.yaml import YAML
-
-import sharrow as sh
 
 config_file = Path(
     os.path.join(
@@ -15,5 +14,5 @@ config_file = Path(
 
 yaml = YAML(typ="rt")  # default, if not specfied, is 'rt' (round-trip)
 content = yaml.load(config_file)
-content["title"] = f"PRE-RELEASE DEV DOCS"
+content["title"] = sys.argv[-1]
 yaml.dump(content, config_file)

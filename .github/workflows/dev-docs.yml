@@ -29,6 +29,10 @@ jobs:
         activate-environment: development
         auto-activate-base: false
         auto-update-conda: false
+    - name: Infer larch version
+      run: |
+        python tools/get_version.py
+        echo "LARCH_VERSION=$LARCH_VERSION" >> $GITHUB_ENV
     - name: Install sharrow
       run: |
         git clone https://github.com/ActivitySim/sharrow.git
@@ -44,7 +48,7 @@ jobs:
     - name: Build the docs
       run: |
         python book/_scripts/hide_test_cells.py
-        python book/_scripts/developer_doc_title.py
+        python book/_scripts/developer_doc_title.py ${{ env.LARCH_VERSION }}
         jb build book
     - name: Push to GitHub Pages
       uses: peaceiris/actions-gh-pages@v3.5.9
