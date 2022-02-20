@@ -62,4 +62,4 @@ jobs:
         personal_token: ${{ secrets.PERSONAL_TOKEN }}
         publish_dir: ./book/_build/html
         external_repository: jpndashdash/larch-dev-docs
-        destination_dir: latest
+        destination_dir: v${{ env.LARCH_VERSION }}
