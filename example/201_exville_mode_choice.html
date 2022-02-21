@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>201: Exampville Mode Choice &#8212; 5.5.11.dev58+gca641c1</title>
+    <title>201: Exampville Mode Choice &#8212; 5.5.11.dev59+g3d07f1e</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -88,7 +88,7 @@
       <img src="../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">5.5.11.dev58+gca641c1</h1>
+      <h1 class="site-logo" id="site-title">5.5.11.dev59+g3d07f1e</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -1328,22 +1328,6 @@ for mode choice model estimation, using the DataTree structure.</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">addicty</span> <span class="kn">import</span> <span class="n">Dict</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">Mode</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">DA</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">SR</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span>     <span class="n">Transit</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="p">)</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;addicty&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1368,23 +1352,6 @@ for mode choice model estimation, using the DataTree structure.</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">tour_dataset</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_idco</span><span class="p">(</span><span class="n">tour</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;TOURID&#39;</span><span class="p">),</span> <span class="n">alts</span><span class="o">=</span><span class="n">Mode</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">od_skims</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_omx</span><span class="p">(</span><span class="n">skims</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="n">dt</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">DataTree</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">tour</span><span class="o">=</span><span class="n">tour_dataset</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">hh</span><span class="o">=</span><span class="n">hh</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;HHID&#39;</span><span class="p">),</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span>     <span class="p">),</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;Mode&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <p>In Exampville, there are only two kinds of trips:</p>
 <ul class="simple">
@@ -1399,16 +1366,6 @@ so we’ll begin by excluding all the other trips:</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dt_work</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">query_cases</span><span class="p">(</span><span class="s2">&quot;TOURPURP == 1&quot;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;dt&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 </div>
 <div class="section" id="model-definition">
@@ -1418,17 +1375,6 @@ so we’ll begin by excluding all the other trips:</p>
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">datatree</span> <span class="o">=</span> <span class="n">dt_work</span><span class="p">)</span>
 <span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Exampville Work Tour Mode Choice v1&quot;</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">datatree</span> <span class="o">=</span> <span class="n">dt_work</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Exampville Work Tour Mode Choice v1&quot;</span>
-
-<span class="ne">NameError</span>: name &#39;dt_work&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1476,7 +1422,7 @@ a unique utility function for each alternative.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">8</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">Mode</span><span class="o">.</span><span class="n">DA</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span>         <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">InVehTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">AUTO_TIME</span>
@@ -1494,7 +1440,7 @@ a unique utility function for each alternative.</p>
 <span class="g g-Whitespace">     </span><span class="mi">16</span>         <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;LogIncome:Walk&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;log(INCOME)&quot;</span><span class="p">)</span>
 <span class="g g-Whitespace">     </span><span class="mi">17</span> <span class="p">)</span>
 
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
+<span class="ne">AttributeError</span>: &#39;NoneType&#39; object has no attribute &#39;DA&#39;
 </pre></div>
 </div>
 </div>
@@ -1516,14 +1462,50 @@ a higher level nest.  We do this below, adding the ‘Car’ nest into the
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/larch/larch/larch/larch/dataset.py:1148: UserWarning: no defined ALTID
+  warnings.warn(&quot;no defined ALTID&quot;)
+/home/runner/work/larch/larch/larch/larch/numba/model.py:899: UserWarning: cannot initialize graph, must define alternatives somehow
+  warnings.warn(&#39;cannot initialize graph, must define alternatives somehow&#39;)
+</pre></div>
+</div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">Car</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;Mu:Car&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">Mode</span><span class="o">.</span><span class="n">DA</span><span class="p">,</span> <span class="n">Mode</span><span class="o">.</span><span class="n">SR</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Car&#39;</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">NonMotor</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;Mu:NonMotor&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">Mode</span><span class="o">.</span><span class="n">Walk</span><span class="p">,</span> <span class="n">Mode</span><span class="o">.</span><span class="n">Bike</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;NonMotor&#39;</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">Motor</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">new_node</span><span class="p">(</span><span class="n">parameter</span><span class="o">=</span><span class="s1">&#39;Mu:Motor&#39;</span><span class="p">,</span> <span class="n">children</span><span class="o">=</span><span class="p">[</span><span class="n">Car</span><span class="p">,</span> <span class="n">Mode</span><span class="o">.</span><span class="n">Transit</span><span class="p">],</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;Motor&#39;</span><span class="p">)</span>
 
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
 </pre></div>
 </div>
 </div>
@@ -1537,11 +1519,41 @@ a higher level nest.  We do this below, adding the ‘Car’ nest into the
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">graph</span>
 
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
 </pre></div>
 </div>
 </div>
@@ -1552,16 +1564,6 @@ defined for the model using <code class="docutils literal notranslate"><span cla
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">choice_co_code</span> <span class="o">=</span> <span class="s1">&#39;TOURMODE&#39;</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">11</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">choice_co_code</span> <span class="o">=</span> <span class="s1">&#39;TOURMODE&#39;</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1584,7 +1586,7 @@ by setting the criterion to 1.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">12</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">availability_co_vars</span> <span class="o">=</span> <span class="p">{</span>
 <span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">Mode</span><span class="o">.</span><span class="n">DA</span><span class="p">:</span> <span class="s1">&#39;AGE &gt;= 16&#39;</span><span class="p">,</span>
@@ -1594,7 +1596,7 @@ by setting the criterion to 1.</p>
 <span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">Mode</span><span class="o">.</span><span class="n">Transit</span><span class="p">:</span> <span class="s1">&#39;TRANSIT_FARE&gt;0&#39;</span><span class="p">,</span>
 <span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="p">}</span>
 
-<span class="ne">NameError</span>: name &#39;Mode&#39; is not defined
+<span class="ne">AttributeError</span>: &#39;NoneType&#39; object has no attribute &#39;DA&#39;
 </pre></div>
 </div>
 </div>
@@ -1618,11 +1620,73 @@ before we estimate the model.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">13</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">choice_avail_summary</span><span class="p">()</span>
 
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:2059,</span> in <span class="ni">NumbaModel.choice_avail_summary</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2051</span> <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2052</span><span class="sd"> Generate a summary of choice and availability statistics.</span>
+<span class="g g-Whitespace">   </span><span class="mi">2053</span><span class="sd"> </span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">   </span><span class="mi">2056</span><span class="sd"> pandas.DataFrame</span>
+<span class="g g-Whitespace">   </span><span class="mi">2057</span><span class="sd"> &quot;&quot;&quot;</span>
+<span class="g g-Whitespace">   </span><span class="mi">2058</span> <span class="kn">from</span> <span class="nn">..dataset</span> <span class="kn">import</span> <span class="n">choice_avail_summary</span>
+<span class="ne">-&gt; </span><span class="mi">2059</span> <span class="bp">self</span><span class="o">.</span><span class="n">unmangle</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">2060</span> <span class="n">graph</span> <span class="o">=</span> <span class="kc">None</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">is_mnl</span><span class="p">()</span> <span class="k">else</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span>
+<span class="g g-Whitespace">   </span><span class="mi">2061</span> <span class="k">return</span> <span class="n">choice_avail_summary</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">2062</span>     <span class="bp">self</span><span class="o">.</span><span class="n">dataset</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2063</span>     <span class="n">graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2064</span>     <span class="bp">self</span><span class="o">.</span><span class="n">availability_co_vars</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">2065</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
 </pre></div>
 </div>
 </div>
@@ -1638,12 +1702,62 @@ can go ahead and estimate the model.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">15</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">set_cap</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span> <span class="c1"># improves optimization stability</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">result</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
 
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:622,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.set_cap</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
 </pre></div>
 </div>
 </div>
@@ -1658,12 +1772,163 @@ the estimates and t statistics, using <code class="docutils literal notranslate"
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>error in calculate_parameter_covariance
+Traceback (most recent call last):
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 896, in graph
+    self.initialize_graph()
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 966, in initialize_graph
+    super().initialize_graph(
+  File &quot;larch/model/controller.pyx&quot;, line 1308, in larch.model.controller.Model5c.initialize_graph
+ValueError: must define dataframes, dataservice, or give alternative_codes explicitly
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;larch/model/abstract_model.pyx&quot;, line 1065, in larch.model.abstract_model.AbstractChoiceModel.calculate_parameter_covariance
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 1773, in d2_loglike
+    return super().d2_loglike(
+  File &quot;larch/model/abstract_model.pyx&quot;, line 566, in larch.model.abstract_model.AbstractChoiceModel.d2_loglike
+  File &quot;larch/model/abstract_model.pyx&quot;, line 417, in larch.model.abstract_model.AbstractChoiceModel.loglike3
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 1706, in loglike2
+    result_arrays, penalty = self._loglike_runner(
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 1339, in _loglike_runner
+    args = self.__prepare_for_compute(
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 1172, in __prepare_for_compute
+    self.unmangle()
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 1118, in unmangle
+    self.reflow_data_arrays()
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 977, in reflow_data_arrays
+    if self.graph is None:
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 900, in graph
+    raise RuntimeError(&#39;cannot initialize graph, must define alternatives somehow&#39;)
+RuntimeError: cannot initialize graph, must define alternatives somehow
+</pre></div>
+</div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">17</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">calculate_parameter_covariance</span><span class="p">()</span>
 
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
+<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:1230,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.calculate_parameter_covariance</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:1065,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.calculate_parameter_covariance</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1773,</span> in <span class="ni">NumbaModel.d2_loglike</span><span class="nt">(self, x, start_case, stop_case, step_case, leave_out, keep_only, subsample)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1762</span> <span class="k">def</span> <span class="nf">d2_loglike</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1763</span>         <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1764</span>         <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1771</span>         <span class="n">subsample</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1772</span> <span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1773</span>     <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">d2_loglike</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1774</span>         <span class="n">x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1775</span>         <span class="n">start_case</span><span class="o">=</span><span class="n">start_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1776</span>         <span class="n">stop_case</span><span class="o">=</span><span class="n">stop_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1777</span>         <span class="n">step_case</span><span class="o">=</span><span class="n">step_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1778</span>         <span class="n">leave_out</span><span class="o">=</span><span class="n">leave_out</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1779</span>         <span class="n">keep_only</span><span class="o">=</span><span class="n">keep_only</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1780</span>         <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1781</span>     <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:566,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.d2_loglike</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:417,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.loglike3</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1706,</span> in <span class="ni">NumbaModel.loglike2</span><span class="nt">(self, x, start_case, stop_case, step_case, persist, leave_out, keep_only, subsample, return_series, probability_only)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1692</span> <span class="k">def</span> <span class="nf">loglike2</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1693</span>         <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1694</span>         <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1704</span>         <span class="n">probability_only</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1705</span> <span class="p">):</span>
+<span class="ne">-&gt; </span><span class="mi">1706</span>     <span class="n">result_arrays</span><span class="p">,</span> <span class="n">penalty</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_loglike_runner</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1707</span>         <span class="n">x</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1708</span>         <span class="n">start_case</span><span class="o">=</span><span class="n">start_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1709</span>         <span class="n">stop_case</span><span class="o">=</span><span class="n">stop_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1710</span>         <span class="n">step_case</span><span class="o">=</span><span class="n">step_case</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1711</span>         <span class="n">return_gradient</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1712</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1713</span>     <span class="n">result</span> <span class="o">=</span> <span class="n">dictx</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1714</span>         <span class="n">ll</span><span class="o">=</span><span class="n">result_arrays</span><span class="o">.</span><span class="n">loglike</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_normalization</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1715</span>         <span class="n">dll</span><span class="o">=</span><span class="n">result_arrays</span><span class="o">.</span><span class="n">d_loglike</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weight_normalization</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1716</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1717</span>     <span class="k">if</span> <span class="n">start_case</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">stop_case</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">step_case</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1339,</span> in <span class="ni">NumbaModel._loglike_runner</span><span class="nt">(self, x, only_utility, return_gradient, return_probability, return_bhhh, start_case, stop_case, step_case)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1327</span> <span class="k">def</span> <span class="nf">_loglike_runner</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1328</span>         <span class="bp">self</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1329</span>         <span class="n">x</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1336</span>         <span class="n">step_case</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1337</span> <span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1338</span>     <span class="n">caseslice</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start_case</span><span class="p">,</span> <span class="n">stop_case</span><span class="p">,</span> <span class="n">step_case</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1339</span>     <span class="n">args</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">__prepare_for_compute</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1340</span>         <span class="n">x</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1341</span>         <span class="n">allow_missing_ch</span><span class="o">=</span><span class="n">return_probability</span> <span class="ow">or</span> <span class="p">(</span><span class="n">only_utility</span><span class="o">&gt;</span><span class="mi">0</span><span class="p">),</span>
+<span class="g g-Whitespace">   </span><span class="mi">1342</span>         <span class="n">caseslice</span><span class="o">=</span><span class="n">caseslice</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1343</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1344</span>     <span class="n">args_flags</span> <span class="o">=</span> <span class="n">args</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span>
+<span class="g g-Whitespace">   </span><span class="mi">1345</span>         <span class="n">only_utility</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1346</span>         <span class="n">return_probability</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1347</span>         <span class="n">return_gradient</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1348</span>         <span class="n">return_bhhh</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1349</span>     <span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int8</span><span class="p">),)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1350</span>     <span class="k">try</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1172,</span> in <span class="ni">NumbaModel.__prepare_for_compute</span><span class="nt">(self, x, allow_missing_ch, allow_missing_av, caseslice)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1170</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframes</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataframes</span><span class="o">.</span><span class="n">is_computational_ready</span><span class="p">(</span><span class="n">activate</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1171</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;DataFrames is not computational-ready&#39;</span><span class="p">)</span>
+<span class="ne">-&gt; </span><span class="mi">1172</span> <span class="bp">self</span><span class="o">.</span><span class="n">unmangle</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1173</span> <span class="k">if</span> <span class="n">x</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1174</span>     <span class="bp">self</span><span class="o">.</span><span class="n">set_values</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
 </pre></div>
 </div>
 </div>
@@ -1676,12 +1941,90 @@ the estimates and t statistics, using <code class="docutils literal notranslate"
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>error in parameter_summary
+Traceback (most recent call last):
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 896, in graph
+    self.initialize_graph()
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 966, in initialize_graph
+    super().initialize_graph(
+  File &quot;larch/model/controller.pyx&quot;, line 1308, in larch.model.controller.Model5c.initialize_graph
+ValueError: must define dataframes, dataservice, or give alternative_codes explicitly
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 848, in larch.model.parameter_frame.ParameterFrame.parameter_summary
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 661, in larch.model.parameter_frame.ParameterFrame.pfo
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 195, in larch.model.parameter_frame.ParameterFrame.pf.__get__
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 1118, in unmangle
+    self.reflow_data_arrays()
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 977, in reflow_data_arrays
+    if self.graph is None:
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 900, in graph
+    raise RuntimeError(&#39;cannot initialize graph, must define alternatives somehow&#39;)
+RuntimeError: cannot initialize graph, must define alternatives somehow
+</pre></div>
+</div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">18</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">()</span>
 
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:1008,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:848,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:661,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pfo</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
 </pre></div>
 </div>
 </div>
@@ -1694,11 +2037,65 @@ the estimates and t statistics, using <code class="docutils literal notranslate"
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">20</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">estimation_statistics</span><span class="p">()</span>
 
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
+<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:922,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.estimation_statistics</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:736,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.loglike_null</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:631,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.get_values</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
 </pre></div>
 </div>
 </div>
@@ -1712,16 +2109,6 @@ the estimates and t statistics, using <code class="docutils literal notranslate"
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">21</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">report</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Reporter</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="n">m</span><span class="o">.</span><span class="n">title</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1732,14 +2119,92 @@ the estimates and t statistics, using <code class="docutils literal notranslate"
 </div>
 </div>
 <div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>error in parameter_summary
+Traceback (most recent call last):
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 896, in graph
+    self.initialize_graph()
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 966, in initialize_graph
+    super().initialize_graph(
+  File &quot;larch/model/controller.pyx&quot;, line 1308, in larch.model.controller.Model5c.initialize_graph
+ValueError: must define dataframes, dataservice, or give alternative_codes explicitly
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 848, in larch.model.parameter_frame.ParameterFrame.parameter_summary
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 661, in larch.model.parameter_frame.ParameterFrame.pfo
+  File &quot;larch/model/parameter_frame.pyx&quot;, line 195, in larch.model.parameter_frame.ParameterFrame.pf.__get__
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 1118, in unmangle
+    self.reflow_data_arrays()
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 977, in reflow_data_arrays
+    if self.graph is None:
+  File &quot;/home/runner/work/larch/larch/larch/larch/numba/model.py&quot;, line 900, in graph
+    raise RuntimeError(&#39;cannot initialize graph, must define alternatives somehow&#39;)
+RuntimeError: cannot initialize graph, must define alternatives somehow
+</pre></div>
+</div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">22</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;# Parameter Summary&#39;</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">())</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;# Parameter Summary&#39;</span><span class="p">)</span>
+<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">report</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">parameter_summary</span><span class="p">())</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">report</span>
 
-<span class="ne">NameError</span>: name &#39;report&#39; is not defined
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:1008,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:848,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.parameter_summary</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:661,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pfo</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
 </pre></div>
 </div>
 </div>
@@ -1752,11 +2217,65 @@ the estimates and t statistics, using <code class="docutils literal notranslate"
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">23</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">report</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;# Estimation Statistics&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="o">.</span><span class="n">estimation_statistics</span><span class="p">()</span>
 
-<span class="ne">NameError</span>: name &#39;report&#39; is not defined
+<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:922,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.estimation_statistics</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:736,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.loglike_null</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:631,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.get_values</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/parameter_frame.pyx:195,</span> in <span class="ni">larch.model.parameter_frame.ParameterFrame.pf.__get__</span><span class="nt">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
 </pre></div>
 </div>
 </div>
@@ -1769,11 +2288,69 @@ the estimates and t statistics, using <code class="docutils literal notranslate"
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:896,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">895</span> <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">896</span>     <span class="bp">self</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">897</span> <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:966,</span> in <span class="ni">NumbaModel.initialize_graph</span><span class="nt">(self, dataframes, alternative_codes, alternative_names, root_id)</span>
+<span class="g g-Whitespace">    </span><span class="mi">961</span>         <span class="n">alternative_names</span> <span class="o">=</span> <span class="n">get_coords_array</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">962</span>             <span class="s1">&#39;altname&#39;</span><span class="p">,</span> <span class="s1">&#39;altnames&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alt_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">963</span>             <span class="s1">&#39;alternative_name&#39;</span><span class="p">,</span> <span class="s1">&#39;alternative_names&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">964</span>         <span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">966</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">initialize_graph</span><span class="p">(</span>
+<span class="g g-Whitespace">    </span><span class="mi">967</span>     <span class="n">dataframes</span><span class="o">=</span><span class="n">dataframes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">968</span>     <span class="n">alternative_codes</span><span class="o">=</span><span class="n">alternative_codes</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">969</span>     <span class="n">alternative_names</span><span class="o">=</span><span class="n">alternative_names</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">970</span>     <span class="n">root_id</span><span class="o">=</span><span class="n">root_id</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">971</span> <span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:1308,</span> in <span class="ni">larch.model.controller.Model5c.initialize_graph</span><span class="nt">()</span>
+
+<span class="ne">ValueError</span>: must define dataframes, dataservice, or give alternative_codes explicitly
+
+<span class="n">During</span> <span class="n">handling</span> <span class="n">of</span> <span class="n">the</span> <span class="n">above</span> <span class="n">exception</span><span class="p">,</span> <span class="n">another</span> <span class="n">exception</span> <span class="n">occurred</span><span class="p">:</span>
+
+<span class="ne">RuntimeError</span><span class="g g-Whitespace">                              </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">24</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">report</span> <span class="o">&lt;&lt;</span> <span class="s2">&quot;# Utility Functions&quot;</span> <span class="o">&lt;&lt;</span> <span class="n">m</span><span class="o">.</span><span class="n">utility_functions</span><span class="p">()</span>
 
-<span class="ne">NameError</span>: name &#39;report&#39; is not defined
+<span class="nn">File ~/work/larch/larch/larch/larch/model/model.py:470,</span> in <span class="ni">Model.utility_functions</span><span class="nt">(self, subset, resolve_parameters)</span>
+<span class="g g-Whitespace">    </span><span class="mi">450</span> <span class="k">def</span> <span class="nf">utility_functions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">subset</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">resolve_parameters</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">451</span> 	<span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">452</span><span class="sd"> 	Generate an XHTML output of the utility function(s).</span>
+<span class="g g-Whitespace">    </span><span class="mi">453</span><span class="sd"> </span>
+<span class="sd">   (...)</span>
+<span class="g g-Whitespace">    </span><span class="mi">468</span><span class="sd"> 	xmle.Elem</span>
+<span class="g g-Whitespace">    </span><span class="mi">469</span><span class="sd"> 	&quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">470</span> 	<span class="bp">self</span><span class="o">.</span><span class="n">unmangle</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">471</span> 	<span class="kn">from</span> <span class="nn">xmle</span> <span class="kn">import</span> <span class="n">Elem</span>
+<span class="g g-Whitespace">    </span><span class="mi">472</span> 	<span class="n">x</span> <span class="o">=</span> <span class="n">Elem</span><span class="p">(</span><span class="s1">&#39;div&#39;</span><span class="p">)</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1118,</span> in <span class="ni">NumbaModel.unmangle</span><span class="nt">(self, force)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1116</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">unmangle</span><span class="p">(</span><span class="n">force</span><span class="o">=</span><span class="n">force</span><span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1117</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dataset</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="ne">-&gt; </span><span class="mi">1118</span>     <span class="bp">self</span><span class="o">.</span><span class="n">reflow_data_arrays</span><span class="p">()</span>
+<span class="g g-Whitespace">   </span><span class="mi">1119</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fixed_arrays</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">force</span><span class="p">:</span>
+<span class="g g-Whitespace">   </span><span class="mi">1120</span>     <span class="bp">self</span><span class="o">.</span><span class="n">_rebuild_fixed_arrays</span><span class="p">()</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:977,</span> in <span class="ni">NumbaModel.reflow_data_arrays</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">973</span> <span class="k">def</span> <span class="nf">reflow_data_arrays</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">974</span>     <span class="sd">&quot;&quot;&quot;</span>
+<span class="g g-Whitespace">    </span><span class="mi">975</span><span class="sd">     Reload the internal data_arrays so they are consistent with the datatree.</span>
+<span class="g g-Whitespace">    </span><span class="mi">976</span><span class="sd">     &quot;&quot;&quot;</span>
+<span class="ne">--&gt; </span><span class="mi">977</span>     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">graph</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">978</span>         <span class="bp">self</span><span class="o">.</span><span class="n">_data_arrays</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="g g-Whitespace">    </span><span class="mi">979</span>         <span class="k">return</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:900,</span> in <span class="ni">NumbaModel.graph</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">    </span><span class="mi">898</span>         <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="g g-Whitespace">    </span><span class="mi">899</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="ne">--&gt; </span><span class="mi">900</span>         <span class="k">raise</span> <span class="ne">RuntimeError</span><span class="p">(</span><span class="s1">&#39;cannot initialize graph, must define alternatives somehow&#39;</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">901</span> <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_graph</span>
+
+<span class="ne">RuntimeError</span>: cannot initialize graph, must define alternatives somehow
 </pre></div>
 </div>
 </div>
@@ -1790,7 +2367,7 @@ the estimates and t statistics, using <code class="docutils literal notranslate"
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">25</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">report</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="s1">&#39;/tmp/exampville_mode_choice.html&#39;</span><span class="p">,</span> 
@@ -1798,7 +2375,52 @@ the estimates and t statistics, using <code class="docutils literal notranslate"
 <span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">metadata</span><span class="o">=</span><span class="n">m</span><span class="p">,</span>
 <span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="p">)</span>
 
-<span class="ne">NameError</span>: name &#39;report&#39; is not defined
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xmle/reporter.py:97,</span> in <span class="ni">Reporter.save</span><span class="nt">(self, filename, overwrite, archive_dir, metadata)</span>
+<span class="g g-Whitespace">     </span><span class="mi">94</span> <span class="bp">self</span><span class="o">.</span><span class="n">renumber_numbered_items</span><span class="p">()</span>
+<span class="g g-Whitespace">     </span><span class="mi">96</span> <span class="kn">from</span> <span class="nn">.xhtml</span> <span class="kn">import</span> <span class="n">XHTML</span>
+<span class="ne">---&gt; </span><span class="mi">97</span> <span class="k">with</span> <span class="n">XHTML</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">98</span> 		<span class="n">filename</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">99</span> 		<span class="n">overwrite</span><span class="o">=</span><span class="n">overwrite</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">100</span> 		<span class="n">metadata</span><span class="o">=</span><span class="n">metadata</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">101</span> 		<span class="n">archive_dir</span><span class="o">=</span><span class="n">archive_dir</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">102</span> 		<span class="n">title</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_short_title</span><span class="p">,</span>
+<span class="g g-Whitespace">    </span><span class="mi">103</span> <span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">104</span> 	<span class="n">f</span> <span class="o">&lt;&lt;</span> <span class="bp">self</span>
+<span class="g g-Whitespace">    </span><span class="mi">105</span> <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">_filename</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xmle/xhtml.py:335,</span> in <span class="ni">XHTML.__init__</span><span class="nt">(self, filename, overwrite, archive_dir, title, css, extra_css, jquery, jqueryui, floating_tablehead, metadata, toc, favicon)</span>
+<span class="g g-Whitespace">    </span><span class="mi">333</span> <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">334</span> 	<span class="kn">import</span> <span class="nn">pickle</span> <span class="k">as</span> <span class="nn">cloudpickle</span>
+<span class="ne">--&gt; </span><span class="mi">335</span> <span class="n">_meta</span> <span class="o">=</span> <span class="p">(</span><span class="n">base64</span><span class="o">.</span><span class="n">standard_b64encode</span><span class="p">(</span><span class="n">zlib</span><span class="o">.</span><span class="n">compress</span><span class="p">(</span><span class="n">cloudpickle</span><span class="o">.</span><span class="n">dumps</span><span class="p">(</span><span class="n">metadata</span><span class="p">))))</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+<span class="g g-Whitespace">    </span><span class="mi">336</span> <span class="bp">self</span><span class="o">.</span><span class="n">head</span> <span class="o">&lt;&lt;</span> <span class="n">Elem</span><span class="p">(</span><span class="n">tag</span><span class="o">=</span><span class="s2">&quot;meta&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s1">&#39;pythonmetadata&#39;</span><span class="p">,</span> <span class="n">content</span><span class="o">=</span><span class="n">_meta</span><span class="p">)</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/cloudpickle/cloudpickle_fast.py:73,</span> in <span class="ni">dumps</span><span class="nt">(obj, protocol, buffer_callback)</span>
+<span class="g g-Whitespace">     </span><span class="mi">69</span> <span class="k">with</span> <span class="n">io</span><span class="o">.</span><span class="n">BytesIO</span><span class="p">()</span> <span class="k">as</span> <span class="n">file</span><span class="p">:</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span>     <span class="n">cp</span> <span class="o">=</span> <span class="n">CloudPickler</span><span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span>         <span class="n">file</span><span class="p">,</span> <span class="n">protocol</span><span class="o">=</span><span class="n">protocol</span><span class="p">,</span> <span class="n">buffer_callback</span><span class="o">=</span><span class="n">buffer_callback</span>
+<span class="g g-Whitespace">     </span><span class="mi">72</span>     <span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">73</span>     <span class="n">cp</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">74</span>     <span class="k">return</span> <span class="n">file</span><span class="o">.</span><span class="n">getvalue</span><span class="p">()</span>
+
+<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/cloudpickle/cloudpickle_fast.py:602,</span> in <span class="ni">CloudPickler.dump</span><span class="nt">(self, obj)</span>
+<span class="g g-Whitespace">    </span><span class="mi">600</span> <span class="k">def</span> <span class="nf">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+<span class="g g-Whitespace">    </span><span class="mi">601</span>     <span class="k">try</span><span class="p">:</span>
+<span class="ne">--&gt; </span><span class="mi">602</span>         <span class="k">return</span> <span class="n">Pickler</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span>
+<span class="g g-Whitespace">    </span><span class="mi">603</span>     <span class="k">except</span> <span class="ne">RuntimeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+<span class="g g-Whitespace">    </span><span class="mi">604</span>         <span class="k">if</span> <span class="s2">&quot;recursion&quot;</span> <span class="ow">in</span> <span class="n">e</span><span class="o">.</span><span class="n">args</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>
+
+<span class="nn">File ~/work/larch/larch/larch/larch/numba/model.py:1927,</span> in <span class="ni">NumbaModel.__getstate__</span><span class="nt">(self)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1921</span> <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="g g-Whitespace">   </span><span class="mi">1922</span>     <span class="n">state</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+<span class="g g-Whitespace">   </span><span class="mi">1923</span>         <span class="n">float_dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">float_dtype</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1924</span>         <span class="n">constraint_intensity</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">constraint_intensity</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1925</span>         <span class="n">constraint_sharpness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">constraint_sharpness</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1926</span>         <span class="n">_constraint_funcs</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_constraint_funcs</span><span class="p">,</span>
+<span class="ne">-&gt; </span><span class="mi">1927</span>         <span class="n">_private__graph</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_private__graph</span><span class="p">,</span>
+<span class="g g-Whitespace">   </span><span class="mi">1928</span>     <span class="p">)</span>
+<span class="g g-Whitespace">   </span><span class="mi">1929</span>     <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__getstate__</span><span class="p">(),</span> <span class="n">state</span>
+
+<span class="ne">AttributeError</span>: &#39;NumbaModel&#39; object has no attribute &#39;_private__graph&#39;
 </pre></div>
 </div>
 </div>

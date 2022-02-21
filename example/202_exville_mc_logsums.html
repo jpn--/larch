@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>202: Exampville Mode Choice Logsums &#8212; 5.5.11.dev58+gca641c1</title>
+    <title>202: Exampville Mode Choice Logsums &#8212; 5.5.11.dev59+g3d07f1e</title>
     
   <link href="../_static/css/theme.css" rel="stylesheet">
   <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -88,7 +88,7 @@
       <img src="../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">5.5.11.dev58+gca641c1</h1>
+      <h1 class="site-logo" id="site-title">5.5.11.dev59+g3d07f1e</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -1242,20 +1242,6 @@ data and tools that a transportation planner might use when building a travel mo
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
-<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">addicty</span> <span class="kn">import</span> <span class="n">Dict</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">larch</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">import</span> <span class="nn">larch.numba</span> <span class="k">as</span> <span class="nn">lx</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;addicty&#39;
-</pre></div>
-</div>
-</div>
 </div>
 <p>In this example notebook, we will walk through the creation of logsums from
 an existing tour mode choice model.  First, let’s load the data files from
@@ -1277,7 +1263,7 @@ our example.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="ne">AttributeError</span><span class="g g-Whitespace">                            </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">4</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">exampville_mode_choice_file</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">201</span><span class="p">,</span> <span class="n">output_file</span><span class="o">=</span><span class="s1">&#39;/tmp/exampville_mode_choice.html&#39;</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">read_metadata</span><span class="p">(</span><span class="n">exampville_mode_choice_file</span><span class="p">)</span>
@@ -1301,19 +1287,26 @@ our example.</p>
 <span class="g g-Whitespace">    </span><span class="mi">136</span> 	<span class="n">f</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">exampledocdir</span><span class="p">,</span> <span class="n">get_examplefile</span><span class="p">(</span><span class="n">n</span><span class="p">))</span>
 <span class="g g-Whitespace">    </span><span class="mi">137</span> 	<span class="k">return</span> <span class="n">_exec_example</span><span class="p">(</span><span class="n">f</span><span class="p">,</span> <span class="o">*</span><span class="n">arg</span><span class="p">,</span> <span class="n">echo</span><span class="o">=</span><span class="n">echo</span><span class="p">,</span> <span class="n">larch</span><span class="o">=</span><span class="n">larch</span><span class="p">,</span> <span class="o">**</span><span class="n">kwarg</span><span class="p">)</span>
 
-<span class="nn">File ~/work/larch/larch/larch/larch/examples/generated/_201_exville_mode_choice.py:10,</span> in <span class="ni">example</span><span class="nt">(extract, estimate)</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span> <span class="nn">larch</span> <span class="kn">import</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">hh</span><span class="p">,</span> <span class="n">pp</span><span class="p">,</span> <span class="n">tour</span><span class="p">,</span> <span class="n">skims</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">example</span><span class="p">(</span><span class="mi">200</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;hh&#39;</span><span class="p">,</span> <span class="s1">&#39;pp&#39;</span><span class="p">,</span> <span class="s1">&#39;tour&#39;</span><span class="p">,</span> <span class="s1">&#39;skims&#39;</span><span class="p">])</span>
-<span class="ne">---&gt; </span><span class="mi">10</span> <span class="kn">from</span> <span class="nn">addicty</span> <span class="kn">import</span> <span class="n">Dict</span>
-<span class="g g-Whitespace">     </span><span class="mi">12</span> <span class="n">Mode</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">(</span>
-<span class="g g-Whitespace">     </span><span class="mi">13</span>     <span class="n">DA</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">14</span>     <span class="n">SR</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">17</span>     <span class="n">Transit</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-<span class="g g-Whitespace">     </span><span class="mi">18</span> <span class="p">)</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
-<span class="g g-Whitespace">     </span><span class="mi">20</span> <span class="n">tour_dataset</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_idco</span><span class="p">(</span><span class="n">tour</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;TOURID&#39;</span><span class="p">),</span> <span class="n">alts</span><span class="o">=</span><span class="n">Mode</span><span class="p">)</span>
+<span class="nn">File ~/work/larch/larch/larch/larch/examples/generated/_201_exville_mode_choice.py:44,</span> in <span class="ni">example</span><span class="nt">(extract, estimate)</span>
+<span class="g g-Whitespace">     </span><span class="mi">41</span> <span class="n">m</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">datatree</span> <span class="o">=</span> <span class="n">dt_work</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">42</span> <span class="n">m</span><span class="o">.</span><span class="n">title</span> <span class="o">=</span> <span class="s2">&quot;Exampville Work Tour Mode Choice v1&quot;</span>
+<span class="ne">---&gt; </span><span class="mi">44</span> <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">Mode</span><span class="o">.</span><span class="n">DA</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">45</span>         <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">InVehTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">AUTO_TIME</span>
+<span class="g g-Whitespace">     </span><span class="mi">46</span>         <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">Cost</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">AUTO_COST</span> <span class="c1"># dollars per mile</span>
+<span class="g g-Whitespace">     </span><span class="mi">47</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">49</span> <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">Mode</span><span class="o">.</span><span class="n">SR</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">50</span>         <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">ASC_SR</span>
+<span class="g g-Whitespace">     </span><span class="mi">51</span>         <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">InVehTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">AUTO_TIME</span>
+<span class="g g-Whitespace">     </span><span class="mi">52</span>         <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">Cost</span> <span class="o">*</span> <span class="p">(</span><span class="n">X</span><span class="o">.</span><span class="n">AUTO_COST</span> <span class="o">*</span> <span class="mf">0.5</span><span class="p">)</span> <span class="c1"># dollars per mile, half share</span>
+<span class="g g-Whitespace">     </span><span class="mi">53</span>         <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;LogIncome:SR&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;log(INCOME)&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">54</span> <span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">56</span> <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="n">Mode</span><span class="o">.</span><span class="n">Walk</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">57</span>         <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">ASC_Walk</span>
+<span class="g g-Whitespace">     </span><span class="mi">58</span>         <span class="o">+</span> <span class="n">P</span><span class="o">.</span><span class="n">NonMotorTime</span> <span class="o">*</span> <span class="n">X</span><span class="o">.</span><span class="n">WALK_TIME</span>
+<span class="g g-Whitespace">     </span><span class="mi">59</span>         <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;LogIncome:Walk&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;log(INCOME)&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">60</span> <span class="p">)</span>
 
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;addicty&#39;
+<span class="ne">AttributeError</span>: &#39;NoneType&#39; object has no attribute &#39;DA&#39;
 </pre></div>
 </div>
 </div>
@@ -1356,24 +1349,6 @@ but for this model these commands will run almost instantaneously.)</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">5</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">Mode</span> <span class="o">=</span> <span class="n">Dict</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">DA</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">SR</span> <span class="o">=</span> <span class="mi">2</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">Walk</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">Bike</span> <span class="o">=</span> <span class="mi">4</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">Transit</span> <span class="o">=</span> <span class="mi">5</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="p">)</span><span class="o">.</span><span class="n">freeze</span><span class="p">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">tour_dataset</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_idco</span><span class="p">(</span><span class="n">tour</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;TOURID&#39;</span><span class="p">),</span> <span class="n">alts</span><span class="o">=</span><span class="n">Mode</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="n">od_skims</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">from_omx</span><span class="p">(</span><span class="n">skims</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;Dict&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <p>Then we bundle the raw data into the <code class="docutils literal notranslate"><span class="pre">larch.DataFrames</span></code> structure,
 as we did for estimation, and attach this structure to the model
@@ -1388,20 +1363,6 @@ and a column for each possible destination zone.</p>
     <span class="n">skims</span><span class="o">.</span><span class="n">TAZ_ID</span><span class="p">,</span>
     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;logsums&#39;</span><span class="p">,</span>
 <span class="p">)</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">6</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="n">logsums</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">DataArray</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span>
-<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">dt</span><span class="o">.</span><span class="n">caseids</span><span class="p">(),</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">skims</span><span class="o">.</span><span class="n">TAZ_ID</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;logsums&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;dt&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1427,15 +1388,15 @@ zones, dropping in the zone as the destination and computing the logsums.</p>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
 <span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
 <span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">7</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">dtaz</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">logsums</span><span class="o">.</span><span class="n">TAZ_ID</span><span class="p">):</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">m</span><span class="o">.</span><span class="n">datatree</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">replace_datasets</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span><span class="n">dtaz</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">logsums</span><span class="o">.</span><span class="n">TAZ_ID</span><span class="p">):</span>
+<span class="ne">----&gt; </span><span class="mi">2</span>     <span class="n">m</span><span class="o">.</span><span class="n">datatree</span> <span class="o">=</span> <span class="n">dt</span><span class="o">.</span><span class="n">replace_datasets</span><span class="p">(</span>
 <span class="g g-Whitespace">      </span><span class="mi">3</span>         <span class="n">tour</span><span class="o">=</span><span class="n">dt</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
 <span class="g g-Whitespace">      </span><span class="mi">4</span>             <span class="n">DTAZ</span><span class="o">=</span><span class="n">xr</span><span class="o">.</span><span class="n">full_like</span><span class="p">(</span><span class="n">dt</span><span class="p">[</span><span class="s1">&#39;DTAZ&#39;</span><span class="p">],</span> <span class="n">dtaz</span><span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">5</span>         <span class="p">),</span>
 <span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">logsums</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="nb">dict</span><span class="p">(</span><span class="n">TAZ_ID</span><span class="o">=</span><span class="n">dtaz</span><span class="p">)]</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">logsums</span><span class="p">()</span>
 
-<span class="ne">NameError</span>: name &#39;logsums&#39; is not defined
+<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1448,16 +1409,6 @@ example, where we will estimate a destination choice model.</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">9</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">logsums</span><span class="o">.</span><span class="n">to_zarr</span><span class="p">(</span><span class="s1">&#39;/tmp/logsums.zarr.zip&#39;</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;logsums&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <p>To recover the DataArray later, we can read it using the <code class="docutils literal notranslate"><span class="pre">DataArray.from_zarr</span></code> method.</p>
 <div class="cell docutils container">
@@ -1467,133 +1418,425 @@ example, where we will estimate a destination choice model.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">FileNotFoundError</span><span class="g g-Whitespace">                         </span>Traceback (most recent call last)
-<span class="n">Input</span> <span class="n">In</span> <span class="p">[</span><span class="mi">10</span><span class="p">],</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">lx</span><span class="o">.</span><span class="n">DataArray</span><span class="o">.</span><span class="n">from_zarr</span><span class="p">(</span><span class="s1">&#39;/tmp/logsums.zarr.zip&#39;</span><span class="p">)</span>
+<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
+<defs>
+<symbol id="icon-database" viewBox="0 0 32 32">
+<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
+<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
+</symbol>
+<symbol id="icon-file-text2" viewBox="0 0 32 32">
+<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
+<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
+</symbol>
+</defs>
+</svg>
+<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
+ *
+ */
 
-<span class="nn">File ~/work/larch/larch/larch/larch/dataset.py:133,</span> in <span class="ni">DataArray.from_zarr</span><span class="nt">(cls, name, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">131</span> <span class="nd">@classmethod</span>
-<span class="g g-Whitespace">    </span><span class="mi">132</span> <span class="k">def</span> <span class="nf">from_zarr</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">133</span>     <span class="n">dataset</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_zarr</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">134</span>     <span class="k">if</span> <span class="n">name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">135</span>         <span class="n">names</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">variables</span><span class="p">)</span> <span class="o">-</span> <span class="nb">set</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">coords</span><span class="p">)</span>
+:root {
+  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
+  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
+  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
+  --xr-border-color: var(--jp-border-color2, #e0e0e0);
+  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
+  --xr-background-color: var(--jp-layout-color0, white);
+  --xr-background-color-row-even: var(--jp-layout-color1, white);
+  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
+}
 
-<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xarray/backends/zarr.py:769,</span> in <span class="ni">open_zarr</span><span class="nt">(store, group, synchronizer, chunks, decode_cf, mask_and_scale, decode_times, concat_characters, decode_coords, drop_variables, consolidated, overwrite_encoded_chunks, chunk_store, storage_options, decode_timedelta, use_cftime, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">756</span>     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">757</span>         <span class="s2">&quot;open_zarr() got unexpected keyword arguments &quot;</span> <span class="o">+</span> <span class="s2">&quot;,&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
-<span class="g g-Whitespace">    </span><span class="mi">758</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">760</span> <span class="n">backend_kwargs</span> <span class="o">=</span> <span class="p">{</span>
-<span class="g g-Whitespace">    </span><span class="mi">761</span>     <span class="s2">&quot;synchronizer&quot;</span><span class="p">:</span> <span class="n">synchronizer</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">762</span>     <span class="s2">&quot;consolidated&quot;</span><span class="p">:</span> <span class="n">consolidated</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">766</span>     <span class="s2">&quot;stacklevel&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">767</span> <span class="p">}</span>
-<span class="ne">--&gt; </span><span class="mi">769</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">open_dataset</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">770</span>     <span class="n">filename_or_obj</span><span class="o">=</span><span class="n">store</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">771</span>     <span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">772</span>     <span class="n">decode_cf</span><span class="o">=</span><span class="n">decode_cf</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">773</span>     <span class="n">mask_and_scale</span><span class="o">=</span><span class="n">mask_and_scale</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">774</span>     <span class="n">decode_times</span><span class="o">=</span><span class="n">decode_times</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">775</span>     <span class="n">concat_characters</span><span class="o">=</span><span class="n">concat_characters</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">776</span>     <span class="n">decode_coords</span><span class="o">=</span><span class="n">decode_coords</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">777</span>     <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;zarr&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">778</span>     <span class="n">chunks</span><span class="o">=</span><span class="n">chunks</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">779</span>     <span class="n">drop_variables</span><span class="o">=</span><span class="n">drop_variables</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">780</span>     <span class="n">backend_kwargs</span><span class="o">=</span><span class="n">backend_kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">781</span>     <span class="n">decode_timedelta</span><span class="o">=</span><span class="n">decode_timedelta</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">782</span>     <span class="n">use_cftime</span><span class="o">=</span><span class="n">use_cftime</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">783</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">784</span> <span class="k">return</span> <span class="n">ds</span>
+html[theme=dark],
+body.vscode-dark {
+  --xr-font-color0: rgba(255, 255, 255, 1);
+  --xr-font-color2: rgba(255, 255, 255, 0.54);
+  --xr-font-color3: rgba(255, 255, 255, 0.38);
+  --xr-border-color: #1F1F1F;
+  --xr-disabled-color: #515151;
+  --xr-background-color: #111111;
+  --xr-background-color-row-even: #111111;
+  --xr-background-color-row-odd: #313131;
+}
 
-<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xarray/backends/api.py:495,</span> in <span class="ni">open_dataset</span><span class="nt">(filename_or_obj, engine, chunks, cache, decode_cf, mask_and_scale, decode_times, decode_timedelta, use_cftime, concat_characters, decode_coords, drop_variables, backend_kwargs, *args, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">483</span> <span class="n">decoders</span> <span class="o">=</span> <span class="n">_resolve_decoders_kwargs</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">484</span>     <span class="n">decode_cf</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">485</span>     <span class="n">open_backend_dataset_parameters</span><span class="o">=</span><span class="n">backend</span><span class="o">.</span><span class="n">open_dataset_parameters</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">491</span>     <span class="n">decode_coords</span><span class="o">=</span><span class="n">decode_coords</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">492</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">494</span> <span class="n">overwrite_encoded_chunks</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;overwrite_encoded_chunks&quot;</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">495</span> <span class="n">backend_ds</span> <span class="o">=</span> <span class="n">backend</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">496</span>     <span class="n">filename_or_obj</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">497</span>     <span class="n">drop_variables</span><span class="o">=</span><span class="n">drop_variables</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">498</span>     <span class="o">**</span><span class="n">decoders</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">499</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">500</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">501</span> <span class="n">ds</span> <span class="o">=</span> <span class="n">_dataset_from_backend_dataset</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">502</span>     <span class="n">backend_ds</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">503</span>     <span class="n">filename_or_obj</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">510</span>     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">511</span> <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">512</span> <span class="k">return</span> <span class="n">ds</span>
+.xr-wrap {
+  display: block !important;
+  min-width: 300px;
+  max-width: 700px;
+}
 
-<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xarray/backends/zarr.py:817,</span> in <span class="ni">ZarrBackendEntrypoint.open_dataset</span><span class="nt">(self, filename_or_obj, mask_and_scale, decode_times, concat_characters, decode_coords, drop_variables, use_cftime, decode_timedelta, group, mode, synchronizer, consolidated, chunk_store, storage_options, stacklevel)</span>
-<span class="g g-Whitespace">    </span><span class="mi">797</span> <span class="k">def</span> <span class="nf">open_dataset</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">798</span>     <span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">799</span>     <span class="n">filename_or_obj</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">813</span>     <span class="n">stacklevel</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">814</span> <span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">816</span>     <span class="n">filename_or_obj</span> <span class="o">=</span> <span class="n">_normalize_path</span><span class="p">(</span><span class="n">filename_or_obj</span><span class="p">)</span>
-<span class="ne">--&gt; </span><span class="mi">817</span>     <span class="n">store</span> <span class="o">=</span> <span class="n">ZarrStore</span><span class="o">.</span><span class="n">open_group</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">818</span>         <span class="n">filename_or_obj</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">819</span>         <span class="n">group</span><span class="o">=</span><span class="n">group</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">820</span>         <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">821</span>         <span class="n">synchronizer</span><span class="o">=</span><span class="n">synchronizer</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">822</span>         <span class="n">consolidated</span><span class="o">=</span><span class="n">consolidated</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">823</span>         <span class="n">consolidate_on_close</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">824</span>         <span class="n">chunk_store</span><span class="o">=</span><span class="n">chunk_store</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">825</span>         <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">826</span>         <span class="n">stacklevel</span><span class="o">=</span><span class="n">stacklevel</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">827</span>     <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">829</span>     <span class="n">store_entrypoint</span> <span class="o">=</span> <span class="n">StoreBackendEntrypoint</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">830</span>     <span class="k">with</span> <span class="n">close_on_error</span><span class="p">(</span><span class="n">store</span><span class="p">):</span>
+.xr-text-repr-fallback {
+  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
+  display: none;
+}
 
-<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/xarray/backends/zarr.py:365,</span> in <span class="ni">ZarrStore.open_group</span><span class="nt">(cls, store, mode, synchronizer, group, consolidated, consolidate_on_close, chunk_store, storage_options, append_dim, write_region, safe_chunks, stacklevel)</span>
-<span class="g g-Whitespace">    </span><span class="mi">363</span> <span class="k">if</span> <span class="n">consolidated</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">364</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">365</span>         <span class="n">zarr_group</span> <span class="o">=</span> <span class="n">zarr</span><span class="o">.</span><span class="n">open_consolidated</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="o">**</span><span class="n">open_kwargs</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">366</span>     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-<span class="g g-Whitespace">    </span><span class="mi">367</span>         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">368</span>             <span class="s2">&quot;Failed to open Zarr store with consolidated metadata, &quot;</span>
-<span class="g g-Whitespace">    </span><span class="mi">369</span>             <span class="s2">&quot;falling back to try reading non-consolidated metadata. &quot;</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">380</span>             <span class="n">stacklevel</span><span class="o">=</span><span class="n">stacklevel</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">381</span>         <span class="p">)</span>
+.xr-header {
+  padding-top: 6px;
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: solid 1px var(--xr-border-color);
+}
 
-<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/zarr/convenience.py:1182,</span> in <span class="ni">open_consolidated</span><span class="nt">(store, metadata_key, mode, **kwargs)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1179</span> <span class="kn">from</span> <span class="nn">.storage</span> <span class="kn">import</span> <span class="n">ConsolidatedMetadataStore</span>
-<span class="g g-Whitespace">   </span><span class="mi">1181</span> <span class="c1"># normalize parameters</span>
-<span class="ne">-&gt; </span><span class="mi">1182</span> <span class="n">store</span> <span class="o">=</span> <span class="n">normalize_store_arg</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;storage_options&quot;</span><span class="p">))</span>
-<span class="g g-Whitespace">   </span><span class="mi">1183</span> <span class="k">if</span> <span class="n">mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">{</span><span class="s1">&#39;r&#39;</span><span class="p">,</span> <span class="s1">&#39;r+&#39;</span><span class="p">}:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1184</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid mode, expected either &#39;r&#39; or &#39;r+&#39;; found </span><span class="si">{!r}</span><span class="s2">&quot;</span>
-<span class="g g-Whitespace">   </span><span class="mi">1185</span>                      <span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mode</span><span class="p">))</span>
+.xr-header > div,
+.xr-header > ul {
+  display: inline;
+  margin-top: 0;
+  margin-bottom: 0;
+}
 
-<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/zarr/storage.py:119,</span> in <span class="ni">normalize_store_arg</span><span class="nt">(store, clobber, storage_options, mode)</span>
-<span class="g g-Whitespace">    </span><span class="mi">117</span>     <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;storage_options passed with non-fsspec path&quot;</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">118</span> <span class="k">if</span> <span class="n">store</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.zip&#39;</span><span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">119</span>     <span class="k">return</span> <span class="n">ZipStore</span><span class="p">(</span><span class="n">store</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">120</span> <span class="k">elif</span> <span class="n">store</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s1">&#39;.n5&#39;</span><span class="p">):</span>
-<span class="g g-Whitespace">    </span><span class="mi">121</span>     <span class="kn">from</span> <span class="nn">zarr.n5</span> <span class="kn">import</span> <span class="n">N5Store</span>
+.xr-obj-type,
+.xr-array-name {
+  margin-left: 2px;
+  margin-right: 10px;
+}
 
-<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/site-packages/zarr/storage.py:1507,</span> in <span class="ni">ZipStore.__init__</span><span class="nt">(self, path, compression, allowZip64, mode, dimension_separator)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1504</span> <span class="bp">self</span><span class="o">.</span><span class="n">mutex</span> <span class="o">=</span> <span class="n">RLock</span><span class="p">()</span>
-<span class="g g-Whitespace">   </span><span class="mi">1506</span> <span class="c1"># open zip file</span>
-<span class="ne">-&gt; </span><span class="mi">1507</span> <span class="bp">self</span><span class="o">.</span><span class="n">zf</span> <span class="o">=</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="n">mode</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="n">compression</span><span class="p">,</span>
-<span class="g g-Whitespace">   </span><span class="mi">1508</span>                           <span class="n">allowZip64</span><span class="o">=</span><span class="n">allowZip64</span><span class="p">)</span>
+.xr-obj-type {
+  color: var(--xr-font-color2);
+}
 
-<span class="nn">File /usr/share/miniconda3/envs/development/lib/python3.9/zipfile.py:1239,</span> in <span class="ni">ZipFile.__init__</span><span class="nt">(self, file, mode, compression, allowZip64, compresslevel, strict_timestamps)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1237</span> <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1238</span>     <span class="k">try</span><span class="p">:</span>
-<span class="ne">-&gt; </span><span class="mi">1239</span>         <span class="bp">self</span><span class="o">.</span><span class="n">fp</span> <span class="o">=</span> <span class="n">io</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">filemode</span><span class="p">)</span>
-<span class="g g-Whitespace">   </span><span class="mi">1240</span>     <span class="k">except</span> <span class="ne">OSError</span><span class="p">:</span>
-<span class="g g-Whitespace">   </span><span class="mi">1241</span>         <span class="k">if</span> <span class="n">filemode</span> <span class="ow">in</span> <span class="n">modeDict</span><span class="p">:</span>
+.xr-sections {
+  padding-left: 0 !important;
+  display: grid;
+  grid-template-columns: 150px auto auto 1fr 20px 20px;
+}
 
-<span class="ne">FileNotFoundError</span>: [Errno 2] No such file or directory: &#39;/tmp/logsums.zarr.zip&#39;
-</pre></div>
-</div>
-</div>
+.xr-section-item {
+  display: contents;
+}
+
+.xr-section-item input {
+  display: none;
+}
+
+.xr-section-item input + label {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-item input:enabled + label {
+  cursor: pointer;
+  color: var(--xr-font-color2);
+}
+
+.xr-section-item input:enabled + label:hover {
+  color: var(--xr-font-color0);
+}
+
+.xr-section-summary {
+  grid-column: 1;
+  color: var(--xr-font-color2);
+  font-weight: 500;
+}
+
+.xr-section-summary > span {
+  display: inline-block;
+  padding-left: 0.5em;
+}
+
+.xr-section-summary-in:disabled + label {
+  color: var(--xr-font-color2);
+}
+
+.xr-section-summary-in + label:before {
+  display: inline-block;
+  content: '►';
+  font-size: 11px;
+  width: 15px;
+  text-align: center;
+}
+
+.xr-section-summary-in:disabled + label:before {
+  color: var(--xr-disabled-color);
+}
+
+.xr-section-summary-in:checked + label:before {
+  content: '▼';
+}
+
+.xr-section-summary-in:checked + label > span {
+  display: none;
+}
+
+.xr-section-summary,
+.xr-section-inline-details {
+  padding-top: 4px;
+  padding-bottom: 4px;
+}
+
+.xr-section-inline-details {
+  grid-column: 2 / -1;
+}
+
+.xr-section-details {
+  display: none;
+  grid-column: 1 / -1;
+  margin-bottom: 5px;
+}
+
+.xr-section-summary-in:checked ~ .xr-section-details {
+  display: contents;
+}
+
+.xr-array-wrap {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 20px auto;
+}
+
+.xr-array-wrap > label {
+  grid-column: 1;
+  vertical-align: top;
+}
+
+.xr-preview {
+  color: var(--xr-font-color3);
+}
+
+.xr-array-preview,
+.xr-array-data {
+  padding: 0 5px !important;
+  grid-column: 2;
+}
+
+.xr-array-data,
+.xr-array-in:checked ~ .xr-array-preview {
+  display: none;
+}
+
+.xr-array-in:checked ~ .xr-array-data,
+.xr-array-preview {
+  display: inline-block;
+}
+
+.xr-dim-list {
+  display: inline-block !important;
+  list-style: none;
+  padding: 0 !important;
+  margin: 0;
+}
+
+.xr-dim-list li {
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.xr-dim-list:before {
+  content: '(';
+}
+
+.xr-dim-list:after {
+  content: ')';
+}
+
+.xr-dim-list li:not(:last-child):after {
+  content: ',';
+  padding-right: 5px;
+}
+
+.xr-has-index {
+  font-weight: bold;
+}
+
+.xr-var-list,
+.xr-var-item {
+  display: contents;
+}
+
+.xr-var-item > div,
+.xr-var-item label,
+.xr-var-item > .xr-var-name span {
+  background-color: var(--xr-background-color-row-even);
+  margin-bottom: 0;
+}
+
+.xr-var-item > .xr-var-name:hover span {
+  padding-right: 5px;
+}
+
+.xr-var-list > li:nth-child(odd) > div,
+.xr-var-list > li:nth-child(odd) > label,
+.xr-var-list > li:nth-child(odd) > .xr-var-name span {
+  background-color: var(--xr-background-color-row-odd);
+}
+
+.xr-var-name {
+  grid-column: 1;
+}
+
+.xr-var-dims {
+  grid-column: 2;
+}
+
+.xr-var-dtype {
+  grid-column: 3;
+  text-align: right;
+  color: var(--xr-font-color2);
+}
+
+.xr-var-preview {
+  grid-column: 4;
+}
+
+.xr-var-name,
+.xr-var-dims,
+.xr-var-dtype,
+.xr-preview,
+.xr-attrs dt {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-right: 10px;
+}
+
+.xr-var-name:hover,
+.xr-var-dims:hover,
+.xr-var-dtype:hover,
+.xr-attrs dt:hover {
+  overflow: visible;
+  width: auto;
+  z-index: 1;
+}
+
+.xr-var-attrs,
+.xr-var-data {
+  display: none;
+  background-color: var(--xr-background-color) !important;
+  padding-bottom: 5px !important;
+}
+
+.xr-var-attrs-in:checked ~ .xr-var-attrs,
+.xr-var-data-in:checked ~ .xr-var-data {
+  display: block;
+}
+
+.xr-var-data > table {
+  float: right;
+}
+
+.xr-var-name span,
+.xr-var-data,
+.xr-attrs {
+  padding-left: 25px !important;
+}
+
+.xr-attrs,
+.xr-var-attrs,
+.xr-var-data {
+  grid-column: 1 / -1;
+}
+
+dl.xr-attrs {
+  padding: 0;
+  margin: 0;
+  display: grid;
+  grid-template-columns: 125px auto;
+}
+
+.xr-attrs dt,
+.xr-attrs dd {
+  padding: 0;
+  margin: 0;
+  float: left;
+  padding-right: 10px;
+  width: auto;
+}
+
+.xr-attrs dt {
+  font-weight: normal;
+  grid-column: 1;
+}
+
+.xr-attrs dt:hover span {
+  display: inline-block;
+  background: var(--xr-background-color);
+  padding-right: 10px;
+}
+
+.xr-attrs dd {
+  grid-column: 2;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
+
+.xr-icon-database,
+.xr-icon-file-text2 {
+  display: inline-block;
+  vertical-align: middle;
+  width: 1em;
+  height: 1.5em !important;
+  stroke-width: 0;
+  stroke: currentColor;
+  fill: currentColor;
+}
+</style><pre class='xr-text-repr-fallback'>&lt;larch.DataArray &#x27;logsums&#x27; (TOURID: 7564, TAZ_ID: 40)&gt;
+dask.array&lt;open_dataset-999c507c54473def8087ad1a82951db4logsums, shape=(7564, 40), dtype=float64, chunksize=(1891, 20), chunktype=numpy.ndarray&gt;
+Coordinates:
+  * TAZ_ID   (TAZ_ID) int64 1 2 3 4 5 6 7 8 9 10 ... 32 33 34 35 36 37 38 39 40
+  * TOURID   (TOURID) int64 0 1 3 7 10 13 ... 20728 20729 20731 20734 20736</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>larch.DataArray</div><div class='xr-array-name'>'logsums'</div><ul class='xr-dim-list'><li><span class='xr-has-index'>TOURID</span>: 7564</li><li><span class='xr-has-index'>TAZ_ID</span>: 40</li></ul></div><ul class='xr-sections'><li class='xr-section-item'><div class='xr-array-wrap'><input id='section-0619147a-ea69-4841-bbbe-924f59aba61b' class='xr-array-in' type='checkbox' checked><label for='section-0619147a-ea69-4841-bbbe-924f59aba61b' title='Show/hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-array-preview xr-preview'><span>dask.array&lt;chunksize=(1891, 20), meta=np.ndarray&gt;</span></div><div class='xr-array-data'><table>
+    <tr>
+        <td>
+            <table>
+                <thead>
+                    <tr>
+                        <td> </td>
+                        <th> Array </th>
+                        <th> Chunk </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <th> Bytes </th>
+                        <td> 2.31 MiB </td>
+                        <td> 295.47 kiB </td>
+                    </tr>
+
+                    <tr>
+                        <th> Shape </th>
+                        <td> (7564, 40) </td>
+                        <td> (1891, 20) </td>
+                    </tr>
+                    <tr>
+                        <th> Count </th>
+                        <td> 9 Tasks </td>
+                        <td> 8 Chunks </td>
+                    </tr>
+                    <tr>
+                    <th> Type </th>
+                    <td> float64 </td>
+                    <td> numpy.ndarray </td>
+                    </tr>
+                </tbody>
+            </table>
+        </td>
+        <td>
+        <svg width="75" height="170" style="stroke:rgb(0,0,0);stroke-width:1" >
+
+  <!-- Horizontal lines -->
+  <line x1="0" y1="0" x2="25" y2="0" style="stroke-width:2" />
+  <line x1="0" y1="30" x2="25" y2="30" />
+  <line x1="0" y1="60" x2="25" y2="60" />
+  <line x1="0" y1="90" x2="25" y2="90" />
+  <line x1="0" y1="120" x2="25" y2="120" style="stroke-width:2" />
+
+  <!-- Vertical lines -->
+  <line x1="0" y1="0" x2="0" y2="120" style="stroke-width:2" />
+  <line x1="12" y1="0" x2="12" y2="120" />
+  <line x1="25" y1="0" x2="25" y2="120" style="stroke-width:2" />
+
+  <!-- Colored Rectangle -->
+  <polygon points="0.0,0.0 25.412616514582485,0.0 25.412616514582485,120.0 0.0,120.0" style="fill:#ECB172A0;stroke-width:0"/>
+
+  <!-- Text -->
+  <text x="12.706308" y="140.000000" font-size="1.0rem" font-weight="100" text-anchor="middle" >40</text>
+  <text x="45.412617" y="60.000000" font-size="1.0rem" font-weight="100" text-anchor="middle" transform="rotate(-90,45.412617,60.000000)">7564</text>
+</svg>
+        </td>
+    </tr>
+</table></div></div></li><li class='xr-section-item'><input id='section-6454d17c-31f9-4aed-904b-c4e71f45dc36' class='xr-section-summary-in' type='checkbox'  checked><label for='section-6454d17c-31f9-4aed-904b-c4e71f45dc36' class='xr-section-summary' >Coordinates: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>TAZ_ID</span></div><div class='xr-var-dims'>(TAZ_ID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 2 3 4 5 6 7 ... 35 36 37 38 39 40</div><input id='attrs-1d8195d3-9e2f-4f46-b94f-ab171f59fbe4' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-1d8195d3-9e2f-4f46-b94f-ab171f59fbe4' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-c7b625c0-e901-457e-9815-0932dc337952' class='xr-var-data-in' type='checkbox'><label for='data-c7b625c0-e901-457e-9815-0932dc337952' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([ 1,  2,  3,  4,  5,  6,  7,  8,  9, 10, 11, 12, 13, 14, 15, 16, 17, 18,
+       19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36,
+       37, 38, 39, 40])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>TOURID</span></div><div class='xr-var-dims'>(TOURID)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 3 7 ... 20729 20731 20734 20736</div><input id='attrs-47b9f5fb-c8dd-4581-a0af-8a46e9200630' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-47b9f5fb-c8dd-4581-a0af-8a46e9200630' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d6d1b3fb-db7c-4e4c-93e2-fd3f32ab428e' class='xr-var-data-in' type='checkbox'><label for='data-d6d1b3fb-db7c-4e4c-93e2-fd3f32ab428e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([    0,     1,     3, ..., 20731, 20734, 20736])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-cb3f53ef-8c15-424e-9562-68a783bbd0a4' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-cb3f53ef-8c15-424e-9562-68a783bbd0a4' class='xr-section-summary'  title='Expand/collapse section'>Attributes: <span>(0)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'></dl></div></li></ul></div></div></div></div>
 </div>
 </div>
 
