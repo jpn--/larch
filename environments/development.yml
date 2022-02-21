@@ -9,6 +9,7 @@ dependencies:
   - cython >=0.29
   - numpy>=1.19,<1.22
   - addict >=2.2.1
+  - addicty
   - appdirs >=1.4
   - beautifulsoup4 >=4.6.3
   - blosc >=1.14.3
@@ -46,6 +47,7 @@ dependencies:
   - setuptools_scm
   - sphinx
   - sphinx_rtd_theme
+  - tabulate
   - tqdm >=4.28.1
   - xarray
   - xlsxwriter
