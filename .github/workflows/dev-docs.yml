@@ -55,15 +55,16 @@ jobs:
         python larch/book/_scripts/developer_doc_title.py ${{ env.LARCH_VERSION }}
         jb build larch/book
     - name: Push to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v3.5.9
+      uses: peaceiris/actions-gh-pages@v3.8.0
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         # Token is created automatically by Github Actions, no other config needed
         publish_dir: larch/book/_build/html
     - name: Push to External GitHub Pages
       uses: peaceiris/actions-gh-pages@v3.8.0
+      if: "!contains(env.LARCH_VERSION, '+')"
       with:
         personal_token: ${{ secrets.PERSONAL_TOKEN }}
         publish_dir: larch/book/_build/html
-        external_repository: jpndashdash/larch-dev-docs
+        external_repository: jpndashdash/larchdocs
         destination_dir: v${{ env.LARCH_VERSION }}
