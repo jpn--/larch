@@ -110,9 +110,6 @@ else:
     #         'pthread',
     #     ]
 
-from pprint import pprint
-pprint(os.environ)
-
 extensions = [
     Extension(
         pyx.replace('.pyx','').replace("."+os.sep,'').replace(os.sep,'.'),  # os.path.basename(pyx).replace('.pyx',''),
