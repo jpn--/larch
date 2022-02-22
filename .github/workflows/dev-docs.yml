@@ -21,6 +21,15 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
+    - name: Cache conda
+      uses: actions/cache@v2
+      env:
+        # Increase this value to reset cache if larch/environments/development.yml has not changed
+        CACHE_NUMBER: 0
+      with:
+        path: ~/conda_pkgs_dir
+        key:
+          ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{ hashFiles('larch/environments/development.yml') }}
     - name: Install dependencies
       uses: conda-incubator/setup-miniconda@v2
       with:
@@ -32,6 +41,7 @@ jobs:
         activate-environment: development
         auto-activate-base: false
         auto-update-conda: false
+        use-only-tar-bz2: true # IMPORTANT: This needs to be set for caching to work properly!
     - name: Infer larch version
       run: |
         python larch/tools/get_version.py LARCH_VERSION.txt
@@ -49,7 +59,15 @@ jobs:
       run: |
         conda info -a
         conda list
+    - name: Cache documentation html
+      id: cachedocs
+      uses: actions/cache@v2
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: larch/book/_build/html
+        key: ${{ runner.os }}-docs-html-${{ env.LARCH_VERSION }} }}
     - name: Build the docs
+      if: steps.cachedocs.outputs.cache-hit != 'true'
       run: |
         python larch/book/_scripts/hide_test_cells.py
         python larch/book/_scripts/developer_doc_title.py ${{ env.LARCH_VERSION }}
