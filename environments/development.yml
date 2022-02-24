@@ -8,8 +8,7 @@ dependencies:
   - compilers
   - cython >=0.29
   - numpy>=1.19,<1.22
-  - addict >=2.2.1
-  - addicty
+  - addicty >=2022.2.1
   - appdirs >=1.4
   - beautifulsoup4 >=4.6.3
   - blosc >=1.14.3

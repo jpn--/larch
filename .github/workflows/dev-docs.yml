@@ -59,15 +59,7 @@ jobs:
       run: |
         conda info -a
         conda list
-    - name: Cache documentation html
-      id: cachedocs
-      uses: actions/cache@v2
-      with:
-        # npm cache files are stored in `~/.npm` on Linux/macOS
-        path: larch/book/_build/html
-        key: ${{ runner.os }}-docs-html-${{ env.LARCH_VERSION }} }}
     - name: Build the docs
-      if: steps.cachedocs.outputs.cache-hit != 'true'
       run: |
         python larch/book/_scripts/hide_test_cells.py
         python larch/book/_scripts/developer_doc_title.py v${{ env.LARCH_VERSION }}

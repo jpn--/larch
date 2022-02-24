@@ -3,7 +3,7 @@ import yaml
 import os
 import logging
 
-from addict import Dict as _Dict
+from addicty import Dict as _Dict
 from pprint import pformat
 
 __all__ = ('yaml', 'Dict')

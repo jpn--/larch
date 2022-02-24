@@ -150,7 +150,7 @@ setup(
         'jinja2 >=2.9.6', # for pandas styler
         'beautifulsoup4 >=4.6',
         'seaborn >=0.8.1',
-        'addict >=2.2.1',
+        'addicty >=2022.2.1',
         'xmle >=0.1.3',
     ],
     url='https://larch.newman.me',
