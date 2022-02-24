@@ -65,7 +65,6 @@ test:
   source_files:
     - tests
     - book/example
-    - larch
   imports:
     - larch
   commands:
