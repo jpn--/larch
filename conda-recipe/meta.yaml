@@ -64,7 +64,8 @@ requirements:
 test:
   source_files:
     - tests
-    - book/example
+    - book
+    - pyproject.toml
   imports:
     - larch
   commands:
