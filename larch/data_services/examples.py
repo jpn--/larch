@@ -23,8 +23,8 @@ def MTC(format='dataframes'):
 			['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
 			dims=['altid'],
 		)
-		dataset.CASEID = 'caseid'
-		dataset.ALTID = 'altid'
+		dataset.flow.CASEID = 'caseid'
+		dataset.flow.ALTID = 'altid'
 		return dataset
 	elif format == 'dataframes':
 		dt.data_ce_as_ca("_avail_")

@@ -3,7 +3,7 @@ import numpy as np
 sh = importorskip("sharrow")
 import larch.numba as lx
 import larch.numba.data_arrays as lxd
-from larch.dim_names import CASEID, ALTID
+from larch.dataset.dim_names import CASEID, ALTID
 
 def test_weighted():
     m = lx.example(1, legacy=True)

@@ -5,7 +5,7 @@ import logging
 from typing import NamedTuple
 import numba as nb
 
-from ..dim_names import CASEID as _CASEID, ALTID as _ALTID, CASEALT as _CASEALT, ALTIDX as _ALTIDX, CASEPTR as _CASEPTR
+from ..dataset.dim_names import CASEID as _CASEID, ALTID as _ALTID, CASEALT as _CASEALT, ALTIDX as _ALTIDX, CASEPTR as _CASEPTR
 
 class _case_slice:
 
@@ -109,14 +109,14 @@ def prepare_data(
             model_dataset.coords.update(datasource.subspaces['idcoVars'].coords)
     except AttributeError:
         pass
-    model_dataset.CASEID = datasource.CASEID
-    model_dataset.ALTID = datasource.ALTID
+    model_dataset.flow.CASEID = datasource.flow.CASEID
+    model_dataset.flow.ALTID = datasource.flow.ALTID
 
     from .model import NumbaModel # avoid circular import
     if isinstance(request, NumbaModel):
         alts = request.graph.elemental_names()
-        if model_dataset.ALTID not in model_dataset.coords:
-            model_dataset.coords[model_dataset.ALTID] = list(alts.keys())
+        if model_dataset.flow.ALTID not in model_dataset.coords:
+            model_dataset.coords[model_dataset.flow.ALTID] = list(alts.keys())
         if 'alt_names' not in model_dataset.coords:
             model_dataset.coords['alt_names'] = DataArray(list(alts.values()), dims=(model_dataset.ALTID,))
         request = request.required_data()
@@ -264,6 +264,19 @@ def prepare_data(
             dtype=float_dtype,
             cache_dir=cache_dir,
             flow=flows.get('weight_co'),
+        )
+
+    if 'group_co' in request:
+        log.debug(f"requested group_co data: {request['group_co']}")
+        model_dataset, flows['group_co'] = _prep_co(
+            model_dataset,
+            datatree_co,
+            [request['group_co']],
+            tag='group',
+            preserve_vars=False,
+            dtype=np.int64,
+            cache_dir=cache_dir,
+            flow=flows.get('group_co'),
         )
 
     if 'avail_ca' in request:
@@ -501,8 +514,8 @@ def _prep_ce(
                 dims=(datatree.ALTID),
             ),
         })
-    model_dataset.CASEID = datatree.CASEID
-    model_dataset.ALTID = datatree.ALTID
+    model_dataset.flow.CASEID = datatree.CASEID
+    model_dataset.flow.ALTID = datatree.ALTID
     return model_dataset, flow
 
 

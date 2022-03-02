@@ -5,6 +5,7 @@ from ..data_warehouse import example_file
 from ..model.model_group import ModelGroup
 
 try:
+    from .. import dataset
     from ..dataset import Dataset, DataArray, DataTree, merge
 except RuntimeError:
     pass

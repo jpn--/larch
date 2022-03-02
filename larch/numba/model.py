@@ -760,7 +760,7 @@ def model_co_slots(data_provider, model, dtype=np.float64):
         if 'var_co' in data_provider.indexes:
             for _n, _dname in enumerate(data_provider.indexes['var_co']):
                 data_loc[_dname] = _n
-        alternative_codes = data_provider.indexes[data_provider.ALTID]
+        alternative_codes = data_provider.indexes[data_provider.flow.ALTID]
     else:
         raise TypeError(f"data_provider must be DataFrames or Dataset not {type(data_provider)}")
 
@@ -988,7 +988,7 @@ class NumbaModel(_BaseModel):
                 cache_dir=datatree.cache_dir,
                 flows=getattr(self, 'dataflows', None),
             )
-            self._data_arrays = self.dataset.to_arrays(
+            self._data_arrays = self.dataset.flow.to_arrays(
                 self.graph,
                 float_dtype=self.float_dtype,
             )
@@ -1973,7 +1973,7 @@ class NumbaModel(_BaseModel):
             self._datatree = tree
             self.mangle()
         elif isinstance(tree, Dataset):
-            self._datatree = tree.as_tree()
+            self._datatree = tree.flow.as_tree()
             self.mangle()
         else:
             try:
@@ -2025,7 +2025,7 @@ class NumbaModel(_BaseModel):
     @property
     def data_as_possible(self):
         if self._dataset is not None:
-            return self._dataset
+            return self._dataset.flow
         if self.dataframes is not None:
             return self.dataframes
         if self.datatree is not None:
