@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>larch.Dataset.construct &#8212; v5.6.2.dev6+gc5fc2082</title>
+    <title>larch.Dataset.construct &#8212; v5.6.2.dev8+g20141712</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -53,8 +53,8 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="shortcut icon" href="../../_static/larch_favicon.png"/>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="larch.Dataset.from_table" href="larch.Dataset.from_table.html" />
-    <link rel="prev" title="larch.Dataset.from_idco" href="larch.Dataset.from_idco.html" />
+    <link rel="next" title="larch.Dataset.dims" href="larch.Dataset.dims.html" />
+    <link rel="prev" title="larch.Dataset" href="larch.Dataset.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -87,7 +87,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="../../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.6.2.dev6+gc5fc2082</h1>
+      <h1 class="site-logo" id="site-title">v5.6.2.dev8+g20141712</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -170,74 +170,9 @@ const thebe_selector_output = ".output, .cell_output"
        larch.Dataset
       </a>
      </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.from_idca.html">
-       larch.Dataset.from_idca
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.from_idce.html">
-       larch.Dataset.from_idce
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.from_idco.html">
-       larch.Dataset.from_idco
-      </a>
-     </li>
      <li class="toctree-l3 current active">
       <a class="current reference internal" href="#">
        larch.Dataset.construct
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.from_table.html">
-       larch.Dataset.from_table
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.from_omx.html">
-       larch.Dataset.from_omx
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.from_omx_3d.html">
-       larch.Dataset.from_omx_3d
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.from_zarr.html">
-       larch.Dataset.from_zarr
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.from_named_objects.html">
-       larch.Dataset.from_named_objects
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.n_cases.html">
-       larch.Dataset.n_cases
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.n_alts.html">
-       larch.Dataset.n_alts
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.CASEID.html">
-       larch.Dataset.CASEID
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.ALTID.html">
-       larch.Dataset.ALTID
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.alts_mapping.html">
-       larch.Dataset.alts_mapping
       </a>
      </li>
      <li class="toctree-l3">
@@ -291,38 +226,8 @@ const thebe_selector_output = ".output, .cell_output"
       </a>
      </li>
      <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.caseids.html">
-       larch.Dataset.caseids
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.dissolve_zero_variance.html">
-       larch.Dataset.dissolve_zero_variance
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.query_cases.html">
-       larch.Dataset.query_cases
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.set_altnames.html">
-       larch.Dataset.set_altnames
-      </a>
-     </li>
-     <li class="toctree-l3">
       <a class="reference internal" href="larch.Dataset.set_dtypes.html">
        larch.Dataset.set_dtypes
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.setup_flow.html">
-       larch.Dataset.setup_flow
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="larch.Dataset.get_expr.html">
-       larch.Dataset.get_expr
       </a>
      </li>
     </ul>
@@ -1227,30 +1132,6 @@ const thebe_selector_output = ".output, .cell_output"
                 
   <div class="section" id="larch-dataset-construct">
 <h1>larch.Dataset.construct<a class="headerlink" href="#larch-dataset-construct" title="Permalink to this headline">¶</a></h1>
-<dl class="py method">
-<dt class="sig sig-object py" id="larch.Dataset.construct">
-<em class="property"><span class="pre">classmethod</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Dataset.</span></span><span class="sig-name descname"><span class="pre">construct</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">source</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">caseid</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">alts</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/larch/dataset.html#Dataset.construct"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#larch.Dataset.construct" title="Permalink to this definition">¶</a></dt>
-<dd><p>A generic constructor for creating Datasets from various similar objects.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters</dt>
-<dd class="field-odd"><ul class="simple">
-<li><p><strong>source</strong> (<em>pandas.DataFrame</em><em>, </em><em>pyarrow.Table</em><em>, </em><em>xarray.Dataset</em><em>, or </em><em>Sequence</em><em>[</em><em>str</em><em>]</em>) – The source from which to create a Dataset.  DataFrames and Tables
-are converted to Datasets that have one dimension (the rows) and
-seperate variables for each of the columns.  A list of strings
-creates a dataset with those named empty variables.</p></li>
-<li><p><strong>caseid</strong> (<em>str</em><em>, </em><em>optional</em>) – The name of a dimension referencing cases.</p></li>
-<li><p><strong>alts</strong> (<em>Mapping</em><em> or </em><em>str</em><em> or </em><em>array-like</em><em>, </em><em>optional</em>) – If given as a mapping, links alternative codes to names.
-A string names a dimension that defines the alternatives.
-An array or list of integers gives codes for the alternatives,
-which are otherwise unnamed.</p></li>
-</ul>
-</dd>
-<dt class="field-even">Returns</dt>
-<dd class="field-even"><p><em>Dataset</em></p>
-</dd>
-</dl>
-</dd></dl>
-
 </div>
 
     <script type="text/x-thebe-config">
@@ -1278,17 +1159,17 @@ which are otherwise unnamed.</p></li>
             
                 <!-- Previous / next buttons -->
 <div class='prev-next-area'> 
-    <a class='left-prev' id="prev-link" href="larch.Dataset.from_idco.html" title="previous page">
+    <a class='left-prev' id="prev-link" href="larch.Dataset.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
             <p class="prev-next-subtitle">previous</p>
-            <p class="prev-next-title">larch.Dataset.from_idco</p>
+            <p class="prev-next-title">larch.Dataset</p>
         </div>
     </a>
-    <a class='right-next' id="next-link" href="larch.Dataset.from_table.html" title="next page">
+    <a class='right-next' id="next-link" href="larch.Dataset.dims.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">larch.Dataset.from_table</p>
+        <p class="prev-next-title">larch.Dataset.dims</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>
