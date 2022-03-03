@@ -115,10 +115,11 @@ def prepare_data(
     from .model import NumbaModel # avoid circular import
     if isinstance(request, NumbaModel):
         alts = request.graph.elemental_names()
+        alt_dim = model_dataset.flow.ALTID or _ALTID
         if model_dataset.flow.ALTID not in model_dataset.coords:
-            model_dataset.coords[model_dataset.flow.ALTID] = list(alts.keys())
+            model_dataset.coords[alt_dim] = DataArray(list(alts.keys()), dims=(alt_dim,))
         if 'alt_names' not in model_dataset.coords:
-            model_dataset.coords['alt_names'] = DataArray(list(alts.values()), dims=(model_dataset.ALTID,))
+            model_dataset.coords['alt_names'] = DataArray(list(alts.values()), dims=(alt_dim,))
         request = request.required_data()
 
     if flows is None:
@@ -131,7 +132,7 @@ def prepare_data(
         datatree = datasource
         datatree_co = datatree.idco_subtree()
     elif isinstance(datasource, Dataset):
-        datatree = datasource.as_tree()
+        datatree = datasource.flow.as_tree()
         if not datatree.relationships_are_digitized:
             datatree.digitize_relationships(inplace=True)
         datatree_co = datatree.idco_subtree()
@@ -206,8 +207,8 @@ def prepare_data(
             da_ch = DataArray(
                 ce_to_dense(
                     model_dataset['choice_ce_data'].values,
-                    model_dataset[model_dataset.ALTIDX].values,
-                    model_dataset[model_dataset.CASEPTR].values,
+                    model_dataset[model_dataset.flow.ALTIDX].values,
+                    model_dataset[model_dataset.flow.CASEPTR].values,
                     datatree.n_alts
                 ),
                 dims=[datatree.CASEID, datatree.ALTID],
@@ -245,9 +246,9 @@ def prepare_data(
             },
             name='ch',
         )
-        for i,a in enumerate(model_dataset.alts_mapping):
+        for i,a in enumerate(model_dataset.flow.alts_mapping):
             choice_expr = request['choice_co'][a]
-            da_ch[:, i] = datatree_co.get_expr(choice_expr).values
+            da_ch[:, i] = datatree_co.flow.get_expr(choice_expr).values
         model_dataset = model_dataset.merge(da_ch)
     if 'choice_any' in request:
         log.debug(f"requested choice_any data: {request['choice_any']}")
@@ -294,11 +295,11 @@ def prepare_data(
                 flow=flows.get('avail_ca'),
             )
         else:
-            if request['avail_ca'] in {'1', 'True', '1.0'} and model_dataset.CASEPTR is not None and model_dataset.ALTIDX is not None:
+            if request['avail_ca'] in {'1', 'True', '1.0'} and model_dataset.flow.CASEPTR is not None and model_dataset.flow.ALTIDX is not None:
                 da_av = DataArray(
                     ce_bool_to_dense(
-                        model_dataset[model_dataset.ALTIDX].values,
-                        model_dataset[model_dataset.CASEPTR].values,
+                        model_dataset[model_dataset.flow.ALTIDX].values,
+                        model_dataset[model_dataset.flow.CASEPTR].values,
                         datatree.n_alts,
                     ),
                     dims=[datatree.CASEID, datatree.ALTID],
@@ -324,8 +325,8 @@ def prepare_data(
                 da_av = DataArray(
                     ce_to_dense(
                         model_dataset['avail_ce_data'].values,
-                        model_dataset[model_dataset.ALTIDX].values,
-                        model_dataset[model_dataset.CASEPTR].values,
+                        model_dataset[model_dataset.flow.ALTIDX].values,
+                        model_dataset[model_dataset.flow.CASEPTR].values,
                         datatree.n_alts,
                     ),
                     dims=[datatree.CASEID, datatree.ALTID],
@@ -499,11 +500,11 @@ def _prep_ce(
         altidx = datatree.root_dataset.coords[datatree.ALTIDX]
         altidx = altidx.drop_vars(list(altidx.coords))
         model_dataset[datatree.ALTIDX] = altidx
-        model_dataset.ALTIDX = datatree.ALTIDX
+        model_dataset.flow.ALTIDX = datatree.ALTIDX
         caseptr = datatree.root_dataset[datatree.CASEPTR]
         caseptr = caseptr.drop_vars(list(caseptr.coords))
         model_dataset[datatree.CASEPTR] = caseptr
-        model_dataset.CASEPTR = datatree.CASEPTR
+        model_dataset.flow.CASEPTR = datatree.CASEPTR
         model_dataset = model_dataset.assign_coords({
             datatree.CASEID: DataArray(
                 datatree.caseids(),

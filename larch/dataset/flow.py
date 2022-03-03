@@ -67,13 +67,18 @@ class _GenericFlow:
         result = self._obj.attrs.get(CASEID, None)
         return result
 
+    def __set_attr(self, attr_name, target_value, check_dim=True):
+        if target_value is None:
+            if attr_name in self._obj.attrs:
+                del self._obj.attrs[attr_name]
+        else:
+            if check_dim and target_value not in self._obj.dims:
+                raise ValueError(f"cannot set {attr_name}, {target_value} not in dims")
+            self._obj.attrs[attr_name] = target_value
+
     @CASEID.setter
     def CASEID(self, dim_name):
-        if dim_name not in self.dims:
-            if self.GROUPID is None:
-                # allow non-dim caseid if using groups
-                raise ValueError(f"{dim_name} not in dims")
-        self._obj.attrs[CASEID] = dim_name
+        self.__set_attr(CASEID, dim_name, check_dim=self.GROUPID is not None)
 
     @property
     def ALTID(self):
@@ -83,7 +88,7 @@ class _GenericFlow:
 
     @ALTID.setter
     def ALTID(self, dim_name):
-        self._obj.attrs[ALTID] = dim_name
+        self.__set_attr(ALTID, dim_name)
 
     @property
     def CASEALT(self):
@@ -93,7 +98,7 @@ class _GenericFlow:
 
     @CASEALT.setter
     def CASEALT(self, dim_name):
-        self._obj.attrs[CASEALT] = dim_name
+        self.__set_attr(CASEALT, dim_name)
 
     @property
     def ALTIDX(self):
@@ -103,7 +108,7 @@ class _GenericFlow:
 
     @ALTIDX.setter
     def ALTIDX(self, dim_name):
-        self._obj.attrs[ALTIDX] = dim_name
+        self.__set_attr(ALTIDX, dim_name, False)
 
     @property
     def CASEPTR(self):
@@ -113,7 +118,7 @@ class _GenericFlow:
 
     @CASEPTR.setter
     def CASEPTR(self, dim_name):
-        self._obj.attrs[CASEPTR] = dim_name
+        self.__set_attr(CASEPTR, dim_name, False)
 
     @property
     def GROUPID(self):
@@ -123,7 +128,7 @@ class _GenericFlow:
 
     @GROUPID.setter
     def GROUPID(self, dim_name):
-        self._obj.attrs[GROUPID] = dim_name
+        self.__set_attr(GROUPID, dim_name)
 
     @property
     def INGROUP(self):
@@ -133,7 +138,7 @@ class _GenericFlow:
 
     @INGROUP.setter
     def INGROUP(self, dim_name):
-        self._obj.attrs[INGROUP] = dim_name
+        self.__set_attr(INGROUP, dim_name)
 
     def set_altids(self, altids, dim_name=None, inplace=False):
         """
@@ -224,10 +229,10 @@ class _GenericFlow:
         -------
         DataTree
         """
-        from sharrow import DataTree
+        from ..dataset import DataTree
         if self.CASEPTR is not None:
-            case_index = case_ptr_to_indexes(self.dims[self.CASEALT], self[self.CASEPTR].values)
-            obj = self.assign({'_case_index_': xr.DataArray(case_index, dims=(self.CASEALT))})
+            case_index = case_ptr_to_indexes(self._obj.dims[self.CASEALT], self[self.CASEPTR].values)
+            obj = self._obj.assign({'_case_index_': xr.DataArray(case_index, dims=(self.CASEALT))})
             tree = DataTree(**{label: obj.drop_dims(self.CASEID)})
             ds = obj.keep_dims(self.CASEID)
             ds.attrs.pop('_exclude_dims_', None)
@@ -242,7 +247,7 @@ class _GenericFlow:
                 )
             )
         else:
-            tree = DataTree(**{label: self})
+            tree = DataTree(**{label: self._obj})
         return tree
 
     def setup_flow(self, *args, **kwargs):
@@ -384,9 +389,9 @@ class _GenericFlow:
                     if dissolve:
                         obj[k] = obj[k].min(dim=dim)
             elif obj[k].dims == (self.CASEALT,):
-                proposal, flag = ce_dissolve_zero_variance(obj[k].values, obj[obj.CASEPTR].values)
+                proposal, flag = ce_dissolve_zero_variance(obj[k].values, obj[self.CASEPTR].values)
                 if flag == 0:
-                    obj = obj.assign({k: xr.DataArray(proposal, dims=(obj.CASEID))})
+                    obj = obj.assign({k: xr.DataArray(proposal, dims=(self.CASEID))})
         return obj
 
     def dissolve_coords(self, dim, others=None):

@@ -8,8 +8,8 @@ def test_dataset():
     assert d.flow.CASEID == 'caseid'
     assert d.flow.ALTID == 'altid'
 
-    assert d.flow.chose.CASEID == 'caseid'
-    assert d.flow.chose.ALTID == 'altid'
+    assert d.flow.chose.flow.CASEID == 'caseid'
+    assert d.flow.chose.flow.ALTID == 'altid'
 
-    assert d.flow['chose'].CASEID == 'caseid'
-    assert d.flow['chose'].ALTID == 'altid'
+    assert d.flow['chose'].flow.CASEID == 'caseid'
+    assert d.flow['chose'].flow.ALTID == 'altid'

@@ -38,7 +38,7 @@ def EXAMPVILLE(format='dataframes', model='mode', cache_dir=None):
 		from ..examples import example
 		from ..dataset import Dataset, DataArray, DataTree
 		_hh, _pp, _tour, _skims = example(200, ['hh', 'pp', 'tour', 'skims'])
-		tours = Dataset(
+		tours = Dataset.construct(
 			_tour.set_index('TOURID'), caseid='TOURID',
 		)
 		tours.coords['altid'] = DataArray(
@@ -47,7 +47,7 @@ def EXAMPVILLE(format='dataframes', model='mode', cache_dir=None):
 		tours.coords['altname'] = DataArray(
 			['DA', 'SR', 'Walk', 'Bike', 'Transit'], dims="_altid_",
 		)
-		od_skims = Dataset.from_omx(_skims)
+		od_skims = Dataset.construct.from_omx(_skims)
 		hh = Dataset(_hh.set_index('HHID'))
 		pp = Dataset(_pp.set_index('PERSONID'))
 		tree = DataTree(

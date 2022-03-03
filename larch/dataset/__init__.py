@@ -33,6 +33,7 @@ try:
     from sharrow import Dataset as _sharrow_Dataset
     from sharrow import DataArray as _sharrow_DataArray
     from sharrow import DataTree as _sharrow_DataTree
+    from sharrow.accessors import register_dataarray_method, register_dataarray_staticmethod
 except ImportError:
     warnings.warn("larch.dataset requires the sharrow library")
     class _noclass:
@@ -40,200 +41,194 @@ except ImportError:
     _sharrow_Dataset = xr.Dataset
     _sharrow_DataArray = xr.DataArray
     _sharrow_DataTree = _noclass
+    register_dataarray_method = lambda x: x
 
 from .dim_names import CASEID as _CASEID, ALTID as _ALTID, CASEALT as _CASEALT, ALTIDX as _ALTIDX, CASEPTR as _CASEPTR, GROUPID as _GROUPID, INGROUP as _INGROUP
 
-class DataArray(_sharrow_DataArray):
+DataArray = _sharrow_DataArray
 
-    __slots__ = ()
+@register_dataarray_staticmethod
+def zeros(*coords, dtype=np.float64, name=None, attrs=None):
+    """
+    Construct a dataset filled with zeros.
 
-    def __init__(self, *args, caseid=None, altid=None, **kwargs):
-        super().__init__(*args, **kwargs)
-        if caseid is not None and caseid in self.dims:
-            self.flow.CASEID = caseid
-        if altid is not None and altid in self.dims:
-            self.flow.ALTID = altid
+    Parameters
+    ----------
+    coords : Tuple[array-like]
+        A sequence of coordinate vectors.  Ideally each should have a
+        `name` attribute that names a dimension, otherwise placeholder
+        names are used.
+    dtype : dtype, default np.float64
+        dtype of the new array. If omitted, it defaults to np.float64.
+    name : str or None, optional
+        Name of this array.
+    attrs : dict_like or None, optional
+        Attributes to assign to the new instance. By default, an empty
+        attribute dictionary is initialized.
 
-    @classmethod
-    def zeros(cls, *coords, dtype=np.float64, name=None, attrs=None):
-        """
-        Construct a dataset filled with zeros.
+    Returns
+    -------
+    DataArray
+    """
+    dims = []
+    shape = []
+    coo = {}
+    for n, c in enumerate(coords):
+        i = getattr(c, "name", f"dim_{n}")
+        dims.append(i)
+        shape.append(len(c))
+        coo[i] = c
+    return xr.DataArray(
+        data=np.zeros(shape, dtype=dtype),
+        coords=coo,
+        dims=dims,
+        name=name,
+        attrs=attrs,
+    )
 
-        Parameters
-        ----------
-        coords : Tuple[array-like]
-            A sequence of coordinate vectors.  Ideally each should have a
-            `name` attribute that names a dimension, otherwise placeholder
-            names are used.
-        dtype : dtype, default np.float64
-            dtype of the new array. If omitted, it defaults to np.float64.
-        name : str or None, optional
-            Name of this array.
-        attrs : dict_like or None, optional
-            Attributes to assign to the new instance. By default, an empty
-            attribute dictionary is initialized.
+@register_dataarray_method
+def to_zarr(self, store=None, *args, **kwargs):
+    """
+    Write DataArray contents to a zarr store.
 
-        Returns
-        -------
-        DataArray
-        """
-        dims = []
-        shape = []
-        coo = {}
-        for n, c in enumerate(coords):
-            i = getattr(c, "name", f"dim_{n}")
-            dims.append(i)
-            shape.append(len(c))
-            coo[i] = c
-        return cls(
-            data=np.zeros(shape, dtype=dtype),
-            coords=coo,
-            dims=dims,
-            name=name,
-            attrs=attrs,
-        )
+    All parameters are passed directly to :py:meth:`xarray.Dataset.to_zarr`.
 
-    def to_zarr(self, store=None, *args, **kwargs):
-        """
-        Write DataArray contents to a zarr store.
+    Notes
+    -----
+    Only xarray.Dataset objects can be written to netCDF files, so
+    the xarray.DataArray is converted to a xarray.Dataset object
+    containing a single variable. If the DataArray has no name, or if the
+    name is the same as a coordinate name, then it is given the name
+    ``"__xarray_dataarray_variable__"``.
 
-        All parameters are passed directly to :py:meth:`xarray.Dataset.to_zarr`.
+    See Also
+    --------
+    Dataset.to_zarr
+    """
+    from xarray.backends.api import DATAARRAY_VARIABLE
 
-        Notes
-        -----
-        Only xarray.Dataset objects can be written to netCDF files, so
-        the xarray.DataArray is converted to a xarray.Dataset object
-        containing a single variable. If the DataArray has no name, or if the
-        name is the same as a coordinate name, then it is given the name
-        ``"__xarray_dataarray_variable__"``.
+    if self.name is None:
+        # If no name is set then use a generic xarray name
+        dataset = self.to_dataset(name=DATAARRAY_VARIABLE)
+    else:
+        # No problems with the name - so we're fine!
+        dataset = self.to_dataset()
 
-        See Also
-        --------
-        Dataset.to_zarr
-        """
-        from xarray.backends.api import DATAARRAY_VARIABLE
+    if isinstance(store, (str, pathlib.Path)) and len(args)==0:
+        if str(store).endswith('.zip'):
+            import zarr
+            with zarr.ZipStore(store, mode='w') as zstore:
+                dataset.to_zarr(zstore, **kwargs)
+            return
 
-        if self.name is None:
-            # If no name is set then use a generic xarray name
-            dataset = self.to_dataset(name=DATAARRAY_VARIABLE)
+    return dataset.to_zarr(*args, **kwargs)
+
+@register_dataarray_staticmethod
+def from_zarr(*args, name=None, **kwargs):
+    dataset = xr.open_zarr(*args, **kwargs)
+    if name is None:
+        names = set(dataset.variables) - set(dataset.coords)
+        if len(names) == 1:
+            name = names.pop()
         else:
-            # No problems with the name - so we're fine!
-            dataset = self.to_dataset()
+            raise ValueError("cannot infer name to load")
+    return dataset[name]
 
-        if isinstance(store, (str, pathlib.Path)) and len(args)==0:
-            if str(store).endswith('.zip'):
-                import zarr
-                with zarr.ZipStore(store, mode='w') as zstore:
-                    dataset.to_zarr(zstore, **kwargs)
-                return
+    # @property
+    # def CASEID(self):
+    #     result = self.attrs.get(_CASEID, None)
+    #     if result is None:
+    #         warnings.warn("no defined CASEID")
+    #         return _CASEID
+    #     return result
+    #
+    # @CASEID.setter
+    # def CASEID(self, dim_name):
+    #     if dim_name not in self.dims:
+    #         raise ValueError(f"{dim_name} not in dims")
+    #     self.attrs[_CASEID] = dim_name
+    #
+    # @property
+    # def ALTID(self):
+    #     result = self.attrs.get(_ALTID, None)
+    #     if result is None:
+    #         warnings.warn("no defined ALTID")
+    #         return _ALTID
+    #     return result
+    #
+    # @ALTID.setter
+    # def ALTID(self, dim_name):
+    #     self.attrs[_ALTID] = dim_name
+    #
+    # @property
+    # def n_cases(self):
+    #     try:
+    #         i = self.dims.index(self.CASEID)
+    #     except ValueError:
+    #         logging.getLogger().error(f"missing {self.CASEID!r} among dims {self.dims}")
+    #         raise
+    #     return self.shape[i]
 
-        return dataset.to_zarr(*args, **kwargs)
+    # @property
+    # def n_alts(self):
+    #     if self.ALTID in self.dims:
+    #         return self.shape[self.dims.index(self.ALTID)]
+    #     if 'n_alts' in self.attrs:
+    #         return self.attrs['n_alts']
+    #     raise ValueError('no n_alts set')
+    #
+    # @property
+    # def alts_mapping(self):
+    #     """Dict[int,str] : Mapping of alternative codes to names"""
+    #     a = self.coords[self.ALTID]
+    #     if 'alt_names' in a.coords:
+    #         return dict(zip(a.values, a.coords['alt_names'].values))
+    #     else:
+    #         return dict(zip(a.values, a.values))
 
-    @classmethod
-    def from_zarr(cls, *args, name=None, **kwargs):
-        dataset = xr.open_zarr(*args, **kwargs)
-        if name is None:
-            names = set(dataset.variables) - set(dataset.coords)
-            if len(names) == 1:
-                name = names.pop()
-            else:
-                raise ValueError("cannot infer name to load")
-        return cls(dataset[name])
+    # def _repr_html_(self):
+    #     html = super()._repr_html_()
+    #     html = html.replace("sharrow.DataArray", "larch.DataArray")
+    #     html = html.replace("xarray.DataArray", "larch.DataArray")
+    #     return html
+    #
+    # def __repr__(self):
+    #     r = super().__repr__()
+    #     r = r.replace("sharrow.DataArray", "larch.DataArray")
+    #     r = r.replace("xarray.DataArray", "larch.DataArray")
+    #     return r
 
-    @property
-    def CASEID(self):
-        result = self.attrs.get(_CASEID, None)
-        if result is None:
-            warnings.warn("no defined CASEID")
-            return _CASEID
-        return result
+@register_dataarray_method
+def value_counts(self, index_name='index'):
+    """
+    Count the number of times each unique value appears in the array.
 
-    @CASEID.setter
-    def CASEID(self, dim_name):
-        if dim_name not in self.dims:
-            raise ValueError(f"{dim_name} not in dims")
-        self.attrs[_CASEID] = dim_name
+    Parameters
+    ----------
+    index_name : str, default 'index'
+        Name of index dimension in result.
 
-    @property
-    def ALTID(self):
-        result = self.attrs.get(_ALTID, None)
-        if result is None:
-            warnings.warn("no defined ALTID")
-            return _ALTID
-        return result
+    Returns
+    -------
+    DataArray
+    """
+    values, freqs = np.unique(self, return_counts=True)
+    return self.__class__(freqs, dims=index_name, coords={index_name:values})
 
-    @ALTID.setter
-    def ALTID(self, dim_name):
-        self.attrs[_ALTID] = dim_name
-
-    @property
-    def n_cases(self):
-        try:
-            i = self.dims.index(self.CASEID)
-        except ValueError:
-            logging.getLogger().error(f"missing {self.CASEID!r} among dims {self.dims}")
-            raise
-        return self.shape[i]
-
-    @property
-    def n_alts(self):
-        if self.ALTID in self.dims:
-            return self.shape[self.dims.index(self.ALTID)]
-        if 'n_alts' in self.attrs:
-            return self.attrs['n_alts']
-        raise ValueError('no n_alts set')
-
-    @property
-    def alts_mapping(self):
-        """Dict[int,str] : Mapping of alternative codes to names"""
-        a = self.coords[self.ALTID]
-        if 'alt_names' in a.coords:
-            return dict(zip(a.values, a.coords['alt_names'].values))
-        else:
-            return dict(zip(a.values, a.values))
-
-    def _repr_html_(self):
-        html = super()._repr_html_()
-        html = html.replace("sharrow.DataArray", "larch.DataArray")
-        html = html.replace("xarray.DataArray", "larch.DataArray")
-        return html
-
-    def __repr__(self):
-        r = super().__repr__()
-        r = r.replace("sharrow.DataArray", "larch.DataArray")
-        r = r.replace("xarray.DataArray", "larch.DataArray")
-        return r
-
-    def value_counts(self, index_name='index'):
-        """
-        Count the number of times each unique value appears in the array.
-
-        Parameters
-        ----------
-        index_name : str, default 'index'
-            Name of index dimension in result.
-
-        Returns
-        -------
-        DataArray
-        """
-        values, freqs = np.unique(self, return_counts=True)
-        return self.__class__(freqs, dims=index_name, coords={index_name:values})
-
-    def clip(self, *args, **kwargs):
-        """
-        Return an array whose values are limited to ``[min, max]``.
-        At least one of max or min must be given.
-
-        Refer to `numpy.clip` for full documentation.
-
-        See Also
-        --------
-        numpy.clip : equivalent function
-        """
-        out = super().clip(*args, **kwargs)
-        out.__class__ = self.__class__
-        return out
+    # def clip(self, *args, **kwargs):
+    #     """
+    #     Return an array whose values are limited to ``[min, max]``.
+    #     At least one of max or min must be given.
+    #
+    #     Refer to `numpy.clip` for full documentation.
+    #
+    #     See Also
+    #     --------
+    #     numpy.clip : equivalent function
+    #     """
+    #     out = super().clip(*args, **kwargs)
+    #     out.__class__ = self.__class__
+    #     return out
 
 Dataset = _sharrow_Dataset
 # class Dataset(_sharrow_Dataset):
@@ -1176,7 +1171,7 @@ class DataTree(_sharrow_DataTree):
 
     def idco_subtree(self):
         if 'idcoVars' in self.subspaces:
-            return self.subspaces['idcoVars'].as_tree()
+            return self.subspaces['idcoVars'].flow.as_tree()
         return self.drop_dims(self.ALTID, ignore_missing_dims=True)
 
     @property
@@ -1534,7 +1529,7 @@ def choice_avail_summary(dataset, graph=None, availability_co_vars=None):
         idx = graph.standard_sort
         od['name'] = pd.Series(graph.standard_sort_names, index=idx)
     else:
-        idx = dataset.altids()
+        idx = dataset.flow.altids()
         if dataset.get('alt_names') is not None:
             od['name'] = pd.Series(dataset.get('alt_names'), index=idx)
 

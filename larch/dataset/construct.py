@@ -15,13 +15,82 @@ def _steal(func):
     wrapper.__name__ = func.__name__
     return staticmethod(wrapper)
 
+def _initialize_for_larch(obj, caseid=None, alts=None):
+    """
+
+    Parameters
+    ----------
+    obj : Dataset
+        The dataaset being initialized.
+    caseid : str, optional
+        The name of a dimension referencing cases.
+    alts : Mapping or str or array-like, optional
+        If given as a mapping, links alternative codes to names.
+        A string names a dimension that defines the alternatives.
+        An array or list of integers gives codes for the alternatives,
+        which are otherwise unnamed.
+
+    Returns
+    -------
+    Dataset
+    """
+    if caseid is not None:
+        if caseid not in obj.dims:
+            raise ValueError(f"no dim named '{caseid}' to make into {CASEID}")
+        obj.attrs[CASEID] = caseid
+    if isinstance(alts, pd.Series):
+        alts_dim_name = alts.name or alts.index.name or '_altid_'
+        alts_k = xr.DataArray(
+            alts.index, dims=alts_dim_name,
+        )
+        alts_v = xr.DataArray(
+            alts.values, dims=alts_dim_name,
+        )
+    elif isinstance(alts, Mapping):
+        alts_dim_name = '_altid_'
+        alts_k = xr.DataArray(
+            list(alts.keys()), dims=alts_dim_name,
+        )
+        alts_v = xr.DataArray(
+            list(alts.values()), dims=alts_dim_name,
+        )
+    elif isinstance(alts, str):
+        alts_dim_name = alts
+        alts_k = alts_v = None
+    elif alts is None:
+        alts_dim_name = None
+        alts_k = alts_v = None
+    else:
+        alts_dim_name = getattr(alts, 'name', '_altid_')
+        alts_v = np.asarray(alts).reshape(-1)
+        alts_k = None
+    if alts_dim_name:
+        obj.attrs[ALTID] = alts_dim_name
+    if alts_k is not None:
+        if np.issubdtype(alts_v, np.integer) and not np.issubdtype(alts_k, np.integer):
+            obj.coords[alts_dim_name] = alts_v
+            obj.coords['alt_names'] = alts_k
+        else:
+            obj.coords[alts_dim_name] = alts_k
+            obj.coords['alt_names'] = alts_v
+    elif alts_v is not None:
+        obj.coords[alts_dim_name] = alts_v
+    return obj
+
 
 @xr.register_dataset_accessor("construct")
 class _DatasetConstruct:
 
     _parent_class = xr.Dataset
 
-    def __init__(self, x=None):
+    def __new__(cls, *args, **kwargs):
+        if kwargs:
+            source = construct(*args)
+            return _initialize_for_larch(source, **kwargs)
+        else:
+            return super().__new__(cls, *args, **kwargs)
+
+    def __init__(self, x=None, **kwargs):
         self._obj = x
 
     @classmethod
@@ -49,70 +118,7 @@ class _DatasetConstruct:
         Dataset
         """
         source = construct(source)
-        return cls._initialize_for_larch(source, caseid, alts)
-
-    @classmethod
-    def _initialize_for_larch(cls, obj, caseid=None, alts=None):
-        """
-
-        Parameters
-        ----------
-        obj : Dataset
-            The dataaset being initialized.
-        caseid : str, optional
-            The name of a dimension referencing cases.
-        alts : Mapping or str or array-like, optional
-            If given as a mapping, links alternative codes to names.
-            A string names a dimension that defines the alternatives.
-            An array or list of integers gives codes for the alternatives,
-            which are otherwise unnamed.
-
-        Returns
-        -------
-        Dataset
-        """
-        if caseid is not None:
-            if caseid not in obj.dims:
-                raise ValueError(f"no dim named '{caseid}' to make into {CASEID}")
-            obj.attrs[CASEID] = caseid
-        if isinstance(alts, pd.Series):
-            alts_dim_name = alts.name or alts.index.name or '_altid_'
-            alts_k = xr.DataArray(
-                alts.index, dims=alts_dim_name,
-            )
-            alts_v = xr.DataArray(
-                alts.values, dims=alts_dim_name,
-            )
-        elif isinstance(alts, Mapping):
-            alts_dim_name = '_altid_'
-            alts_k = xr.DataArray(
-                list(alts.keys()), dims=alts_dim_name,
-            )
-            alts_v = xr.DataArray(
-                list(alts.values()), dims=alts_dim_name,
-            )
-        elif isinstance(alts, str):
-            alts_dim_name = alts
-            alts_k = alts_v = None
-        elif alts is None:
-            alts_dim_name = None
-            alts_k = alts_v = None
-        else:
-            alts_dim_name = getattr(alts, 'name', '_altid_')
-            alts_v = np.asarray(alts).reshape(-1)
-            alts_k = None
-        if alts_dim_name:
-            obj.attrs[ALTID] = alts_dim_name
-        if alts_k is not None:
-            if np.issubdtype(alts_v, np.integer) and not np.issubdtype(alts_k, np.integer):
-                obj.coords[alts_dim_name] = alts_v
-                obj.coords['alt_names'] = alts_k
-            else:
-                obj.coords[alts_dim_name] = alts_k
-                obj.coords['alt_names'] = alts_v
-        elif alts_v is not None:
-            obj.coords[alts_dim_name] = alts_v
-        return obj
+        return _initialize_for_larch(source, caseid, alts)
 
     from_omx = _steal(sd.from_omx)
     from_omx_3d = _steal(sd.from_omx_3d)
@@ -197,17 +203,17 @@ class _DatasetConstruct:
 
         ds = cls()(df, caseid=caseidname, alts=altidname)
         if crack:
-            ds = ds.dissolve_zero_variance()
+            ds = ds.flow.dissolve_zero_variance()
         ds = ds.set_dtypes(df)
         if altnames is not None:
-            ds = ds.set_altnames(altnames)
-        if avail not in ds and len(df) < ds.n_cases * ds.n_alts:
+            ds = ds.flow.set_altnames(altnames)
+        if avail not in ds and len(df) < ds.flow.n_cases * ds.flow.n_alts:
             av = xr.DataArray.from_series(pd.Series(1, index=df.index)).fillna(0).astype(np.int8)
             ds[avail] = av
             if fill_missing is not None:
                 if isinstance(fill_missing, Mapping):
                     for k, i in ds.items():
-                        if ds.ALTID not in i.dims:
+                        if ds.flow.ALTID not in i.dims:
                             continue
                         if k not in fill_missing and i.dtype not in fill_missing:
                             continue
@@ -215,7 +221,7 @@ class _DatasetConstruct:
                         ds[k] = i.where(ds['_avail_']!=0, filler)
                 else:
                     for k, i in ds.items():
-                        if ds.ALTID not in i.dims:
+                        if ds.flow.ALTID not in i.dims:
                             continue
                         ds[k] = i.where(ds['_avail_']!=0, fill_missing)
         return ds
@@ -288,8 +294,8 @@ class _DatasetConstruct:
         ds.attrs[CASEPTR] = case_pointer
         ds = ds.drop_vars(dim_name)
         if crack:
-            ds = ds.dissolve_zero_variance()
+            ds = ds.flow.dissolve_zero_variance()
         ds = ds.set_dtypes(df)
         if altnames is not None:
-            ds = ds.set_altnames(altnames)
+            ds = ds.flow.set_altnames(altnames)
         return ds
