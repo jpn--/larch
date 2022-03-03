@@ -60,6 +60,7 @@ requirements:
     - pyarrow
     - numba
     - xarray
+    - sharrow >=2.0
 
 test:
   source_files:
