@@ -1020,7 +1020,7 @@ def test_constrained_optimization():
         'totcost': -0.004910169034222911,
         'tottime': -0.04790588175791953,
     }
-    assert dict(r.x) == approx(x)
+    assert dict(r.x) == approx(x, rel=1e-4)
     assert r.iteration_number == 48
 
     m.set_values("null")

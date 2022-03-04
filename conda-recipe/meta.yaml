@@ -84,6 +84,8 @@ test:
     - nbsphinx
     - geopandas
     - nbmake
+    - tabulate
+    - zarr
 
 about:
   home: https://larch.newman.me
