@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>302: Itinerary Choice using Simple Nested Logit &#8212; v5.6.2.dev10+gc28ca59e</title>
+    <title>302: Itinerary Choice using Simple Nested Logit &#8212; v5.6.2.dev11+gcc82836a</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -86,7 +86,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="../../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.6.2.dev10+gc28ca59e</h1>
+      <h1 class="site-logo" id="site-title">v5.6.2.dev11+gcc82836a</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -1133,7 +1133,8 @@ const thebe_selector_output = ".output, .cell_output"
 <h1>302: Itinerary Choice using Simple Nested Logit<a class="headerlink" href="#itinerary-choice-using-simple-nested-logit" title="Permalink to this headline">¶</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">larch</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">larch</span>
 <span class="n">larch</span><span class="o">.</span><span class="n">__version__</span>
 </pre></div>
 </div>
@@ -1155,14 +1156,7 @@ itinerary choice dataset included with Larch.  See example 300 for details.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="nn">Input In [2],</span> in <span class="ni">&lt;cell line: 2&gt;</span><span class="nt">()</span>
-<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">larch.data_warehouse</span> <span class="kn">import</span> <span class="n">example_file</span>
-<span class="ne">----&gt; </span><span class="mi">2</span> <span class="n">itin</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">example_file</span><span class="p">(</span><span class="s2">&quot;arc&quot;</span><span class="p">),</span> <span class="n">index_col</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;id_case&#39;</span><span class="p">,</span><span class="s1">&#39;id_alt&#39;</span><span class="p">])</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">d</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">DataFrames</span><span class="p">(</span><span class="n">itin</span><span class="p">,</span> <span class="n">ch</span><span class="o">=</span><span class="s1">&#39;choice&#39;</span><span class="p">,</span> <span class="n">crack</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">autoscale_weights</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;pd&#39; is not defined
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>rescaled array of weights by a factor of 2239.980952380952
 </pre></div>
 </div>
 </div>
@@ -1191,23 +1185,6 @@ system using a special object:</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="nn">Input In [3],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">d1</span> <span class="o">=</span> <span class="n">d</span><span class="o">.</span><span class="n">new_systematic_alternatives</span><span class="p">(</span>
-<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">groupby</span><span class="o">=</span><span class="s1">&#39;nb_cnxs&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span>     <span class="n">name</span><span class="o">=</span><span class="s1">&#39;alternative_code&#39;</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">padding_levels</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">groupby_prefixes</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;Cnx&#39;</span><span class="p">],</span>
-<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">overwrite</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">complete_features_list</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;nb_cnxs&#39;</span><span class="p">:[</span><span class="mi">0</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">]},</span>
-<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="p">)</span>
-
-<span class="ne">NameError</span>: name &#39;d&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <p>If we compare the new data with the old data, we’ll see that we have created a few more alternative.</p>
 <div class="cell docutils container">
@@ -1217,12 +1194,14 @@ system using a special object:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="nn">Input In [4],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">d</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;d&#39; is not defined
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>larch.DataFrames:  (not computation-ready)
+  n_cases: 105
+  n_alts: 127
+  data_ce: 8 variables, 6023 rows
+  data_co: 3 variables
+  data_av: &lt;populated&gt;
+  data_ch: choice
+  data_wt: computed_weight (/ 2239.980952380952)
 </pre></div>
 </div>
 </div>
@@ -1234,12 +1213,14 @@ system using a special object:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="nn">Input In [5],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">d1</span><span class="o">.</span><span class="n">info</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;d1&#39; is not defined
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>larch.DataFrames:  (not computation-ready)
+  n_cases: 105
+  n_alts: 134
+  data_ce: 9 variables, 6023 rows
+  data_co: 3 variables
+  data_av: &lt;populated&gt;
+  data_ch: choice
+  data_wt: computed_weight (/ 2239.98095703125)
 </pre></div>
 </div>
 </div>
@@ -1276,23 +1257,6 @@ the MNL version of the model.</p>
 </pre></div>
 </div>
 </div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="nn">Input In [6],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">dataservice</span><span class="o">=</span><span class="n">d1</span><span class="p">)</span>
-<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">v</span> <span class="o">=</span> <span class="p">[</span>
-<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="s2">&quot;timeperiod==2&quot;</span><span class="p">,</span>
-<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="s2">&quot;timeperiod==3&quot;</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">     </span><span class="mi">20</span>     <span class="s2">&quot;nb_cnxs&quot;</span><span class="p">,</span>       
-<span class="g g-Whitespace">     </span><span class="mi">21</span> <span class="p">]</span>
-<span class="g g-Whitespace">     </span><span class="mi">22</span> <span class="kn">from</span> <span class="nn">larch.roles</span> <span class="kn">import</span> <span class="n">PX</span>
-
-<span class="ne">NameError</span>: name &#39;d1&#39; is not defined
-</pre></div>
-</div>
-</div>
 </div>
 <p>If we just end our model specification here, we will have a plain MNL model.  To change to
 a nested logit model, all we need to do is add the nests.  We can do this easily, using the
@@ -1300,16 +1264,6 @@ special <code class="docutils literal notranslate"><span class="pre">magic_nesti
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">m</span><span class="o">.</span><span class="n">magic_nesting</span><span class="p">()</span>
-</pre></div>
-</div>
-</div>
-<div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="nn">Input In [7],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">magic_nesting</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1321,12 +1275,13 @@ special <code class="docutils literal notranslate"><span class="pre">magic_nesti
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="nn">Input In [8],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
-
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>req_data does not request weight_co but it is set and being provided
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>req_data does not request avail_ca or avail_co but it is set and being provided
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>converting data_ce to &lt;class &#39;numpy.float64&#39;&gt;
 </pre></div>
 </div>
 </div>
@@ -1338,15 +1293,403 @@ special <code class="docutils literal notranslate"><span class="pre">magic_nesti
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
-<span class="nn">Input In [9],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
-<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
+<div class="output text_html"><h3>Iteration 042 [Optimization terminated successfully] </h3></div><div class="output text_html"><p>Best LL = -777705.7732910335</p></div><div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
 
-<span class="ne">NameError</span>: name &#39;m&#39; is not defined
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>value</th>
+      <th>initvalue</th>
+      <th>nullvalue</th>
+      <th>minimum</th>
+      <th>maximum</th>
+      <th>holdfast</th>
+      <th>note</th>
+      <th>best</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>MU_nb_cnxs</th>
+      <td>0.691151</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>0.001</td>
+      <td>1.0</td>
+      <td>0</td>
+      <td></td>
+      <td>0.691151</td>
+    </tr>
+    <tr>
+      <th>carrier==2</th>
+      <td>0.079567</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.079567</td>
+    </tr>
+    <tr>
+      <th>carrier==3</th>
+      <td>0.440537</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.440537</td>
+    </tr>
+    <tr>
+      <th>carrier==4</th>
+      <td>0.397000</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.397000</td>
+    </tr>
+    <tr>
+      <th>carrier==5</th>
+      <td>-0.439005</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-0.439005</td>
+    </tr>
+    <tr>
+      <th>elapsed_time</th>
+      <td>-0.004229</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-0.004229</td>
+    </tr>
+    <tr>
+      <th>equipment==2</th>
+      <td>0.326813</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.326813</td>
+    </tr>
+    <tr>
+      <th>fare_hy</th>
+      <td>-0.000847</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-0.000847</td>
+    </tr>
+    <tr>
+      <th>fare_ly</th>
+      <td>-0.000857</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-0.000857</td>
+    </tr>
+    <tr>
+      <th>nb_cnxs</th>
+      <td>-3.156922</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-3.156922</td>
+    </tr>
+    <tr>
+      <th>timeperiod==2</th>
+      <td>0.065438</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.065438</td>
+    </tr>
+    <tr>
+      <th>timeperiod==3</th>
+      <td>0.087974</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.087974</td>
+    </tr>
+    <tr>
+      <th>timeperiod==4</th>
+      <td>0.042816</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.042816</td>
+    </tr>
+    <tr>
+      <th>timeperiod==5</th>
+      <td>0.096447</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.096447</td>
+    </tr>
+    <tr>
+      <th>timeperiod==6</th>
+      <td>0.164563</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.164563</td>
+    </tr>
+    <tr>
+      <th>timeperiod==7</th>
+      <td>0.243778</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.243778</td>
+    </tr>
+    <tr>
+      <th>timeperiod==8</th>
+      <td>0.245030</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>0.245030</td>
+    </tr>
+    <tr>
+      <th>timeperiod==9</th>
+      <td>-0.006025</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>inf</td>
+      <td>0</td>
+      <td></td>
+      <td>-0.006025</td>
+    </tr>
+  </tbody>
+</table>
+</div></div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/runner/work/larch/larch/larch/larch/model/optimization.py:308: UserWarning: slsqp may not play nicely with unbounded parameters
+if you get poor results, consider setting global bounds with model.set_cap()
+  warnings.warn( # infinite bounds # )
 </pre></div>
 </div>
-</div>
+<div class="output text_html"><div><table style="margin-top:1px;"><tr><th>key</th><th style="text-align:left;">value</th></tr><tr><td>x</td><td style="text-align:left;"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>MU_nb_cnxs</th>
+      <td>0.691151</td>
+    </tr>
+    <tr>
+      <th>carrier==2</th>
+      <td>0.079567</td>
+    </tr>
+    <tr>
+      <th>carrier==3</th>
+      <td>0.440537</td>
+    </tr>
+    <tr>
+      <th>carrier==4</th>
+      <td>0.397000</td>
+    </tr>
+    <tr>
+      <th>carrier==5</th>
+      <td>-0.439005</td>
+    </tr>
+    <tr>
+      <th>elapsed_time</th>
+      <td>-0.004229</td>
+    </tr>
+    <tr>
+      <th>equipment==2</th>
+      <td>0.326813</td>
+    </tr>
+    <tr>
+      <th>fare_hy</th>
+      <td>-0.000847</td>
+    </tr>
+    <tr>
+      <th>fare_ly</th>
+      <td>-0.000857</td>
+    </tr>
+    <tr>
+      <th>nb_cnxs</th>
+      <td>-3.156922</td>
+    </tr>
+    <tr>
+      <th>timeperiod==2</th>
+      <td>0.065438</td>
+    </tr>
+    <tr>
+      <th>timeperiod==3</th>
+      <td>0.087974</td>
+    </tr>
+    <tr>
+      <th>timeperiod==4</th>
+      <td>0.042816</td>
+    </tr>
+    <tr>
+      <th>timeperiod==5</th>
+      <td>0.096447</td>
+    </tr>
+    <tr>
+      <th>timeperiod==6</th>
+      <td>0.164563</td>
+    </tr>
+    <tr>
+      <th>timeperiod==7</th>
+      <td>0.243778</td>
+    </tr>
+    <tr>
+      <th>timeperiod==8</th>
+      <td>0.245030</td>
+    </tr>
+    <tr>
+      <th>timeperiod==9</th>
+      <td>-0.006025</td>
+    </tr>
+  </tbody>
+</table></td></tr><tr><td>loglike</td><td style="text-align:left;">-777705.7732910335</td></tr><tr><td>d_loglike</td><td style="text-align:left;"><table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>0</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>MU_nb_cnxs</th>
+      <td>0.019040</td>
+    </tr>
+    <tr>
+      <th>carrier==2</th>
+      <td>-0.099388</td>
+    </tr>
+    <tr>
+      <th>carrier==3</th>
+      <td>-0.042668</td>
+    </tr>
+    <tr>
+      <th>carrier==4</th>
+      <td>0.079734</td>
+    </tr>
+    <tr>
+      <th>carrier==5</th>
+      <td>0.092789</td>
+    </tr>
+    <tr>
+      <th>elapsed_time</th>
+      <td>4.260928</td>
+    </tr>
+    <tr>
+      <th>equipment==2</th>
+      <td>0.067728</td>
+    </tr>
+    <tr>
+      <th>fare_hy</th>
+      <td>-9.444235</td>
+    </tr>
+    <tr>
+      <th>fare_ly</th>
+      <td>-3.831194</td>
+    </tr>
+    <tr>
+      <th>nb_cnxs</th>
+      <td>0.001616</td>
+    </tr>
+    <tr>
+      <th>timeperiod==2</th>
+      <td>0.036795</td>
+    </tr>
+    <tr>
+      <th>timeperiod==3</th>
+      <td>0.021406</td>
+    </tr>
+    <tr>
+      <th>timeperiod==4</th>
+      <td>0.049108</td>
+    </tr>
+    <tr>
+      <th>timeperiod==5</th>
+      <td>-0.011497</td>
+    </tr>
+    <tr>
+      <th>timeperiod==6</th>
+      <td>-0.020032</td>
+    </tr>
+    <tr>
+      <th>timeperiod==7</th>
+      <td>0.012699</td>
+    </tr>
+    <tr>
+      <th>timeperiod==8</th>
+      <td>0.000712</td>
+    </tr>
+    <tr>
+      <th>timeperiod==9</th>
+      <td>-0.016040</td>
+    </tr>
+  </tbody>
+</table></td></tr><tr><td>nit</td><td style="text-align:left;">42</td></tr><tr><td>nfev</td><td style="text-align:left;">137</td></tr><tr><td>njev</td><td style="text-align:left;">42</td></tr><tr><td>status</td><td style="text-align:left;">0</td></tr><tr><td>message</td><td style="text-align:left;">'Optimization terminated successfully'</td></tr><tr><td>success</td><td style="text-align:left;">True</td></tr><tr><td>elapsed_time</td><td style="text-align:left;">0:00:00.520278</td></tr><tr><td>method</td><td style="text-align:left;">'slsqp'</td></tr><tr><td>n_cases</td><td style="text-align:left;">105</td></tr><tr><td>iteration_number</td><td style="text-align:left;">42</td></tr><tr><td>logloss</td><td style="text-align:left;">3.3066002758377295</td></tr></table></div></div></div>
 </div>
 </div>
 
