@@ -71,3 +71,6 @@ latent-class-example-report.html
 doc/build
 sandbox.py
 /LARCH_VERSION.txt
+exampville_dest_choice.html
+exampville_mode_choice.html
+logsums.zarr.zip

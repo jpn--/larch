@@ -28,12 +28,13 @@ from typing import (
     overload,
 )
 from . import construct, patch, flow
+from .patch import register_dataarray_classmethod
 
 try:
     from sharrow import Dataset as _sharrow_Dataset
     from sharrow import DataArray as _sharrow_DataArray
     from sharrow import DataTree as _sharrow_DataTree
-    from sharrow.accessors import register_dataarray_method, register_dataarray_staticmethod
+    from sharrow.accessors import register_dataarray_method
 except ImportError:
     warnings.warn("larch.dataset requires the sharrow library")
     class _noclass:
@@ -47,8 +48,8 @@ from .dim_names import CASEID as _CASEID, ALTID as _ALTID, CASEALT as _CASEALT, 
 
 DataArray = _sharrow_DataArray
 
-@register_dataarray_staticmethod
-def zeros(*coords, dtype=np.float64, name=None, attrs=None):
+@register_dataarray_classmethod
+def zeros(cls, *coords, dtype=np.float64, name=None, attrs=None):
     """
     Construct a dataset filled with zeros.
 
@@ -78,7 +79,7 @@ def zeros(*coords, dtype=np.float64, name=None, attrs=None):
         dims.append(i)
         shape.append(len(c))
         coo[i] = c
-    return xr.DataArray(
+    return cls(
         data=np.zeros(shape, dtype=dtype),
         coords=coo,
         dims=dims,
@@ -123,8 +124,8 @@ def to_zarr(self, store=None, *args, **kwargs):
 
     return dataset.to_zarr(*args, **kwargs)
 
-@register_dataarray_staticmethod
-def from_zarr(*args, name=None, **kwargs):
+@register_dataarray_classmethod
+def from_zarr(cls, *args, name=None, **kwargs):
     dataset = xr.open_zarr(*args, **kwargs)
     if name is None:
         names = set(dataset.variables) - set(dataset.coords)
@@ -134,69 +135,6 @@ def from_zarr(*args, name=None, **kwargs):
             raise ValueError("cannot infer name to load")
     return dataset[name]
 
-    # @property
-    # def CASEID(self):
-    #     result = self.attrs.get(_CASEID, None)
-    #     if result is None:
-    #         warnings.warn("no defined CASEID")
-    #         return _CASEID
-    #     return result
-    #
-    # @CASEID.setter
-    # def CASEID(self, dim_name):
-    #     if dim_name not in self.dims:
-    #         raise ValueError(f"{dim_name} not in dims")
-    #     self.attrs[_CASEID] = dim_name
-    #
-    # @property
-    # def ALTID(self):
-    #     result = self.attrs.get(_ALTID, None)
-    #     if result is None:
-    #         warnings.warn("no defined ALTID")
-    #         return _ALTID
-    #     return result
-    #
-    # @ALTID.setter
-    # def ALTID(self, dim_name):
-    #     self.attrs[_ALTID] = dim_name
-    #
-    # @property
-    # def n_cases(self):
-    #     try:
-    #         i = self.dims.index(self.CASEID)
-    #     except ValueError:
-    #         logging.getLogger().error(f"missing {self.CASEID!r} among dims {self.dims}")
-    #         raise
-    #     return self.shape[i]
-
-    # @property
-    # def n_alts(self):
-    #     if self.ALTID in self.dims:
-    #         return self.shape[self.dims.index(self.ALTID)]
-    #     if 'n_alts' in self.attrs:
-    #         return self.attrs['n_alts']
-    #     raise ValueError('no n_alts set')
-    #
-    # @property
-    # def alts_mapping(self):
-    #     """Dict[int,str] : Mapping of alternative codes to names"""
-    #     a = self.coords[self.ALTID]
-    #     if 'alt_names' in a.coords:
-    #         return dict(zip(a.values, a.coords['alt_names'].values))
-    #     else:
-    #         return dict(zip(a.values, a.values))
-
-    # def _repr_html_(self):
-    #     html = super()._repr_html_()
-    #     html = html.replace("sharrow.DataArray", "larch.DataArray")
-    #     html = html.replace("xarray.DataArray", "larch.DataArray")
-    #     return html
-    #
-    # def __repr__(self):
-    #     r = super().__repr__()
-    #     r = r.replace("sharrow.DataArray", "larch.DataArray")
-    #     r = r.replace("xarray.DataArray", "larch.DataArray")
-    #     return r
 
 @register_dataarray_method
 def value_counts(self, index_name='index'):
@@ -215,20 +153,6 @@ def value_counts(self, index_name='index'):
     values, freqs = np.unique(self, return_counts=True)
     return self.__class__(freqs, dims=index_name, coords={index_name:values})
 
-    # def clip(self, *args, **kwargs):
-    #     """
-    #     Return an array whose values are limited to ``[min, max]``.
-    #     At least one of max or min must be given.
-    #
-    #     Refer to `numpy.clip` for full documentation.
-    #
-    #     See Also
-    #     --------
-    #     numpy.clip : equivalent function
-    #     """
-    #     out = super().clip(*args, **kwargs)
-    #     out.__class__ = self.__class__
-    #     return out
 
 Dataset = _sharrow_Dataset
 # class Dataset(_sharrow_Dataset):

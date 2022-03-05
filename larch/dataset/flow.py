@@ -157,11 +157,36 @@ class _GenericFlow:
         Returns
         -------
         Dataset
+
+        Examples
+        --------
+        >>> from larch.dataset import Dataset
+        >>> ds = Dataset()
+        >>> ds = ds.flow.set_altids([1,2,3,4])
+        >>> ds.flow.altids()
+        Int64Index([1, 2, 3, 4], dtype='int64', name='_altid_')
+        >>> ds.flow.n_alts
+        4
+        >>> ds2 = ds.flow.set_altids([7,8,9], dim_name='A')
+        >>> ds2.flow.ALTID
+        'A'
+        >>> ds2.flow.altids()
+        Int64Index([7, 8, 9], dtype='int64', name='A')
+        >>> ds2
+        <xarray.Dataset>
+        Dimensions:  (_altid_: 4, A: 3)
+        Coordinates:
+          * _altid_  (_altid_) int64 1 2 3 4
+          * A        (A) int64 7 8 9
+        Data variables:
+            *empty*
+        Attributes:
+            _altid_:  A
         """
         if inplace:
-            obj = self
+            obj = self._obj
         else:
-            obj = self.copy()
+            obj = self._obj.copy()
         dim_name = dim_name or getattr(altids, 'name', None) or obj.attrs.get(ALTID, ALTID)
         if not isinstance(altids, xr.DataArray):
             altids = xr.DataArray(
@@ -169,7 +194,7 @@ class _GenericFlow:
                 dims=(dim_name),
             )
         obj.coords[dim_name] = altids
-        obj.ALTID = dim_name
+        obj.flow.ALTID = dim_name
         return obj
 
     def set_altnames(self, altnames, inplace=False):

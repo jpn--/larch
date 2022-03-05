@@ -3,6 +3,7 @@ import pandas as pd
 import xarray as xr
 import sharrow.dataset as sd
 from sharrow.dataset import construct
+from .patch import register_dataset_classmethod
 
 from typing import Mapping
 
