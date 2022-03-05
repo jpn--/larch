@@ -162,15 +162,15 @@ class _GenericFlow:
         --------
         >>> from larch.dataset import Dataset
         >>> ds = Dataset()
-        >>> ds = ds.flow.set_altids([1,2,3,4])
-        >>> ds.flow.altids()
+        >>> ds = ds.dc.set_altids([1,2,3,4])
+        >>> ds.dc.altids()
         Int64Index([1, 2, 3, 4], dtype='int64', name='_altid_')
-        >>> ds.flow.n_alts
+        >>> ds.dc.n_alts
         4
-        >>> ds2 = ds.flow.set_altids([7,8,9], dim_name='A')
-        >>> ds2.flow.ALTID
+        >>> ds2 = ds.dc.set_altids([7,8,9], dim_name='A')
+        >>> ds2.dc.ALTID
         'A'
-        >>> ds2.flow.altids()
+        >>> ds2.dc.altids()
         Int64Index([7, 8, 9], dtype='int64', name='A')
         >>> ds2
         <xarray.Dataset>
@@ -194,7 +194,7 @@ class _GenericFlow:
                 dims=(dim_name),
             )
         obj.coords[dim_name] = altids
-        obj.flow.ALTID = dim_name
+        obj.dc.ALTID = dim_name
         return obj
 
     def set_altnames(self, altnames, inplace=False):
@@ -220,7 +220,7 @@ class _GenericFlow:
         else:
             obj = self._obj.copy()
         if isinstance(altnames, Mapping):
-            a = obj.flow.ALTID
+            a = obj.dc.ALTID
             names = xr.DataArray(
                 [altnames.get(i, None) for i in obj[a].values],
                 dims=a,
@@ -230,7 +230,7 @@ class _GenericFlow:
         else:
             names = xr.DataArray(
                 np.asarray(altnames),
-                dims=obj.flow.ALTID,
+                dims=obj.dc.ALTID,
             )
         obj.coords['altnames'] = names
         return obj
@@ -344,9 +344,9 @@ class _GenericFlow:
         if not isinstance(target, (xr.DataArray, xr.Dataset)):
             return target
         updates = {}
-        for i in [CASEID, ALTID, GROUPID, INGROUP]:
+        for i in [CASEID, ALTID, GROUPID, INGROUP, CASEALT, CASEPTR]:
             j = self._obj.attrs.get(i, None)
-            if j is not None:
+            if j is not None and j in target.dims:
                 updates[i] = j
         return target.assign_attrs(updates)
 
@@ -433,8 +433,8 @@ class _GenericFlow:
         return d
 
 
-@xr.register_dataarray_accessor("flow")
-class _DaFlow(_GenericFlow):
+@xr.register_dataarray_accessor("dc")
+class _DataArrayDC(_GenericFlow):
 
     _parent_class = xr.DataArray
 
@@ -446,9 +446,21 @@ class _DaFlow(_GenericFlow):
             return self._obj.attrs['n_alts']
         raise ValueError('no n_alts set')
 
+    def __getitem__(self, name):
+        # pass dimension attrs to DataArray
+        result = self._obj[name]
+        result = self.transfer_dimension_attrs(result)
+        return result
 
-@xr.register_dataset_accessor("flow")
-class _DatasetFlow(_GenericFlow):
+    def __getattr__(self, name):
+        # pass dimension attrs to DataArray
+        result = getattr(self._obj, name)
+        result = self.transfer_dimension_attrs(result)
+        return result
+
+
+@xr.register_dataset_accessor("dc")
+class _DatasetDC(_GenericFlow):
 
     _parent_class = xr.Dataset
 

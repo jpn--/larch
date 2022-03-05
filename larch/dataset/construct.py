@@ -204,17 +204,17 @@ class _DatasetConstruct:
 
         ds = cls()(df, caseid=caseidname, alts=altidname)
         if crack:
-            ds = ds.flow.dissolve_zero_variance()
+            ds = ds.dc.dissolve_zero_variance()
         ds = ds.set_dtypes(df)
         if altnames is not None:
-            ds = ds.flow.set_altnames(altnames)
-        if avail not in ds and len(df) < ds.flow.n_cases * ds.flow.n_alts:
+            ds = ds.dc.set_altnames(altnames)
+        if avail not in ds and len(df) < ds.dc.n_cases * ds.dc.n_alts:
             av = xr.DataArray.from_series(pd.Series(1, index=df.index)).fillna(0).astype(np.int8)
             ds[avail] = av
             if fill_missing is not None:
                 if isinstance(fill_missing, Mapping):
                     for k, i in ds.items():
-                        if ds.flow.ALTID not in i.dims:
+                        if ds.dc.ALTID not in i.dims:
                             continue
                         if k not in fill_missing and i.dtype not in fill_missing:
                             continue
@@ -222,7 +222,7 @@ class _DatasetConstruct:
                         ds[k] = i.where(ds['_avail_']!=0, filler)
                 else:
                     for k, i in ds.items():
-                        if ds.flow.ALTID not in i.dims:
+                        if ds.dc.ALTID not in i.dims:
                             continue
                         ds[k] = i.where(ds['_avail_']!=0, fill_missing)
         return ds
@@ -295,8 +295,8 @@ class _DatasetConstruct:
         ds.attrs[CASEPTR] = case_pointer
         ds = ds.drop_vars(dim_name)
         if crack:
-            ds = ds.flow.dissolve_zero_variance()
+            ds = ds.dc.dissolve_zero_variance()
         ds = ds.set_dtypes(df)
         if altnames is not None:
-            ds = ds.flow.set_altnames(altnames)
+            ds = ds.dc.set_altnames(altnames)
         return ds

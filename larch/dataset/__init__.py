@@ -1085,27 +1085,27 @@ class DataTree(_sharrow_DataTree):
             **kwargs,
         )
         dim_order = []
-        c = self.root_dataset.flow.CASEID
+        c = self.root_dataset.dc.CASEID
         if c is not None:
             dim_order.append(c)
-        a = self.root_dataset.flow.ALTID
+        a = self.root_dataset.dc.ALTID
         if a is not None:
             dim_order.append(a)
         self.dim_order = tuple(dim_order)
 
     def idco_subtree(self):
         if 'idcoVars' in self.subspaces:
-            return self.subspaces['idcoVars'].flow.as_tree()
+            return self.subspaces['idcoVars'].dc.as_tree()
         return self.drop_dims(self.ALTID, ignore_missing_dims=True)
 
     @property
-    def flow(self):
+    def dc(self):
         return self
 
     @property
     def CASEID(self):
         """str : The _caseid_ dimension of the root Dataset."""
-        result = self.root_dataset.flow.CASEID
+        result = self.root_dataset.dc.CASEID
         if result is None:
             warnings.warn("no defined CASEID")
             return _CASEID
@@ -1114,7 +1114,7 @@ class DataTree(_sharrow_DataTree):
     @property
     def ALTID(self):
         """str : The _altid_ dimension of the root Dataset."""
-        result = self.root_dataset.flow.ALTID
+        result = self.root_dataset.dc.ALTID
         if result is None:
             warnings.warn("no defined ALTID")
             return _ALTID
@@ -1183,7 +1183,7 @@ class DataTree(_sharrow_DataTree):
         Dataset.query_cases
         """
         obj = self.copy()
-        obj.root_dataset = obj.root_dataset.flow.query_cases(*args, **kwargs)
+        obj.root_dataset = obj.root_dataset.dc.query_cases(*args, **kwargs)
         return obj
 
     def caseids(self):
@@ -1453,7 +1453,7 @@ def choice_avail_summary(dataset, graph=None, availability_co_vars=None):
         idx = graph.standard_sort
         od['name'] = pd.Series(graph.standard_sort_names, index=idx)
     else:
-        idx = dataset.flow.altids()
+        idx = dataset.dc.altids()
         if dataset.get('alt_names') is not None:
             od['name'] = pd.Series(dataset.get('alt_names'), index=idx)
 

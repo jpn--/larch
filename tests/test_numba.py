@@ -44,8 +44,8 @@ def mtc_dataset():
         ['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
         dims=['_altid_'],
     )
-    dataset.flow.CASEID = '_caseid_'
-    dataset.flow.ALTID = '_altid_'
+    dataset.dc.CASEID = '_caseid_'
+    dataset.dc.ALTID = '_altid_'
     return dataset
 
 
