@@ -20,5 +20,6 @@ addopts = """\
 testpaths = [
     "tests",
     "book/example",
+    "larch",
 ]
 doctest_optionflags = "NORMALIZE_WHITESPACE"
