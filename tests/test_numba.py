@@ -1021,7 +1021,6 @@ def test_constrained_optimization():
         'tottime': -0.04790588175791953,
     }
     assert dict(r.x) == approx(x, rel=5e-3, abs=1e-6)
-    assert r.iteration_number == 48
 
     m.set_values("null")
     m.set_value("totcost", -0.001, maximum=0)
