@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>larch.dataset &#8212; v5.6.2.dev20+g5327fa4c</title>
+    <title>larch.dataset &#8212; v5.6.2.dev22+gcb35445c</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -85,7 +85,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="../../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.6.2.dev20+g5327fa4c</h1>
+      <h1 class="site-logo" id="site-title">v5.6.2.dev22+gcb35445c</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -2199,27 +2199,27 @@ const thebe_selector_output = ".output, .cell_output"
             <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">dim_order</span> <span class="o">=</span> <span class="p">[]</span>
-        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">CASEID</span>
+        <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">dc</span><span class="o">.</span><span class="n">CASEID</span>
         <span class="k">if</span> <span class="n">c</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dim_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">ALTID</span>
+        <span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">dc</span><span class="o">.</span><span class="n">ALTID</span>
         <span class="k">if</span> <span class="n">a</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dim_order</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">dim_order</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">dim_order</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">idco_subtree</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">if</span> <span class="s1">&#39;idcoVars&#39;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspaces</span><span class="p">:</span>
-            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspaces</span><span class="p">[</span><span class="s1">&#39;idcoVars&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">as_tree</span><span class="p">()</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">subspaces</span><span class="p">[</span><span class="s1">&#39;idcoVars&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dc</span><span class="o">.</span><span class="n">as_tree</span><span class="p">()</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">drop_dims</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ALTID</span><span class="p">,</span> <span class="n">ignore_missing_dims</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">flow</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">dc</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="k">return</span> <span class="bp">self</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">CASEID</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;str : The _caseid_ dimension of the root Dataset.&quot;&quot;&quot;</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">CASEID</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">dc</span><span class="o">.</span><span class="n">CASEID</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;no defined CASEID&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">_CASEID</span>
@@ -2228,7 +2228,7 @@ const thebe_selector_output = ".output, .cell_output"
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">ALTID</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;str : The _altid_ dimension of the root Dataset.&quot;&quot;&quot;</span>
-        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">ALTID</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">dc</span><span class="o">.</span><span class="n">ALTID</span>
         <span class="k">if</span> <span class="n">result</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;no defined ALTID&quot;</span><span class="p">)</span>
             <span class="k">return</span> <span class="n">_ALTID</span>
@@ -2297,7 +2297,7 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="sd">        Dataset.query_cases</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">obj</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">obj</span><span class="o">.</span><span class="n">root_dataset</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">query_cases</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+        <span class="n">obj</span><span class="o">.</span><span class="n">root_dataset</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="n">root_dataset</span><span class="o">.</span><span class="n">dc</span><span class="o">.</span><span class="n">query_cases</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">obj</span></div>
 
     <span class="k">def</span> <span class="nf">caseids</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -2567,7 +2567,7 @@ const thebe_selector_output = ".output, .cell_output"
         <span class="n">idx</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">standard_sort</span>
         <span class="n">od</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">graph</span><span class="o">.</span><span class="n">standard_sort_names</span><span class="p">,</span> <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">idx</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">flow</span><span class="o">.</span><span class="n">altids</span><span class="p">()</span>
+        <span class="n">idx</span> <span class="o">=</span> <span class="n">dataset</span><span class="o">.</span><span class="n">dc</span><span class="o">.</span><span class="n">altids</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">dataset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alt_names&#39;</span><span class="p">)</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">od</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Series</span><span class="p">(</span><span class="n">dataset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;alt_names&#39;</span><span class="p">),</span> <span class="n">index</span><span class="o">=</span><span class="n">idx</span><span class="p">)</span>
 

@@ -49,8 +49,8 @@
       ~DataTree.CASEID
       ~DataTree.CASEPTR
       ~DataTree.coords
+      ~DataTree.dc
       ~DataTree.dims
-      ~DataTree.flow
       ~DataTree.n_alts
       ~DataTree.n_cases
       ~DataTree.relationships_are_digitized
