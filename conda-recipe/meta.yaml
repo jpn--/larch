@@ -87,6 +87,8 @@ test:
     - nbmake
     - tabulate
     - zarr
+    - altair
+    - apsw
 
 about:
   home: https://larch.newman.me
