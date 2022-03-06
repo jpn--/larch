@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>sharrow.relationships &#8212; v5.6.2.dev24+g8fec32e3</title>
+    <title>sharrow.relationships &#8212; v5.6.2.dev25+gf5753e2d</title>
     
   <link href="../../_static/css/theme.css" rel="stylesheet">
   <link href="../../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
@@ -85,7 +85,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="../../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.6.2.dev24+g8fec32e3</h1>
+      <h1 class="site-logo" id="site-title">v5.6.2.dev25+gf5753e2d</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
@@ -1121,6 +1121,14 @@ const thebe_selector_output = ".output, .cell_output"
 <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
 
 <span class="kn">from</span> <span class="nn">.dataset</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">construct</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">ast</span> <span class="kn">import</span> <span class="n">unparse</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="kn">from</span> <span class="nn">astunparse</span> <span class="kn">import</span> <span class="n">unparse</span> <span class="k">as</span> <span class="n">_unparse</span>
+
+    <span class="n">unparse</span> <span class="o">=</span> <span class="k">lambda</span> <span class="o">*</span><span class="n">args</span><span class="p">:</span> <span class="n">_unparse</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
 
 <span class="n">logger</span> <span class="o">=</span> <span class="n">logging</span><span class="o">.</span><span class="n">getLogger</span><span class="p">(</span><span class="s2">&quot;sharrow&quot;</span><span class="p">)</span>
 
@@ -2212,7 +2220,7 @@ const thebe_selector_output = ".output, .cell_output"
                     <span class="n">parent_data</span><span class="p">,</span> <span class="n">parent_name</span><span class="p">,</span> <span class="n">exclude_dims</span><span class="o">=</span><span class="n">exclude_dims</span>
                 <span class="p">)</span>
                 <span class="k">try</span><span class="p">:</span>
-                    <span class="n">upside</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">ast</span><span class="o">.</span><span class="n">unparse</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">upside_ast</span><span class="p">)</span>
+                    <span class="n">upside</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">unparse</span><span class="p">(</span><span class="n">t</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">upside_ast</span><span class="p">)</span>
                 <span class="k">except</span><span class="p">:</span>  <span class="c1"># noqa: E722</span>
                     <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">upside_ast</span><span class="p">:</span>
                         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;t:</span><span class="si">{</span><span class="n">t</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
