@@ -140,7 +140,7 @@ class _GenericFlow:
     def INGROUP(self, dim_name):
         self.__set_attr(INGROUP, dim_name)
 
-    def set_altids(self, altids, dim_name=None, inplace=False):
+    def set_altids(self, altids, dim_name=None, dtype=None, inplace=False):
         """
         Set the alternative ids for this Dataset.
 
@@ -150,6 +150,8 @@ class _GenericFlow:
             Integer id codes.
         dim_name : str, optional
             Use this dimension name for alternatives.
+        dtype : dtype, optional
+            Coerce the altids to be this dtype.
         inplace : bool, default False
             When true, apply the transformation in-place on the Dataset,
             otherwise return a modified copy.
@@ -160,14 +162,15 @@ class _GenericFlow:
 
         Examples
         --------
+        >>> import numpy as np
         >>> from larch.dataset import Dataset
         >>> ds = Dataset()
-        >>> ds = ds.dc.set_altids([1,2,3,4])
+        >>> ds = ds.dc.set_altids([1,2,3,4], dtype=np.int64)
         >>> ds.dc.altids()
         Int64Index([1, 2, 3, 4], dtype='int64', name='_altid_')
         >>> ds.dc.n_alts
         4
-        >>> ds2 = ds.dc.set_altids([7,8,9], dim_name='A')
+        >>> ds2 = ds.dc.set_altids([7,8,9], dim_name='A', dtype=np.int64)
         >>> ds2.dc.ALTID
         'A'
         >>> ds2.dc.altids()
@@ -193,6 +196,8 @@ class _GenericFlow:
                 np.asarray(altids),
                 dims=(dim_name),
             )
+        if dtype is not None:
+            altids = altids.astype(dtype)
         obj.coords[dim_name] = altids
         obj.dc.ALTID = dim_name
         return obj
@@ -307,7 +312,7 @@ class _GenericFlow:
         -------
         pd.Index
         """
-        return self.indexes[self.ALTID]
+        return self._obj.indexes[self.ALTID]
 
     def groupids(self):
         """
