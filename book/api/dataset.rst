@@ -53,6 +53,7 @@ Methods
     Dataset.caseids
     Dataset.dissolve_zero_variance
     Dataset.query_cases
+    Dataset.set_altids
     Dataset.set_altnames
     Dataset.set_dtypes
     Dataset.setup_flow

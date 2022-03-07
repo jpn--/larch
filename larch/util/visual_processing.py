@@ -1,9 +1,11 @@
 
+try:
+	from selenium import webdriver
+	from PIL import Image, ImageDraw, ImageEnhance, ImageChops
+except ImportError:
+	pass # Nothing in this module will work
 
-from selenium import webdriver
 import os
-from PIL import Image, ImageDraw, ImageEnhance, ImageChops
-
 import base64
 from io import BytesIO
 
@@ -165,4 +167,3 @@ def trim_uniform_border(im):
 	bbox = diff.getbbox()
 	if bbox:
 		return im.crop(bbox)
-

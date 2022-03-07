@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: "v5.6.1"
+title: "v5.7.0"
 author: Jeffrey Newman
 logo: img/larch-logo.png
 
@@ -19,7 +19,7 @@ execute:
 
 # Add a bibtex file so that we can create citations
 bibtex_bibfiles:
-  - references.bib
+- references.bib
 
 # Information about where the book exists on the web
 repository:
@@ -36,21 +36,21 @@ html:
 
 sphinx:
   extra_extensions:
-    - 'sphinx.ext.autodoc'
-    - 'sphinx.ext.autosummary'
-    - 'sphinx.ext.napoleon'
-    - 'sphinx.ext.mathjax'
-    - 'sphinx.ext.intersphinx'
-    - 'sphinx.ext.doctest'
-    - 'sphinx.ext.graphviz'
-    - 'sphinx.ext.viewcode'
+  - sphinx.ext.autodoc
+  - sphinx.ext.autosummary
+  - sphinx.ext.napoleon
+  - sphinx.ext.mathjax
+  - sphinx.ext.intersphinx
+  - sphinx.ext.doctest
+  - sphinx.ext.graphviz
+  - sphinx.ext.viewcode
   mathjax_config:
     TeX:
       Macros:
-        "N": "\\mathbb{N}"
-        "floor": [ "\\lfloor#1\\rfloor", 1 ]
-        "bmat": [ "\\left[\\begin{array}" ]
-        "emat": [ "\\end{array}\\right]" ]
+        N: \mathbb{N}
+        floor: [\lfloor#1\rfloor, 1]
+        bmat: ['\left[\begin{array}']
+        emat: ['\end{array}\right]']
   latex_elements:
     preamble: |
       \newcommand\N{\mathbb{N}}
@@ -59,27 +59,27 @@ sphinx:
       \newcommand{\emat}{\end{array}\right]}
   intersphinx_mapping:
     pandas:
-      - "http://pandas.pydata.org/pandas-docs/stable/"
-      - null
+    - http://pandas.pydata.org/pandas-docs/stable/
+    -
     sklearn:
-      - "https://scikit-learn.org/stable/"
-      - null
+    - https://scikit-learn.org/stable/
+    -
     networkx:
-      - "https://networkx.github.io/documentation/latest/"
-      - null
+    - https://networkx.github.io/documentation/latest/
+    -
     conda:
-      - "https://docs.conda.io/projects/conda/en/latest/"
-      - null
+    - https://docs.conda.io/projects/conda/en/latest/
+    -
     xarray:
-      - "https://xarray.pydata.org/en/stable/"
-      - null
+    - https://xarray.pydata.org/en/stable/
+    -
   config:
     bibtex_reference_style: author_year
-    autosummary_generate: True
+    autosummary_generate: true
     autodoc_default_options:
-      show-inheritance: True
-    add_module_names: False
-    napoleon_use_rtype: False
+      show-inheritance: true
+    add_module_names: false
+    napoleon_use_rtype: false
     rst_epilog: |
       .. |idca| replace:: :ref:`idca <idca>`
       .. |idco| replace:: :ref:`idco <idco>`
@@ -97,8 +97,8 @@ sphinx:
         sizes: 32x32
         href: img/larch_favicon.png
       switcher:
-        json_url: "https://larch.newman.me/_static/switcher.json"
-        url_template: "https://larch.newman.me/v{version}/"
-        version_match: "5.6.1"
+        json_url: https://larch.newman.me/_static/switcher.json
+        url_template: https://larch.newman.me/v{version}/
+        version_match: 5.7.0
       navbar_end:
       - version-switcher

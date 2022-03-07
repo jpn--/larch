@@ -11,6 +11,8 @@
       <excludeFolder url="file://$MODULE_DIR$/book/_build" />
       <excludeFolder url="file://$MODULE_DIR$/book/.ipynb_checkpoints" />
       <excludeFolder url="file://$MODULE_DIR$/larch/examples/generated" />
+      <excludeFolder url="file://$MODULE_DIR$/book/example/.ipynb_checkpoints" />
+      <excludeFolder url="file://$MODULE_DIR$/book/user-guide/.ipynb_checkpoints" />
     </content>
     <orderEntry type="jdk" jdkName="Python 3.9 (spring22)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />

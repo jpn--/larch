@@ -5,7 +5,7 @@ import logging
 from typing import NamedTuple
 import numba as nb
 
-from ..dim_names import CASEID as _CASEID, ALTID as _ALTID, CASEALT as _CASEALT, ALTIDX as _ALTIDX, CASEPTR as _CASEPTR
+from ..dataset.dim_names import CASEID as _CASEID, ALTID as _ALTID, CASEALT as _CASEALT, ALTIDX as _ALTIDX, CASEPTR as _CASEPTR
 
 class _case_slice:
 
@@ -109,16 +109,17 @@ def prepare_data(
             model_dataset.coords.update(datasource.subspaces['idcoVars'].coords)
     except AttributeError:
         pass
-    model_dataset.CASEID = datasource.CASEID
-    model_dataset.ALTID = datasource.ALTID
+    model_dataset.dc.CASEID = datasource.dc.CASEID
+    model_dataset.dc.ALTID = datasource.dc.ALTID
 
     from .model import NumbaModel # avoid circular import
     if isinstance(request, NumbaModel):
         alts = request.graph.elemental_names()
-        if model_dataset.ALTID not in model_dataset.coords:
-            model_dataset.coords[model_dataset.ALTID] = list(alts.keys())
+        alt_dim = model_dataset.dc.ALTID or _ALTID
+        if model_dataset.dc.ALTID not in model_dataset.coords:
+            model_dataset.coords[alt_dim] = DataArray(list(alts.keys()), dims=(alt_dim,))
         if 'alt_names' not in model_dataset.coords:
-            model_dataset.coords['alt_names'] = DataArray(list(alts.values()), dims=(model_dataset.ALTID,))
+            model_dataset.coords['alt_names'] = DataArray(list(alts.values()), dims=(alt_dim,))
         request = request.required_data()
 
     if flows is None:
@@ -131,7 +132,7 @@ def prepare_data(
         datatree = datasource
         datatree_co = datatree.idco_subtree()
     elif isinstance(datasource, Dataset):
-        datatree = datasource.as_tree()
+        datatree = datasource.dc.as_tree()
         if not datatree.relationships_are_digitized:
             datatree.digitize_relationships(inplace=True)
         datatree_co = datatree.idco_subtree()
@@ -206,8 +207,8 @@ def prepare_data(
             da_ch = DataArray(
                 ce_to_dense(
                     model_dataset['choice_ce_data'].values,
-                    model_dataset[model_dataset.ALTIDX].values,
-                    model_dataset[model_dataset.CASEPTR].values,
+                    model_dataset[model_dataset.dc.ALTIDX].values,
+                    model_dataset[model_dataset.dc.CASEPTR].values,
                     datatree.n_alts
                 ),
                 dims=[datatree.CASEID, datatree.ALTID],
@@ -245,9 +246,9 @@ def prepare_data(
             },
             name='ch',
         )
-        for i,a in enumerate(model_dataset.alts_mapping):
+        for i,a in enumerate(model_dataset.dc.alts_mapping):
             choice_expr = request['choice_co'][a]
-            da_ch[:, i] = datatree_co.get_expr(choice_expr).values
+            da_ch[:, i] = datatree_co.dc.get_expr(choice_expr).values
         model_dataset = model_dataset.merge(da_ch)
     if 'choice_any' in request:
         log.debug(f"requested choice_any data: {request['choice_any']}")
@@ -266,6 +267,19 @@ def prepare_data(
             flow=flows.get('weight_co'),
         )
 
+    if 'group_co' in request:
+        log.debug(f"requested group_co data: {request['group_co']}")
+        model_dataset, flows['group_co'] = _prep_co(
+            model_dataset,
+            datatree_co,
+            [request['group_co']],
+            tag='group',
+            preserve_vars=False,
+            dtype=np.int64,
+            cache_dir=cache_dir,
+            flow=flows.get('group_co'),
+        )
+
     if 'avail_ca' in request:
         log.debug(f"requested avail_ca data: {request['avail_ca']}")
         casealt_dim = datatree.root_dataset.attrs.get(_CASEALT)
@@ -281,11 +295,11 @@ def prepare_data(
                 flow=flows.get('avail_ca'),
             )
         else:
-            if request['avail_ca'] in {'1', 'True', '1.0'} and model_dataset.CASEPTR is not None and model_dataset.ALTIDX is not None:
+            if request['avail_ca'] in {'1', 'True', '1.0'} and model_dataset.dc.CASEPTR is not None and model_dataset.dc.ALTIDX is not None:
                 da_av = DataArray(
                     ce_bool_to_dense(
-                        model_dataset[model_dataset.ALTIDX].values,
-                        model_dataset[model_dataset.CASEPTR].values,
+                        model_dataset[model_dataset.dc.ALTIDX].values,
+                        model_dataset[model_dataset.dc.CASEPTR].values,
                         datatree.n_alts,
                     ),
                     dims=[datatree.CASEID, datatree.ALTID],
@@ -311,8 +325,8 @@ def prepare_data(
                 da_av = DataArray(
                     ce_to_dense(
                         model_dataset['avail_ce_data'].values,
-                        model_dataset[model_dataset.ALTIDX].values,
-                        model_dataset[model_dataset.CASEPTR].values,
+                        model_dataset[model_dataset.dc.ALTIDX].values,
+                        model_dataset[model_dataset.dc.CASEPTR].values,
                         datatree.n_alts,
                     ),
                     dims=[datatree.CASEID, datatree.ALTID],
@@ -486,11 +500,11 @@ def _prep_ce(
         altidx = datatree.root_dataset.coords[datatree.ALTIDX]
         altidx = altidx.drop_vars(list(altidx.coords))
         model_dataset[datatree.ALTIDX] = altidx
-        model_dataset.ALTIDX = datatree.ALTIDX
+        model_dataset.dc.ALTIDX = datatree.ALTIDX
         caseptr = datatree.root_dataset[datatree.CASEPTR]
         caseptr = caseptr.drop_vars(list(caseptr.coords))
         model_dataset[datatree.CASEPTR] = caseptr
-        model_dataset.CASEPTR = datatree.CASEPTR
+        model_dataset.dc.CASEPTR = datatree.CASEPTR
         model_dataset = model_dataset.assign_coords({
             datatree.CASEID: DataArray(
                 datatree.caseids(),
@@ -501,8 +515,8 @@ def _prep_ce(
                 dims=(datatree.ALTID),
             ),
         })
-    model_dataset.CASEID = datatree.CASEID
-    model_dataset.ALTID = datatree.ALTID
+    model_dataset.dc.CASEID = datatree.CASEID
+    model_dataset.dc.ALTID = datatree.ALTID
     return model_dataset, flow
 
 

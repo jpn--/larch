@@ -3,7 +3,10 @@ import apsw
 import numpy
 import pandas
 
-from .sqlite_arrays import _sqlite_array_2d_float64
+try:
+	from .sqlite_arrays import _sqlite_array_2d_float64
+except ImportError:
+	_sqlite_array_2d_float64 = None
 
 class Connection(apsw.Connection):
 
@@ -11,5 +14,3 @@ class Connection(apsw.Connection):
 		if dtype==numpy.float64:
 			return _sqlite_array_2d_float64(self.sqlite3pointer(), query, index_col=index_col)
 		raise TypeError("cannot read in {}".format(dtype))
-
-

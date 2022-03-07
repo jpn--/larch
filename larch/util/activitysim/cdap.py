@@ -9,7 +9,6 @@ import larch
 import os
 import yaml
 import importlib
-asim_cdap = importlib.import_module("activitysim.abm.models.util.cdap")
 
 import logging
 from larch.log import logger_name
@@ -314,6 +313,7 @@ def cdap_data(
     except FileNotFoundError:
         persons = pd.read_csv(persons_file)
 
+    asim_cdap = importlib.import_module("activitysim.abm.models.util.cdap")
     person_rank = asim_cdap.assign_cdap_rank(persons)
 
     coefficients = read_csv(
@@ -400,4 +400,3 @@ def cdap_model(
     if return_data:
         return model, d
     return model
-

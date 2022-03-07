@@ -44,8 +44,8 @@ def mtc_dataset():
         ['DA', 'SR2', 'SR3+', 'Transit', 'Bike', 'Walk'],
         dims=['_altid_'],
     )
-    dataset.CASEID = '_caseid_'
-    dataset.ALTID = '_altid_'
+    dataset.dc.CASEID = '_caseid_'
+    dataset.dc.ALTID = '_altid_'
     return dataset
 
 
@@ -1020,8 +1020,7 @@ def test_constrained_optimization():
         'totcost': -0.004910169034222911,
         'tottime': -0.04790588175791953,
     }
-    assert dict(r.x) == approx(x)
-    assert r.iteration_number == 48
+    assert dict(r.x) == approx(x, rel=5e-3, abs=1e-6)
 
     m.set_values("null")
     m.set_value("totcost", -0.001, maximum=0)

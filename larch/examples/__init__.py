@@ -137,7 +137,7 @@ def _exec_example_n(n, *arg, echo=False, larch=None, legacy=False, **kwarg):
 	return _exec_example(f, *arg, echo=echo, larch=larch, **kwarg)
 
 
-def example(n, extract='m', echo=False, output_file=None, larch=None, legacy=False):
+def example(n, extract='m', echo=False, output_file=None, larch=None, legacy=False, **kwargs):
 	'''Run an example code section (from the documentation) and give the result.
 
 	Parameters
@@ -160,10 +160,10 @@ def example(n, extract='m', echo=False, output_file=None, larch=None, legacy=Fal
 	if output_file is not None:
 		if os.path.exists(output_file):
 			return output_file
-		_exec_example_n(n, extract=None, echo=echo, larch=larch, legacy=legacy)
+		_exec_example_n(n, extract=(), echo=echo, larch=larch, legacy=legacy, **kwargs)
 		if os.path.exists(output_file):
 			return output_file
 		else:
 			raise FileNotFoundError(output_file)
 	else:
-		return _exec_example_n(n, extract=extract, echo=echo, larch=larch, legacy=legacy)
+		return _exec_example_n(n, extract=extract, echo=echo, larch=larch, legacy=legacy, **kwargs)
