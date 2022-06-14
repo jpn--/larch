@@ -101,6 +101,7 @@ def prepare_data(
     if float_dtype is None:
         float_dtype = np.float64
     log.debug(f"building dataset from datashare coords: {datasource.coords}")
+    log.debug("dkjfakljdlksajf")
     model_dataset = Dataset(
         coords=datasource.coords,
     )
@@ -114,11 +115,19 @@ def prepare_data(
 
     from .model import NumbaModel # avoid circular import
     if isinstance(request, NumbaModel):
-        alts = request.graph.elemental_names()
+        alts = request.graph.elemental_names() # these are wrong, they droop the zero index
         alt_dim = model_dataset.dc.ALTID or _ALTID
         if model_dataset.dc.ALTID not in model_dataset.coords:
             model_dataset.coords[alt_dim] = DataArray(list(alts.keys()), dims=(alt_dim,))
-        if 'alt_names' not in model_dataset.coords:
+        if 'alt_names' not in model_dataset.coords: # could we supply this manually?
+            # display(alts)
+            # print(alt_dim, len(alts))
+            # WAS HERE
+            # print(model_dataset.coords)
+            # print(alt_dim)
+            # print(alts)
+            # print(model_dataset.coords)
+            print(len(list(alts.values())), alt_dim)
             model_dataset.coords['alt_names'] = DataArray(list(alts.values()), dims=(alt_dim,))
         request = request.required_data()
 

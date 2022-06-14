@@ -1322,8 +1322,10 @@ cdef class Model5c(AbstractChoiceModel):
 
 		from .tree import NestingTree
 		g = NestingTree(root_id=root_id)
+		# print(root_id)
 		if alternative_names is None:
 			for a in alternative_codes:
+				# print(a)
 				g.add_node(a)
 		else:
 			for a, name in zip(alternative_codes, alternative_names):
