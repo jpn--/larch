@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Data for Discrete Choice &#8212; v5.7.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Data for Discrete Choice &#8212; v5.6.2.dev26+g82cf4dd5</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,32 +20,32 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/larch-book.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -66,7 +68,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -75,9 +91,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -87,7 +104,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.7.0</h1>
+      <h1 class="site-logo" id="site-title">v5.6.2.dev26+g82cf4dd5</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -155,181 +172,20 @@ const thebe_selector_output = ".output, .cell_output"
    </i>
   </label>
   <ul>
-   <li class="toctree-l2 has-children">
+   <li class="toctree-l2">
     <a class="reference internal" href="../api/dataset.html">
      Dataset
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-    <label for="toctree-checkbox-3">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.html">
-       larch.Dataset
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.construct.html">
-       larch.Dataset.construct
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.dims.html">
-       larch.Dataset.dims
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.sizes.html">
-       larch.Dataset.sizes
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.data_vars.html">
-       larch.Dataset.data_vars
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.coords.html">
-       larch.Dataset.coords
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.attrs.html">
-       larch.Dataset.attrs
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.encoding.html">
-       larch.Dataset.encoding
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.indexes.html">
-       larch.Dataset.indexes
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.chunks.html">
-       larch.Dataset.chunks
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.chunksizes.html">
-       larch.Dataset.chunksizes
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.nbytes.html">
-       larch.Dataset.nbytes
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.set_dtypes.html">
-       larch.Dataset.set_dtypes
-      </a>
-     </li>
-    </ul>
    </li>
-   <li class="toctree-l2 has-children">
+   <li class="toctree-l2">
     <a class="reference internal" href="../api/datatree.html">
      DataTree
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-    <label for="toctree-checkbox-4">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.html">
-       larch.DataTree
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.root_node_name.html">
-       larch.DataTree.root_node_name
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.subspaces.html">
-       larch.DataTree.subspaces
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.relationships_are_digitized.html">
-       larch.DataTree.relationships_are_digitized
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.n_cases.html">
-       larch.DataTree.n_cases
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.n_alts.html">
-       larch.DataTree.n_alts
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.CASEID.html">
-       larch.DataTree.CASEID
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.ALTID.html">
-       larch.DataTree.ALTID
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.add_dataset.html">
-       larch.DataTree.add_dataset
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.add_relationship.html">
-       larch.DataTree.add_relationship
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.digitize_relationships.html">
-       larch.DataTree.digitize_relationships
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.query_cases.html">
-       larch.DataTree.query_cases
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.replace_datasets.html">
-       larch.DataTree.replace_datasets
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.setup_flow.html">
-       larch.DataTree.setup_flow
-      </a>
-     </li>
-    </ul>
    </li>
-   <li class="toctree-l2 has-children">
+   <li class="toctree-l2">
     <a class="reference internal" href="../api/dataframes.html">
      DataFrames
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-    <label for="toctree-checkbox-5">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataFrames.html">
-       larch.DataFrames
-      </a>
-     </li>
-    </ul>
    </li>
   </ul>
  </li>
@@ -337,218 +193,16 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../api/~models.html">
    Models
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
-   <li class="toctree-l2 has-children">
+   <li class="toctree-l2">
     <a class="reference internal" href="../api/model.html">
      Model
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-    <label for="toctree-checkbox-7">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.html">
-       larch.numba.Model
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.datatree.html">
-       larch.numba.Model.datatree
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.dataset.html">
-       larch.numba.Model.dataset
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.n_cases.html">
-       larch.numba.Model.n_cases
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.choice_ca_var.html">
-       larch.numba.Model.choice_ca_var
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.choice_co_vars.html">
-       larch.numba.Model.choice_co_vars
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.choice_co_code.html">
-       larch.numba.Model.choice_co_code
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.availability_ca_var.html">
-       larch.numba.Model.availability_ca_var
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.availability_co_vars.html">
-       larch.numba.Model.availability_co_vars
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.utility_ca.html">
-       larch.numba.Model.utility_ca
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.utility_co.html">
-       larch.numba.Model.utility_co
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.quantity_ca.html">
-       larch.numba.Model.quantity_ca
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.pf.html">
-       larch.numba.Model.pf
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.most_recent_estimation_result.html">
-       larch.numba.Model.most_recent_estimation_result
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.possible_overspecification.html">
-       larch.numba.Model.possible_overspecification
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.set_values.html">
-       larch.numba.Model.set_values
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.lock_value.html">
-       larch.numba.Model.lock_value
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.set_cap.html">
-       larch.numba.Model.set_cap
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.remove_unused_parameters.html">
-       larch.numba.Model.remove_unused_parameters
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.maximize_loglike.html">
-       larch.numba.Model.maximize_loglike
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.calculate_parameter_covariance.html">
-       larch.numba.Model.calculate_parameter_covariance
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike_nil.html">
-       larch.numba.Model.loglike_nil
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike_null.html">
-       larch.numba.Model.loglike_null
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.rho_sq_nil.html">
-       larch.numba.Model.rho_sq_nil
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.rho_sq_null.html">
-       larch.numba.Model.rho_sq_null
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.parameter_summary.html">
-       larch.numba.Model.parameter_summary
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.estimation_statistics.html">
-       larch.numba.Model.estimation_statistics
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.to_xlsx.html">
-       larch.numba.Model.to_xlsx
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.bhhh.html">
-       larch.numba.Model.bhhh
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.check_d_loglike.html">
-       larch.numba.Model.check_d_loglike
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.d_loglike.html">
-       larch.numba.Model.d_loglike
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.d_loglike_casewise.html">
-       larch.numba.Model.d_loglike_casewise
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike.html">
-       larch.numba.Model.loglike
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike_casewise.html">
-       larch.numba.Model.loglike_casewise
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.logsums.html">
-       larch.numba.Model.logsums
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.probability.html">
-       larch.numba.Model.probability
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.quantity.html">
-       larch.numba.Model.quantity
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.total_weight.html">
-       larch.numba.Model.total_weight
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.utility.html">
-       larch.numba.Model.utility
-      </a>
-     </li>
-    </ul>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../api/linear.html">
@@ -559,8 +213,8 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal" href="../api/nesting.html">
      NestingTree
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-    <label for="toctree-checkbox-8">
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -601,8 +255,8 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal" href="../api/modelgroup.html">
      ModelGroup
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-    <label for="toctree-checkbox-9">
+    <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+    <label for="toctree-checkbox-5">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -657,8 +311,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../example/mtc.html">
    MTC Mode Choice
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
-  <label for="toctree-checkbox-10">
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -704,8 +358,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../example/swissmetro.html">
    Swissmetro
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
-  <label for="toctree-checkbox-11">
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -731,8 +385,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../example/exampville.html">
    Exampville
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
-  <label for="toctree-checkbox-12">
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -763,8 +417,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../example/itinerary.html">
    Itinerary Choice
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
-  <label for="toctree-checkbox-13">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -785,8 +439,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../example/legacy.html">
    Legacy Examples
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
-  <label for="toctree-checkbox-14">
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -795,8 +449,8 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal" href="../example/legacy/mtc.html">
      MTC Mode Choice Examples
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
-    <label for="toctree-checkbox-15">
+    <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+    <label for="toctree-checkbox-11">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -972,8 +626,8 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal" href="../example/legacy/swissmetro.html">
      Swissmetro Examples
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/>
-    <label for="toctree-checkbox-16">
+    <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+    <label for="toctree-checkbox-12">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -1009,8 +663,8 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal" href="../example/legacy/itinerary.html">
      Itinerary Choice Examples
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/>
-    <label for="toctree-checkbox-17">
+    <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+    <label for="toctree-checkbox-13">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -1037,86 +691,176 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/user-guide/data-fundamentals.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
-    </div>
-</div>
-
-            <!-- Source interaction buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/jpn--/larch"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/jpn--/larch/issues/new?title=Issue%20on%20page%20%2Fuser-guide/data-fundamentals.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        
-    </div>
-</div>
-
-            <!-- Full screen (wrap in <a> to have style consistency -->
-
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
-
-            <!-- Launch buttons -->
-
         </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/jpn--/larch"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/jpn--/larch/issues/new?title=Issue%20on%20page%20%2Fuser-guide/data-fundamentals.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/user-guide/data-fundamentals.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#fundamental-data-formats">
    Fundamental Data Formats
@@ -1180,12 +924,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Data for Discrete Choice</h1>
@@ -1265,11 +1008,12 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="data-for-discrete-choice">
-<span id="data-fundamentals"></span><h1>Data for Discrete Choice<a class="headerlink" href="#data-for-discrete-choice" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="data-for-discrete-choice">
+<span id="data-fundamentals"></span><h1>Data for Discrete Choice<a class="headerlink" href="#data-for-discrete-choice" title="Permalink to this headline">#</a></h1>
 <div class="cell tag_remove-output docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1281,8 +1025,8 @@ const thebe_selector_output = ".output, .cell_output"
 </div>
 </div>
 </div>
-<div class="section" id="fundamental-data-formats">
-<h2>Fundamental Data Formats<a class="headerlink" href="#fundamental-data-formats" title="Permalink to this headline">¶</a></h2>
+<section id="fundamental-data-formats">
+<h2>Fundamental Data Formats<a class="headerlink" href="#fundamental-data-formats" title="Permalink to this headline">#</a></h2>
 <p>When working with discrete choice models in Larch, we will generally
 receive data to input into the system in one of two basic formats: the case-only (“idco”)
 format or the case-alternative (“idca”) format.</p>
@@ -1291,8 +1035,8 @@ IDCase (each record contains all the information for mode choice over
 alternatives for a single trip) or IDCase-IDAlt (each record contains all the
 information for a single alternative available to each decision maker so there is one
 record for each alternative for each choice).</p>
-<div class="section" id="idco">
-<span id="idco-format"></span><h3>idco Format<a class="headerlink" href="#idco" title="Permalink to this headline">¶</a></h3>
+<section id="idco">
+<span id="idco-format"></span><h3>idco Format<a class="headerlink" href="#idco" title="Permalink to this headline">#</a></h3>
 <p>In the <strong>idco</strong> case-only format, each record provides all the relevant information
 about an individual choice, including the variables related to the decision maker
 or the choice itself, as well as alternative-related variables for all available
@@ -1390,9 +1134,9 @@ of data has a variety of names in the choice modeling literature, including
 </table>
 </div></div></div>
 </div>
-</div>
-<div class="section" id="idca">
-<span id="idca-format"></span><h3>idca Format<a class="headerlink" href="#idca" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="idca">
+<span id="idca-format"></span><h3>idca Format<a class="headerlink" href="#idca" title="Permalink to this headline">#</a></h3>
 <p>In the <a class="reference internal" href="#idca"><span class="std std-ref">idca</span></a> case-alternative format, each record can include information on the variables
 related to the decision maker or the choice itself, the attributes of that
 particular alternative, and a choice variable that indicates whether the
@@ -1537,8 +1281,8 @@ choice modeling literature, including “IDCase-IDAlt”, “case-alternative”
 </table>
 </div></div></div>
 </div>
-<div class="section" id="sparse-vs-dense">
-<span id="idce"></span><h4>sparse vs dense<a class="headerlink" href="#sparse-vs-dense" title="Permalink to this headline">¶</a></h4>
+<section id="sparse-vs-dense">
+<span id="idce"></span><h4>sparse vs dense<a class="headerlink" href="#sparse-vs-dense" title="Permalink to this headline">#</a></h4>
 <p>The <code class="docutils literal notranslate"><span class="pre">idca</span></code> format actually has two technical variations, a sparse version and a
 dense version. The table shown above is a sparse version, where any alterative that
 is not available is simply missing from the data table.  Thus, in caseid 2 above,
@@ -1549,10 +1293,10 @@ efficient to simply store and work with the dense array.</p>
 <p>In <em>Larch</em>, these two distinct sub-types of idca data are labeled so
 that the dense version labeled as <code class="docutils literal notranslate"><span class="pre">idca</span></code> and the sparse version
 labeled as <code class="docutils literal notranslate"><span class="pre">idce</span></code>.</p>
-</div>
-</div>
-<div class="section" id="data-conversion">
-<h3>Data Conversion<a class="headerlink" href="#data-conversion" title="Permalink to this headline">¶</a></h3>
+</section>
+</section>
+<section id="data-conversion">
+<h3>Data Conversion<a class="headerlink" href="#data-conversion" title="Permalink to this headline">#</a></h3>
 <p>Converting between <code class="docutils literal notranslate"><span class="pre">idca</span></code> format data and <code class="docutils literal notranslate"><span class="pre">idco</span></code> format in Python can be super easy if the alternative
 id’s are stored appropriately in a two-level MultiIndex. In that case, we can simply <code class="docutils literal notranslate"><span class="pre">stack</span></code> or <code class="docutils literal notranslate"><span class="pre">unstack</span></code> the DataFrame, and change formats.  This is typically more readily available when switching from <code class="docutils literal notranslate"><span class="pre">idca</span></code> to <code class="docutils literal notranslate"><span class="pre">idco</span></code>
 formats, as the alterative id’s typically appear in a column of the DataFrame that can be used for indexing.</p>
@@ -1839,10 +1583,10 @@ neatly arranged in a row of data. We can force it to work, but it’s not pretty
 </table>
 </div></div></div>
 </div>
-</div>
-</div>
-<div class="section" id="practical-data-formating-in-larch">
-<h2>Practical Data Formating in Larch<a class="headerlink" href="#practical-data-formating-in-larch" title="Permalink to this headline">¶</a></h2>
+</section>
+</section>
+<section id="practical-data-formating-in-larch">
+<h2>Practical Data Formating in Larch<a class="headerlink" href="#practical-data-formating-in-larch" title="Permalink to this headline">#</a></h2>
 <p>The data formats described above are relevant when storing data in
 a tabular (two-dimensional) format.  This is quite common and generally
 expected, especially for data exchange between most software tools,
@@ -1866,376 +1610,23 @@ appropriate.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
-<defs>
-<symbol id="icon-database" viewBox="0 0 32 32">
-<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
-<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-</symbol>
-<symbol id="icon-file-text2" viewBox="0 0 32 32">
-<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
-<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-</symbol>
-</defs>
-</svg>
-<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
- *
- */
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [8],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dataset</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="p">[</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span>         <span class="n">data_co</span><span class="p">[[</span><span class="s1">&#39;Income&#39;</span><span class="p">,</span> <span class="s1">&#39;Chosen&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">(),</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>         <span class="n">data_ca</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;caseid&#39;</span><span class="p">,</span> <span class="s1">&#39;altid&#39;</span><span class="p">])[[</span><span class="s1">&#39;Time&#39;</span><span class="p">,</span> <span class="s1">&#39;Cost&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">(),</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="p">],</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="n">caseid</span><span class="o">=</span><span class="s1">&#39;caseid&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="n">alts</span><span class="o">=</span><span class="s1">&#39;altid&#39;</span><span class="p">,</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="n">dataset</span>
 
-:root {
-  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
-  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
-  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
-  --xr-border-color: var(--jp-border-color2, #e0e0e0);
-  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
-  --xr-background-color: var(--jp-layout-color0, white);
-  --xr-background-color-row-even: var(--jp-layout-color1, white);
-  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
-}
-
-html[theme=dark],
-body.vscode-dark {
-  --xr-font-color0: rgba(255, 255, 255, 1);
-  --xr-font-color2: rgba(255, 255, 255, 0.54);
-  --xr-font-color3: rgba(255, 255, 255, 0.38);
-  --xr-border-color: #1F1F1F;
-  --xr-disabled-color: #515151;
-  --xr-background-color: #111111;
-  --xr-background-color-row-even: #111111;
-  --xr-background-color-row-odd: #313131;
-}
-
-.xr-wrap {
-  display: block !important;
-  min-width: 300px;
-  max-width: 700px;
-}
-
-.xr-text-repr-fallback {
-  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
-  display: none;
-}
-
-.xr-header {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-bottom: 4px;
-  border-bottom: solid 1px var(--xr-border-color);
-}
-
-.xr-header > div,
-.xr-header > ul {
-  display: inline;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.xr-obj-type,
-.xr-array-name {
-  margin-left: 2px;
-  margin-right: 10px;
-}
-
-.xr-obj-type {
-  color: var(--xr-font-color2);
-}
-
-.xr-sections {
-  padding-left: 0 !important;
-  display: grid;
-  grid-template-columns: 150px auto auto 1fr 20px 20px;
-}
-
-.xr-section-item {
-  display: contents;
-}
-
-.xr-section-item input {
-  display: none;
-}
-
-.xr-section-item input + label {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-item input:enabled + label {
-  cursor: pointer;
-  color: var(--xr-font-color2);
-}
-
-.xr-section-item input:enabled + label:hover {
-  color: var(--xr-font-color0);
-}
-
-.xr-section-summary {
-  grid-column: 1;
-  color: var(--xr-font-color2);
-  font-weight: 500;
-}
-
-.xr-section-summary > span {
-  display: inline-block;
-  padding-left: 0.5em;
-}
-
-.xr-section-summary-in:disabled + label {
-  color: var(--xr-font-color2);
-}
-
-.xr-section-summary-in + label:before {
-  display: inline-block;
-  content: '►';
-  font-size: 11px;
-  width: 15px;
-  text-align: center;
-}
-
-.xr-section-summary-in:disabled + label:before {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-summary-in:checked + label:before {
-  content: '▼';
-}
-
-.xr-section-summary-in:checked + label > span {
-  display: none;
-}
-
-.xr-section-summary,
-.xr-section-inline-details {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.xr-section-inline-details {
-  grid-column: 2 / -1;
-}
-
-.xr-section-details {
-  display: none;
-  grid-column: 1 / -1;
-  margin-bottom: 5px;
-}
-
-.xr-section-summary-in:checked ~ .xr-section-details {
-  display: contents;
-}
-
-.xr-array-wrap {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 20px auto;
-}
-
-.xr-array-wrap > label {
-  grid-column: 1;
-  vertical-align: top;
-}
-
-.xr-preview {
-  color: var(--xr-font-color3);
-}
-
-.xr-array-preview,
-.xr-array-data {
-  padding: 0 5px !important;
-  grid-column: 2;
-}
-
-.xr-array-data,
-.xr-array-in:checked ~ .xr-array-preview {
-  display: none;
-}
-
-.xr-array-in:checked ~ .xr-array-data,
-.xr-array-preview {
-  display: inline-block;
-}
-
-.xr-dim-list {
-  display: inline-block !important;
-  list-style: none;
-  padding: 0 !important;
-  margin: 0;
-}
-
-.xr-dim-list li {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-}
-
-.xr-dim-list:before {
-  content: '(';
-}
-
-.xr-dim-list:after {
-  content: ')';
-}
-
-.xr-dim-list li:not(:last-child):after {
-  content: ',';
-  padding-right: 5px;
-}
-
-.xr-has-index {
-  font-weight: bold;
-}
-
-.xr-var-list,
-.xr-var-item {
-  display: contents;
-}
-
-.xr-var-item > div,
-.xr-var-item label,
-.xr-var-item > .xr-var-name span {
-  background-color: var(--xr-background-color-row-even);
-  margin-bottom: 0;
-}
-
-.xr-var-item > .xr-var-name:hover span {
-  padding-right: 5px;
-}
-
-.xr-var-list > li:nth-child(odd) > div,
-.xr-var-list > li:nth-child(odd) > label,
-.xr-var-list > li:nth-child(odd) > .xr-var-name span {
-  background-color: var(--xr-background-color-row-odd);
-}
-
-.xr-var-name {
-  grid-column: 1;
-}
-
-.xr-var-dims {
-  grid-column: 2;
-}
-
-.xr-var-dtype {
-  grid-column: 3;
-  text-align: right;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-preview {
-  grid-column: 4;
-}
-
-.xr-var-name,
-.xr-var-dims,
-.xr-var-dtype,
-.xr-preview,
-.xr-attrs dt {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 10px;
-}
-
-.xr-var-name:hover,
-.xr-var-dims:hover,
-.xr-var-dtype:hover,
-.xr-attrs dt:hover {
-  overflow: visible;
-  width: auto;
-  z-index: 1;
-}
-
-.xr-var-attrs,
-.xr-var-data {
-  display: none;
-  background-color: var(--xr-background-color) !important;
-  padding-bottom: 5px !important;
-}
-
-.xr-var-attrs-in:checked ~ .xr-var-attrs,
-.xr-var-data-in:checked ~ .xr-var-data {
-  display: block;
-}
-
-.xr-var-data > table {
-  float: right;
-}
-
-.xr-var-name span,
-.xr-var-data,
-.xr-attrs {
-  padding-left: 25px !important;
-}
-
-.xr-attrs,
-.xr-var-attrs,
-.xr-var-data {
-  grid-column: 1 / -1;
-}
-
-dl.xr-attrs {
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 125px auto;
-}
-
-.xr-attrs dt,
-.xr-attrs dd {
-  padding: 0;
-  margin: 0;
-  float: left;
-  padding-right: 10px;
-  width: auto;
-}
-
-.xr-attrs dt {
-  font-weight: normal;
-  grid-column: 1;
-}
-
-.xr-attrs dt:hover span {
-  display: inline-block;
-  background: var(--xr-background-color);
-  padding-right: 10px;
-}
-
-.xr-attrs dd {
-  grid-column: 2;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.xr-icon-database,
-.xr-icon-file-text2 {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1em;
-  height: 1.5em !important;
-  stroke-width: 0;
-  stroke: currentColor;
-  fill: currentColor;
-}
-</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
-Dimensions:  (caseid: 4, altid: 3)
-Coordinates:
-  * caseid   (caseid) int64 1 2 3 4
-  * altid    (altid) object &#x27;Bus&#x27; &#x27;Car&#x27; &#x27;Walk&#x27;
-Data variables:
-    Income   (caseid) int64 30000 30000 40000 50000
-    Chosen   (caseid) object &#x27;Car&#x27; &#x27;Bus&#x27; &#x27;Walk&#x27; &#x27;Walk&#x27;
-    Time     (caseid, altid) float64 40.0 30.0 20.0 35.0 ... 30.0 20.0 15.0 10.0
-    Cost     (caseid, altid) float64 100.0 150.0 0.0 100.0 ... 150.0 225.0 0.0
-Attributes:
-    _caseid_:  caseid
-    _altid_:   altid</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-6f9351e1-6731-41b6-b124-b54704a38e59' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-6f9351e1-6731-41b6-b124-b54704a38e59' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>caseid</span>: 4</li><li><span class='xr-has-index'>altid</span>: 3</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-9a50c9b3-0bd6-44bd-8c10-08ca409d3a83' class='xr-section-summary-in' type='checkbox'  checked><label for='section-9a50c9b3-0bd6-44bd-8c10-08ca409d3a83' class='xr-section-summary' >Coordinates: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>caseid</span></div><div class='xr-var-dims'>(caseid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 2 3 4</div><input id='attrs-9fa2d362-13f6-4e8b-a983-690f3353a7c4' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-9fa2d362-13f6-4e8b-a983-690f3353a7c4' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-49447360-2661-42de-a44b-f2838705aead' class='xr-var-data-in' type='checkbox'><label for='data-49447360-2661-42de-a44b-f2838705aead' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([1, 2, 3, 4])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>altid</span></div><div class='xr-var-dims'>(altid)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>&#x27;Bus&#x27; &#x27;Car&#x27; &#x27;Walk&#x27;</div><input id='attrs-1c5cefdc-6fc2-4ef1-8c14-0fa4e5a0f9f8' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-1c5cefdc-6fc2-4ef1-8c14-0fa4e5a0f9f8' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9a141bb9-11c6-43a9-93d1-07a428dca486' class='xr-var-data-in' type='checkbox'><label for='data-9a141bb9-11c6-43a9-93d1-07a428dca486' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;Bus&#x27;, &#x27;Car&#x27;, &#x27;Walk&#x27;], dtype=object)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-30cb1c2b-89de-42b3-b7ef-2e9610b8cc5c' class='xr-section-summary-in' type='checkbox'  checked><label for='section-30cb1c2b-89de-42b3-b7ef-2e9610b8cc5c' class='xr-section-summary' >Data variables: <span>(4)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>Income</span></div><div class='xr-var-dims'>(caseid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>30000 30000 40000 50000</div><input id='attrs-9bae216a-a825-47ed-86a5-1da0a8848911' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-9bae216a-a825-47ed-86a5-1da0a8848911' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-de1967a9-a7e3-4dd2-addd-1b08747cbbbb' class='xr-var-data-in' type='checkbox'><label for='data-de1967a9-a7e3-4dd2-addd-1b08747cbbbb' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([30000, 30000, 40000, 50000])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Chosen</span></div><div class='xr-var-dims'>(caseid)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>&#x27;Car&#x27; &#x27;Bus&#x27; &#x27;Walk&#x27; &#x27;Walk&#x27;</div><input id='attrs-2295b6ee-3e16-4531-9cfd-5a8cfbe7d8c3' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-2295b6ee-3e16-4531-9cfd-5a8cfbe7d8c3' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-7b6ed94a-2ac8-44b6-af1a-86e993c8b6db' class='xr-var-data-in' type='checkbox'><label for='data-7b6ed94a-2ac8-44b6-af1a-86e993c8b6db' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;Car&#x27;, &#x27;Bus&#x27;, &#x27;Walk&#x27;, &#x27;Walk&#x27;], dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Time</span></div><div class='xr-var-dims'>(caseid, altid)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>40.0 30.0 20.0 ... 20.0 15.0 10.0</div><input id='attrs-ae658f69-cc55-464b-9f74-ebc88caa94f4' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-ae658f69-cc55-464b-9f74-ebc88caa94f4' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-cb15e87b-45bc-4791-a458-ca7050a01867' class='xr-var-data-in' type='checkbox'><label for='data-cb15e87b-45bc-4791-a458-ca7050a01867' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[40., 30., 20.],
-       [35., 25., nan],
-       [50., 40., 30.],
-       [20., 15., 10.]])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Cost</span></div><div class='xr-var-dims'>(caseid, altid)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>100.0 150.0 0.0 ... 150.0 225.0 0.0</div><input id='attrs-5ca9c5d3-a99c-47e4-9511-e31a5cde6015' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-5ca9c5d3-a99c-47e4-9511-e31a5cde6015' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-69643633-ec3f-46fb-af27-cd463cb66513' class='xr-var-data-in' type='checkbox'><label for='data-69643633-ec3f-46fb-af27-cd463cb66513' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[100., 150.,   0.],
-       [100., 125.,  nan],
-       [ 75., 125.,   0.],
-       [150., 225.,   0.]])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-6ba6b0dd-cb28-492e-9351-5c0208111ae7' class='xr-section-summary-in' type='checkbox'  checked><label for='section-6ba6b0dd-cb28-492e-9351-5c0208111ae7' class='xr-section-summary' >Attributes: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>caseid</dd><dt><span>_altid_ :</span></dt><dd>altid</dd></dl></div></li></ul></div></div></div></div>
+<span class="ne">NameError</span>: name &#39;lx&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 <p>As we saw above, it’s quite easy to move from <a class="reference internal" href="#idca"><span class="std std-ref">idca</span></a> to <a class="reference internal" href="#idco"><span class="std std-ref">idco</span></a> format,
 and Larch can apply those transformations automatically when loading <a class="reference internal" href="#idca"><span class="std std-ref">idca</span></a>
@@ -2250,384 +1641,17 @@ been collapsed to <a class="reference internal" href="#idco"><span class="std st
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
-<defs>
-<symbol id="icon-database" viewBox="0 0 32 32">
-<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
-<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-</symbol>
-<symbol id="icon-file-text2" viewBox="0 0 32 32">
-<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
-<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-</symbol>
-</defs>
-</svg>
-<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
- *
- */
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [9],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">lx</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">construct</span><span class="o">.</span><span class="n">from_idca</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">data_ca</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;caseid&#39;</span><span class="p">,</span> <span class="s1">&#39;altid&#39;</span><span class="p">]),</span> 
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
 
-:root {
-  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
-  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
-  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
-  --xr-border-color: var(--jp-border-color2, #e0e0e0);
-  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
-  --xr-background-color: var(--jp-layout-color0, white);
-  --xr-background-color-row-even: var(--jp-layout-color1, white);
-  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
-}
-
-html[theme=dark],
-body.vscode-dark {
-  --xr-font-color0: rgba(255, 255, 255, 1);
-  --xr-font-color2: rgba(255, 255, 255, 0.54);
-  --xr-font-color3: rgba(255, 255, 255, 0.38);
-  --xr-border-color: #1F1F1F;
-  --xr-disabled-color: #515151;
-  --xr-background-color: #111111;
-  --xr-background-color-row-even: #111111;
-  --xr-background-color-row-odd: #313131;
-}
-
-.xr-wrap {
-  display: block !important;
-  min-width: 300px;
-  max-width: 700px;
-}
-
-.xr-text-repr-fallback {
-  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
-  display: none;
-}
-
-.xr-header {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-bottom: 4px;
-  border-bottom: solid 1px var(--xr-border-color);
-}
-
-.xr-header > div,
-.xr-header > ul {
-  display: inline;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.xr-obj-type,
-.xr-array-name {
-  margin-left: 2px;
-  margin-right: 10px;
-}
-
-.xr-obj-type {
-  color: var(--xr-font-color2);
-}
-
-.xr-sections {
-  padding-left: 0 !important;
-  display: grid;
-  grid-template-columns: 150px auto auto 1fr 20px 20px;
-}
-
-.xr-section-item {
-  display: contents;
-}
-
-.xr-section-item input {
-  display: none;
-}
-
-.xr-section-item input + label {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-item input:enabled + label {
-  cursor: pointer;
-  color: var(--xr-font-color2);
-}
-
-.xr-section-item input:enabled + label:hover {
-  color: var(--xr-font-color0);
-}
-
-.xr-section-summary {
-  grid-column: 1;
-  color: var(--xr-font-color2);
-  font-weight: 500;
-}
-
-.xr-section-summary > span {
-  display: inline-block;
-  padding-left: 0.5em;
-}
-
-.xr-section-summary-in:disabled + label {
-  color: var(--xr-font-color2);
-}
-
-.xr-section-summary-in + label:before {
-  display: inline-block;
-  content: '►';
-  font-size: 11px;
-  width: 15px;
-  text-align: center;
-}
-
-.xr-section-summary-in:disabled + label:before {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-summary-in:checked + label:before {
-  content: '▼';
-}
-
-.xr-section-summary-in:checked + label > span {
-  display: none;
-}
-
-.xr-section-summary,
-.xr-section-inline-details {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.xr-section-inline-details {
-  grid-column: 2 / -1;
-}
-
-.xr-section-details {
-  display: none;
-  grid-column: 1 / -1;
-  margin-bottom: 5px;
-}
-
-.xr-section-summary-in:checked ~ .xr-section-details {
-  display: contents;
-}
-
-.xr-array-wrap {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 20px auto;
-}
-
-.xr-array-wrap > label {
-  grid-column: 1;
-  vertical-align: top;
-}
-
-.xr-preview {
-  color: var(--xr-font-color3);
-}
-
-.xr-array-preview,
-.xr-array-data {
-  padding: 0 5px !important;
-  grid-column: 2;
-}
-
-.xr-array-data,
-.xr-array-in:checked ~ .xr-array-preview {
-  display: none;
-}
-
-.xr-array-in:checked ~ .xr-array-data,
-.xr-array-preview {
-  display: inline-block;
-}
-
-.xr-dim-list {
-  display: inline-block !important;
-  list-style: none;
-  padding: 0 !important;
-  margin: 0;
-}
-
-.xr-dim-list li {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-}
-
-.xr-dim-list:before {
-  content: '(';
-}
-
-.xr-dim-list:after {
-  content: ')';
-}
-
-.xr-dim-list li:not(:last-child):after {
-  content: ',';
-  padding-right: 5px;
-}
-
-.xr-has-index {
-  font-weight: bold;
-}
-
-.xr-var-list,
-.xr-var-item {
-  display: contents;
-}
-
-.xr-var-item > div,
-.xr-var-item label,
-.xr-var-item > .xr-var-name span {
-  background-color: var(--xr-background-color-row-even);
-  margin-bottom: 0;
-}
-
-.xr-var-item > .xr-var-name:hover span {
-  padding-right: 5px;
-}
-
-.xr-var-list > li:nth-child(odd) > div,
-.xr-var-list > li:nth-child(odd) > label,
-.xr-var-list > li:nth-child(odd) > .xr-var-name span {
-  background-color: var(--xr-background-color-row-odd);
-}
-
-.xr-var-name {
-  grid-column: 1;
-}
-
-.xr-var-dims {
-  grid-column: 2;
-}
-
-.xr-var-dtype {
-  grid-column: 3;
-  text-align: right;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-preview {
-  grid-column: 4;
-}
-
-.xr-var-name,
-.xr-var-dims,
-.xr-var-dtype,
-.xr-preview,
-.xr-attrs dt {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 10px;
-}
-
-.xr-var-name:hover,
-.xr-var-dims:hover,
-.xr-var-dtype:hover,
-.xr-attrs dt:hover {
-  overflow: visible;
-  width: auto;
-  z-index: 1;
-}
-
-.xr-var-attrs,
-.xr-var-data {
-  display: none;
-  background-color: var(--xr-background-color) !important;
-  padding-bottom: 5px !important;
-}
-
-.xr-var-attrs-in:checked ~ .xr-var-attrs,
-.xr-var-data-in:checked ~ .xr-var-data {
-  display: block;
-}
-
-.xr-var-data > table {
-  float: right;
-}
-
-.xr-var-name span,
-.xr-var-data,
-.xr-attrs {
-  padding-left: 25px !important;
-}
-
-.xr-attrs,
-.xr-var-attrs,
-.xr-var-data {
-  grid-column: 1 / -1;
-}
-
-dl.xr-attrs {
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 125px auto;
-}
-
-.xr-attrs dt,
-.xr-attrs dd {
-  padding: 0;
-  margin: 0;
-  float: left;
-  padding-right: 10px;
-  width: auto;
-}
-
-.xr-attrs dt {
-  font-weight: normal;
-  grid-column: 1;
-}
-
-.xr-attrs dt:hover span {
-  display: inline-block;
-  background: var(--xr-background-color);
-  padding-right: 10px;
-}
-
-.xr-attrs dd {
-  grid-column: 2;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.xr-icon-database,
-.xr-icon-file-text2 {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1em;
-  height: 1.5em !important;
-  stroke-width: 0;
-  stroke: currentColor;
-  fill: currentColor;
-}
-</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
-Dimensions:   (caseid: 4, altid: 3)
-Coordinates:
-  * caseid    (caseid) int64 1 2 3 4
-  * altid     (altid) int64 1 2 3
-    altnames  (altid) object &#x27;Bus&#x27; &#x27;Car&#x27; &#x27;Walk&#x27;
-Data variables:
-    Income    (caseid) int64 30000 30000 40000 50000
-    Time      (caseid, altid) int64 40 30 20 35 25 ... 40 30 20 15 10
-    Cost      (caseid, altid) int64 100 150 0 100 125 ... 125 0 150 225 0
-    Chosen    (caseid, altid) int64 0 1 0 1 0 -9223372036854775808 0 0 1 0 0 1
-    _avail_   (caseid, altid) int8 1 1 1 1 1 0 1 1 1 1 1 1
-Attributes:
-    _caseid_:  caseid
-    _altid_:   altid</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-30fb9a5b-5824-43ec-a850-728280b732dd' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-30fb9a5b-5824-43ec-a850-728280b732dd' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>caseid</span>: 4</li><li><span class='xr-has-index'>altid</span>: 3</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-5b67c090-4a11-4b23-9839-793f1d9a088f' class='xr-section-summary-in' type='checkbox'  checked><label for='section-5b67c090-4a11-4b23-9839-793f1d9a088f' class='xr-section-summary' >Coordinates: <span>(3)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>caseid</span></div><div class='xr-var-dims'>(caseid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 2 3 4</div><input id='attrs-2ef30a7e-ae92-4fd1-9194-223443770b2e' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-2ef30a7e-ae92-4fd1-9194-223443770b2e' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-740d0e0e-6c3e-4bd3-9442-4c840c72c10f' class='xr-var-data-in' type='checkbox'><label for='data-740d0e0e-6c3e-4bd3-9442-4c840c72c10f' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([1, 2, 3, 4])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>altid</span></div><div class='xr-var-dims'>(altid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 2 3</div><input id='attrs-83ebbde6-c7e2-401e-a93e-e26e3253d98c' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-83ebbde6-c7e2-401e-a93e-e26e3253d98c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9383a68a-25c4-452b-879c-a789f68b9e75' class='xr-var-data-in' type='checkbox'><label for='data-9383a68a-25c4-452b-879c-a789f68b9e75' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([1, 2, 3])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>altnames</span></div><div class='xr-var-dims'>(altid)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>&#x27;Bus&#x27; &#x27;Car&#x27; &#x27;Walk&#x27;</div><input id='attrs-9c2385dd-8053-4ed1-9273-3436dc5d5cbb' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-9c2385dd-8053-4ed1-9273-3436dc5d5cbb' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-e28942a4-c8a2-4af3-af1e-b931da5944e8' class='xr-var-data-in' type='checkbox'><label for='data-e28942a4-c8a2-4af3-af1e-b931da5944e8' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;Bus&#x27;, &#x27;Car&#x27;, &#x27;Walk&#x27;], dtype=object)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-a36fa1a9-63ba-473b-960e-e0d11d04211c' class='xr-section-summary-in' type='checkbox'  checked><label for='section-a36fa1a9-63ba-473b-960e-e0d11d04211c' class='xr-section-summary' >Data variables: <span>(5)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>Income</span></div><div class='xr-var-dims'>(caseid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>30000 30000 40000 50000</div><input id='attrs-28c4bc75-43cb-4131-91ec-e1563d11a473' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-28c4bc75-43cb-4131-91ec-e1563d11a473' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-8569c3bb-0033-4775-946c-95c8a404697d' class='xr-var-data-in' type='checkbox'><label for='data-8569c3bb-0033-4775-946c-95c8a404697d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([30000, 30000, 40000, 50000])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Time</span></div><div class='xr-var-dims'>(caseid, altid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>40 30 20 35 25 ... 40 30 20 15 10</div><input id='attrs-d3f21126-f491-4382-b7db-db06de43b661' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-d3f21126-f491-4382-b7db-db06de43b661' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-802f57c9-e573-4993-bcbf-cc83b09746a6' class='xr-var-data-in' type='checkbox'><label for='data-802f57c9-e573-4993-bcbf-cc83b09746a6' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[                  40,                   30,                   20],
-       [                  35,                   25, -9223372036854775808],
-       [                  50,                   40,                   30],
-       [                  20,                   15,                   10]])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Cost</span></div><div class='xr-var-dims'>(caseid, altid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>100 150 0 100 125 ... 0 150 225 0</div><input id='attrs-18bacabd-c9c1-41d6-a04f-ecbfb75f726c' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-18bacabd-c9c1-41d6-a04f-ecbfb75f726c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-0558441e-b94b-4d9e-9816-69f21927a73f' class='xr-var-data-in' type='checkbox'><label for='data-0558441e-b94b-4d9e-9816-69f21927a73f' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[                 100,                  150,                    0],
-       [                 100,                  125, -9223372036854775808],
-       [                  75,                  125,                    0],
-       [                 150,                  225,                    0]])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Chosen</span></div><div class='xr-var-dims'>(caseid, altid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 1 0 1 0 ... 0 1 0 0 1</div><input id='attrs-42289cc4-554b-4e57-a7c7-a96cf0a74198' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-42289cc4-554b-4e57-a7c7-a96cf0a74198' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-1061ff81-4f98-4062-84f6-d7f25b92c18f' class='xr-var-data-in' type='checkbox'><label for='data-1061ff81-4f98-4062-84f6-d7f25b92c18f' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[                   0,                    1,                    0],
-       [                   1,                    0, -9223372036854775808],
-       [                   0,                    0,                    1],
-       [                   0,                    0,                    1]])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>_avail_</span></div><div class='xr-var-dims'>(caseid, altid)</div><div class='xr-var-dtype'>int8</div><div class='xr-var-preview xr-preview'>1 1 1 1 1 0 1 1 1 1 1 1</div><input id='attrs-b23db3ed-c5e2-480f-b24d-02cbaa9e608d' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-b23db3ed-c5e2-480f-b24d-02cbaa9e608d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-85a2fe9b-2ff6-448f-8113-fe25eda5f4b5' class='xr-var-data-in' type='checkbox'><label for='data-85a2fe9b-2ff6-448f-8113-fe25eda5f4b5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[1, 1, 1],
-       [1, 1, 0],
-       [1, 1, 1],
-       [1, 1, 1]], dtype=int8)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-b5ff1133-65da-4463-a98b-55f7f634ff91' class='xr-section-summary-in' type='checkbox'  checked><label for='section-b5ff1133-65da-4463-a98b-55f7f634ff91' class='xr-section-summary' >Attributes: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>caseid</dd><dt><span>_altid_ :</span></dt><dd>altid</dd></dl></div></li></ul></div></div></div></div>
+<span class="ne">NameError</span>: name &#39;lx&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 <p>Loading data in sparse format is as easy as swapping out
 <span class="xref myst"><code class="docutils literal notranslate"><span class="pre">from_idca</span></code></span> for
@@ -2644,389 +1668,29 @@ using a variety of the compressed sparse row data format.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
-<defs>
-<symbol id="icon-database" viewBox="0 0 32 32">
-<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
-<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-</symbol>
-<symbol id="icon-file-text2" viewBox="0 0 32 32">
-<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
-<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-</symbol>
-</defs>
-</svg>
-<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
- *
- */
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [11],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">lx</span><span class="o">.</span><span class="n">Dataset</span><span class="o">.</span><span class="n">construct</span><span class="o">.</span><span class="n">from_idce</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">data_ca</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;caseid&#39;</span><span class="p">,</span> <span class="s1">&#39;altid&#39;</span><span class="p">]),</span> 
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
 
-:root {
-  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
-  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
-  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
-  --xr-border-color: var(--jp-border-color2, #e0e0e0);
-  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
-  --xr-background-color: var(--jp-layout-color0, white);
-  --xr-background-color-row-even: var(--jp-layout-color1, white);
-  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
-}
-
-html[theme=dark],
-body.vscode-dark {
-  --xr-font-color0: rgba(255, 255, 255, 1);
-  --xr-font-color2: rgba(255, 255, 255, 0.54);
-  --xr-font-color3: rgba(255, 255, 255, 0.38);
-  --xr-border-color: #1F1F1F;
-  --xr-disabled-color: #515151;
-  --xr-background-color: #111111;
-  --xr-background-color-row-even: #111111;
-  --xr-background-color-row-odd: #313131;
-}
-
-.xr-wrap {
-  display: block !important;
-  min-width: 300px;
-  max-width: 700px;
-}
-
-.xr-text-repr-fallback {
-  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
-  display: none;
-}
-
-.xr-header {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-bottom: 4px;
-  border-bottom: solid 1px var(--xr-border-color);
-}
-
-.xr-header > div,
-.xr-header > ul {
-  display: inline;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.xr-obj-type,
-.xr-array-name {
-  margin-left: 2px;
-  margin-right: 10px;
-}
-
-.xr-obj-type {
-  color: var(--xr-font-color2);
-}
-
-.xr-sections {
-  padding-left: 0 !important;
-  display: grid;
-  grid-template-columns: 150px auto auto 1fr 20px 20px;
-}
-
-.xr-section-item {
-  display: contents;
-}
-
-.xr-section-item input {
-  display: none;
-}
-
-.xr-section-item input + label {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-item input:enabled + label {
-  cursor: pointer;
-  color: var(--xr-font-color2);
-}
-
-.xr-section-item input:enabled + label:hover {
-  color: var(--xr-font-color0);
-}
-
-.xr-section-summary {
-  grid-column: 1;
-  color: var(--xr-font-color2);
-  font-weight: 500;
-}
-
-.xr-section-summary > span {
-  display: inline-block;
-  padding-left: 0.5em;
-}
-
-.xr-section-summary-in:disabled + label {
-  color: var(--xr-font-color2);
-}
-
-.xr-section-summary-in + label:before {
-  display: inline-block;
-  content: '►';
-  font-size: 11px;
-  width: 15px;
-  text-align: center;
-}
-
-.xr-section-summary-in:disabled + label:before {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-summary-in:checked + label:before {
-  content: '▼';
-}
-
-.xr-section-summary-in:checked + label > span {
-  display: none;
-}
-
-.xr-section-summary,
-.xr-section-inline-details {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.xr-section-inline-details {
-  grid-column: 2 / -1;
-}
-
-.xr-section-details {
-  display: none;
-  grid-column: 1 / -1;
-  margin-bottom: 5px;
-}
-
-.xr-section-summary-in:checked ~ .xr-section-details {
-  display: contents;
-}
-
-.xr-array-wrap {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 20px auto;
-}
-
-.xr-array-wrap > label {
-  grid-column: 1;
-  vertical-align: top;
-}
-
-.xr-preview {
-  color: var(--xr-font-color3);
-}
-
-.xr-array-preview,
-.xr-array-data {
-  padding: 0 5px !important;
-  grid-column: 2;
-}
-
-.xr-array-data,
-.xr-array-in:checked ~ .xr-array-preview {
-  display: none;
-}
-
-.xr-array-in:checked ~ .xr-array-data,
-.xr-array-preview {
-  display: inline-block;
-}
-
-.xr-dim-list {
-  display: inline-block !important;
-  list-style: none;
-  padding: 0 !important;
-  margin: 0;
-}
-
-.xr-dim-list li {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-}
-
-.xr-dim-list:before {
-  content: '(';
-}
-
-.xr-dim-list:after {
-  content: ')';
-}
-
-.xr-dim-list li:not(:last-child):after {
-  content: ',';
-  padding-right: 5px;
-}
-
-.xr-has-index {
-  font-weight: bold;
-}
-
-.xr-var-list,
-.xr-var-item {
-  display: contents;
-}
-
-.xr-var-item > div,
-.xr-var-item label,
-.xr-var-item > .xr-var-name span {
-  background-color: var(--xr-background-color-row-even);
-  margin-bottom: 0;
-}
-
-.xr-var-item > .xr-var-name:hover span {
-  padding-right: 5px;
-}
-
-.xr-var-list > li:nth-child(odd) > div,
-.xr-var-list > li:nth-child(odd) > label,
-.xr-var-list > li:nth-child(odd) > .xr-var-name span {
-  background-color: var(--xr-background-color-row-odd);
-}
-
-.xr-var-name {
-  grid-column: 1;
-}
-
-.xr-var-dims {
-  grid-column: 2;
-}
-
-.xr-var-dtype {
-  grid-column: 3;
-  text-align: right;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-preview {
-  grid-column: 4;
-}
-
-.xr-var-name,
-.xr-var-dims,
-.xr-var-dtype,
-.xr-preview,
-.xr-attrs dt {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 10px;
-}
-
-.xr-var-name:hover,
-.xr-var-dims:hover,
-.xr-var-dtype:hover,
-.xr-attrs dt:hover {
-  overflow: visible;
-  width: auto;
-  z-index: 1;
-}
-
-.xr-var-attrs,
-.xr-var-data {
-  display: none;
-  background-color: var(--xr-background-color) !important;
-  padding-bottom: 5px !important;
-}
-
-.xr-var-attrs-in:checked ~ .xr-var-attrs,
-.xr-var-data-in:checked ~ .xr-var-data {
-  display: block;
-}
-
-.xr-var-data > table {
-  float: right;
-}
-
-.xr-var-name span,
-.xr-var-data,
-.xr-attrs {
-  padding-left: 25px !important;
-}
-
-.xr-attrs,
-.xr-var-attrs,
-.xr-var-data {
-  grid-column: 1 / -1;
-}
-
-dl.xr-attrs {
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 125px auto;
-}
-
-.xr-attrs dt,
-.xr-attrs dd {
-  padding: 0;
-  margin: 0;
-  float: left;
-  padding-right: 10px;
-  width: auto;
-}
-
-.xr-attrs dt {
-  font-weight: normal;
-  grid-column: 1;
-}
-
-.xr-attrs dt:hover span {
-  display: inline-block;
-  background: var(--xr-background-color);
-  padding-right: 10px;
-}
-
-.xr-attrs dd {
-  grid-column: 2;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.xr-icon-database,
-.xr-icon-file-text2 {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1em;
-  height: 1.5em !important;
-  stroke-width: 0;
-  stroke: currentColor;
-  fill: currentColor;
-}
-</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
-Dimensions:    (caseid: 4, _casealt_: 11, altid: 3, _caseptr_: 5)
-Coordinates:
-  * caseid     (caseid) int64 1 2 3 4
-  * altid      (altid) object &#x27;Bus&#x27; &#x27;Car&#x27; &#x27;Walk&#x27;
-    alt_idx    (_casealt_) int8 1 0 2 1 0 1 0 2 1 0 2
-  * _caseptr_  (_caseptr_) int64 0 3 5 8 11
-Dimensions without coordinates: _casealt_
-Data variables:
-    Income     (caseid) int64 30000 30000 40000 50000
-    Time       (_casealt_) int64 30 40 20 25 35 40 50 30 15 20 10
-    Cost       (_casealt_) int64 150 100 0 125 100 125 75 0 225 150 0
-    Chosen     (_casealt_) int64 1 0 0 0 1 0 0 1 0 0 1
-Attributes:
-    _exclude_dims_:  (&#x27;caseid&#x27;, &#x27;altid&#x27;, &#x27;_caseptr_&#x27;)
-    _caseid_:        caseid
-    _altid_:         altid
-    _casealt_:       _casealt_
-    _alt_idx_:       alt_idx
-    _caseptr_:       _caseptr_</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-1ebbae3c-6689-4c6b-9755-bb3ccc0c6af3' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-1ebbae3c-6689-4c6b-9755-bb3ccc0c6af3' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>caseid</span>: 4</li><li><span>_casealt_</span>: 11</li><li><span class='xr-has-index'>altid</span>: 3</li><li><span class='xr-has-index'>_caseptr_</span>: 5</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-ae3f7e89-c374-4335-b170-e1cac0cdf75b' class='xr-section-summary-in' type='checkbox'  checked><label for='section-ae3f7e89-c374-4335-b170-e1cac0cdf75b' class='xr-section-summary' >Coordinates: <span>(4)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>caseid</span></div><div class='xr-var-dims'>(caseid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 2 3 4</div><input id='attrs-dd521e6c-0aec-4789-bdec-4df3b2c24058' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-dd521e6c-0aec-4789-bdec-4df3b2c24058' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-c10cf817-9f43-4a00-98fa-aec38f1ef89d' class='xr-var-data-in' type='checkbox'><label for='data-c10cf817-9f43-4a00-98fa-aec38f1ef89d' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([1, 2, 3, 4])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>altid</span></div><div class='xr-var-dims'>(altid)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>&#x27;Bus&#x27; &#x27;Car&#x27; &#x27;Walk&#x27;</div><input id='attrs-54870095-6112-4008-b550-c94aae0fc24e' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-54870095-6112-4008-b550-c94aae0fc24e' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-ff421951-46d4-4984-bba1-e99806cf8700' class='xr-var-data-in' type='checkbox'><label for='data-ff421951-46d4-4984-bba1-e99806cf8700' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;Bus&#x27;, &#x27;Car&#x27;, &#x27;Walk&#x27;], dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>alt_idx</span></div><div class='xr-var-dims'>(_casealt_)</div><div class='xr-var-dtype'>int8</div><div class='xr-var-preview xr-preview'>1 0 2 1 0 1 0 2 1 0 2</div><input id='attrs-4323c203-8726-4a9e-944d-8dbc3125294f' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-4323c203-8726-4a9e-944d-8dbc3125294f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-749a182e-025d-45b0-9fd8-c1b33f0e7ac5' class='xr-var-data-in' type='checkbox'><label for='data-749a182e-025d-45b0-9fd8-c1b33f0e7ac5' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([1, 0, 2, 1, 0, 1, 0, 2, 1, 0, 2], dtype=int8)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>_caseptr_</span></div><div class='xr-var-dims'>(_caseptr_)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>0 3 5 8 11</div><input id='attrs-5d34579a-2111-4a47-aad6-104015e516eb' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-5d34579a-2111-4a47-aad6-104015e516eb' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-e793564e-bbd8-419c-8a46-1f5ac1608d38' class='xr-var-data-in' type='checkbox'><label for='data-e793564e-bbd8-419c-8a46-1f5ac1608d38' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([ 0,  3,  5,  8, 11])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-77fec4ad-2c2a-4d3f-b018-952f85dacf53' class='xr-section-summary-in' type='checkbox'  checked><label for='section-77fec4ad-2c2a-4d3f-b018-952f85dacf53' class='xr-section-summary' >Data variables: <span>(4)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>Income</span></div><div class='xr-var-dims'>(caseid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>30000 30000 40000 50000</div><input id='attrs-986f0260-3f00-482c-8da8-7a4411a2053d' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-986f0260-3f00-482c-8da8-7a4411a2053d' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-4117bf0a-4c11-4381-8d2e-1c2e4b0bd24b' class='xr-var-data-in' type='checkbox'><label for='data-4117bf0a-4c11-4381-8d2e-1c2e4b0bd24b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([30000, 30000, 40000, 50000])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Time</span></div><div class='xr-var-dims'>(_casealt_)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>30 40 20 25 35 40 50 30 15 20 10</div><input id='attrs-8a8d4b69-9923-4851-a7ab-caa69b3c67e9' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-8a8d4b69-9923-4851-a7ab-caa69b3c67e9' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-bd2d404b-9023-42d9-900c-415c7042f15e' class='xr-var-data-in' type='checkbox'><label for='data-bd2d404b-9023-42d9-900c-415c7042f15e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([30, 40, 20, 25, 35, 40, 50, 30, 15, 20, 10])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Cost</span></div><div class='xr-var-dims'>(_casealt_)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>150 100 0 125 100 ... 0 225 150 0</div><input id='attrs-5fdc3b83-de91-47c7-9388-01c3cf013b77' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-5fdc3b83-de91-47c7-9388-01c3cf013b77' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-a7aebec7-834a-46af-85f8-661e0c61af82' class='xr-var-data-in' type='checkbox'><label for='data-a7aebec7-834a-46af-85f8-661e0c61af82' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([150, 100,   0, 125, 100, 125,  75,   0, 225, 150,   0])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Chosen</span></div><div class='xr-var-dims'>(_casealt_)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 0 0 0 1 0 0 1 0 0 1</div><input id='attrs-b5f9dcd8-61a0-480e-ae78-4942ca741eed' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-b5f9dcd8-61a0-480e-ae78-4942ca741eed' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-b70734af-3dbf-4fa8-a67e-09b19e68bf93' class='xr-var-data-in' type='checkbox'><label for='data-b70734af-3dbf-4fa8-a67e-09b19e68bf93' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([1, 0, 0, 0, 1, 0, 0, 1, 0, 0, 1])</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-b444312c-a048-4e8e-9604-6b82987280bf' class='xr-section-summary-in' type='checkbox'  checked><label for='section-b444312c-a048-4e8e-9604-6b82987280bf' class='xr-section-summary' >Attributes: <span>(6)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>_exclude_dims_ :</span></dt><dd>(&#x27;caseid&#x27;, &#x27;altid&#x27;, &#x27;_caseptr_&#x27;)</dd><dt><span>_caseid_ :</span></dt><dd>caseid</dd><dt><span>_altid_ :</span></dt><dd>altid</dd><dt><span>_casealt_ :</span></dt><dd>_casealt_</dd><dt><span>_alt_idx_ :</span></dt><dd>alt_idx</dd><dt><span>_caseptr_ :</span></dt><dd>_caseptr_</dd></dl></div></li></ul></div></div></div></div>
+<span class="ne">NameError</span>: name &#39;lx&#39; is not defined
+</pre></div>
 </div>
 </div>
-<div class="section" id="data-encoding">
-<h2>Data Encoding<a class="headerlink" href="#data-encoding" title="Permalink to this headline">¶</a></h2>
+</div>
+</section>
+<section id="data-encoding">
+<h2>Data Encoding<a class="headerlink" href="#data-encoding" title="Permalink to this headline">#</a></h2>
 <p>For the most part, data used in the utility functions of discrete choice models enters into the utility function as part of a linear-in-parameters function.  That is, we have some “data” that expresses an attribute of some part of the transportation system as a number, we multiply that by some numerical parameter that will be estimated, and we sum up the total over all the data-times-parameter operations.  This kind of structure is known as “linear algebra” and it’s something computers can do super fast, as long as all the data and all the parameters are queued up in memory in the right formats.  So, typically it is optimal to pre-compute the “data” part of the process into one large contiguous array of floating point values, regardless if the values otherwise seem to be binary or integers. Most tools, such as Larch, will do much of this work for you, so you don’t need to worry about it too much.</p>
 <p>There are two notable exceptions to this guideline:</p>
 <ul class="simple">
 <li><p><em>choices</em>: the data that represents the observed choices, which are inherently categorical</p></li>
 <li><p><em>availablity</em>: data that represents the availability of each choice, which is inherently boolean</p></li>
 </ul>
-<div class="section" id="categorical-encoding">
-<h3>Categorical Encoding<a class="headerlink" href="#categorical-encoding" title="Permalink to this headline">¶</a></h3>
+<section id="categorical-encoding">
+<h3>Categorical Encoding<a class="headerlink" href="#categorical-encoding" title="Permalink to this headline">#</a></h3>
 <p>When we are looking at discrete choices, it is natural to employ a categorical data type for at least the “choice” data itself, if not for other columns as well.  Pandas can convert columns to categorical data simply by assigning the type “category”.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3131,9 +1795,9 @@ dtype: int8
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="one-hot-encoding">
-<h3>One Hot Encoding<a class="headerlink" href="#one-hot-encoding" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="one-hot-encoding">
+<h3>One Hot Encoding<a class="headerlink" href="#one-hot-encoding" title="Permalink to this headline">#</a></h3>
 <p>One-hot encoding, also known as dummy variables, is the creation of a seperate binary-valued column for every categorical value.  We can convert a categorical data column into a set of one-hot encoded columns using the <code class="docutils literal notranslate"><span class="pre">get_dummies</span></code> function.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -3266,9 +1930,9 @@ dtype: int8
 </table>
 </div></div></div>
 </div>
-</div>
-<div class="section" id="encoding-with-xarray">
-<h3>Encoding with <code class="docutils literal notranslate"><span class="pre">xarray</span></code><a class="headerlink" href="#encoding-with-xarray" title="Permalink to this headline">¶</a></h3>
+</section>
+<section id="encoding-with-xarray">
+<h3>Encoding with <code class="docutils literal notranslate"><span class="pre">xarray</span></code><a class="headerlink" href="#encoding-with-xarray" title="Permalink to this headline">#</a></h3>
 <p>The <code class="docutils literal notranslate"><span class="pre">xarray</span></code> library doesn’t use formal “categorical” datatypes, but we can still use
 the <code class="docutils literal notranslate"><span class="pre">get_dummies</span></code> function to explode choice and availability data as needed.</p>
 <div class="cell docutils container">
@@ -3276,6 +1940,18 @@ the <code class="docutils literal notranslate"><span class="pre">get_dummies</sp
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;Chosen_ca&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
     <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">data_co</span><span class="p">[</span><span class="s1">&#39;Chosen&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;altid&quot;</span><span class="p">)</span>
 <span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [21],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dataset</span><span class="p">[</span><span class="s1">&#39;Chosen_ca&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lx</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">pd</span><span class="o">.</span><span class="n">get_dummies</span><span class="p">(</span><span class="n">data_co</span><span class="p">[</span><span class="s1">&#39;Chosen&#39;</span><span class="p">])</span><span class="o">.</span><span class="n">rename_axis</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;altid&quot;</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;lx&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -3287,384 +1963,19 @@ the <code class="docutils literal notranslate"><span class="pre">get_dummies</sp
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><div><svg style="position: absolute; width: 0; height: 0; overflow: hidden">
-<defs>
-<symbol id="icon-database" viewBox="0 0 32 32">
-<path d="M16 0c-8.837 0-16 2.239-16 5v4c0 2.761 7.163 5 16 5s16-2.239 16-5v-4c0-2.761-7.163-5-16-5z"></path>
-<path d="M16 17c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-<path d="M16 26c-8.837 0-16-2.239-16-5v6c0 2.761 7.163 5 16 5s16-2.239 16-5v-6c0 2.761-7.163 5-16 5z"></path>
-</symbol>
-<symbol id="icon-file-text2" viewBox="0 0 32 32">
-<path d="M28.681 7.159c-0.694-0.947-1.662-2.053-2.724-3.116s-2.169-2.030-3.116-2.724c-1.612-1.182-2.393-1.319-2.841-1.319h-15.5c-1.378 0-2.5 1.121-2.5 2.5v27c0 1.378 1.122 2.5 2.5 2.5h23c1.378 0 2.5-1.122 2.5-2.5v-19.5c0-0.448-0.137-1.23-1.319-2.841zM24.543 5.457c0.959 0.959 1.712 1.825 2.268 2.543h-4.811v-4.811c0.718 0.556 1.584 1.309 2.543 2.268zM28 29.5c0 0.271-0.229 0.5-0.5 0.5h-23c-0.271 0-0.5-0.229-0.5-0.5v-27c0-0.271 0.229-0.5 0.5-0.5 0 0 15.499-0 15.5 0v7c0 0.552 0.448 1 1 1h7v19.5z"></path>
-<path d="M23 26h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 22h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-<path d="M23 18h-14c-0.552 0-1-0.448-1-1s0.448-1 1-1h14c0.552 0 1 0.448 1 1s-0.448 1-1 1z"></path>
-</symbol>
-</defs>
-</svg>
-<style>/* CSS stylesheet for displaying xarray objects in jupyterlab.
- *
- */
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [22],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dataset</span>
 
-:root {
-  --xr-font-color0: var(--jp-content-font-color0, rgba(0, 0, 0, 1));
-  --xr-font-color2: var(--jp-content-font-color2, rgba(0, 0, 0, 0.54));
-  --xr-font-color3: var(--jp-content-font-color3, rgba(0, 0, 0, 0.38));
-  --xr-border-color: var(--jp-border-color2, #e0e0e0);
-  --xr-disabled-color: var(--jp-layout-color3, #bdbdbd);
-  --xr-background-color: var(--jp-layout-color0, white);
-  --xr-background-color-row-even: var(--jp-layout-color1, white);
-  --xr-background-color-row-odd: var(--jp-layout-color2, #eeeeee);
-}
-
-html[theme=dark],
-body.vscode-dark {
-  --xr-font-color0: rgba(255, 255, 255, 1);
-  --xr-font-color2: rgba(255, 255, 255, 0.54);
-  --xr-font-color3: rgba(255, 255, 255, 0.38);
-  --xr-border-color: #1F1F1F;
-  --xr-disabled-color: #515151;
-  --xr-background-color: #111111;
-  --xr-background-color-row-even: #111111;
-  --xr-background-color-row-odd: #313131;
-}
-
-.xr-wrap {
-  display: block !important;
-  min-width: 300px;
-  max-width: 700px;
-}
-
-.xr-text-repr-fallback {
-  /* fallback to plain text repr when CSS is not injected (untrusted notebook) */
-  display: none;
-}
-
-.xr-header {
-  padding-top: 6px;
-  padding-bottom: 6px;
-  margin-bottom: 4px;
-  border-bottom: solid 1px var(--xr-border-color);
-}
-
-.xr-header > div,
-.xr-header > ul {
-  display: inline;
-  margin-top: 0;
-  margin-bottom: 0;
-}
-
-.xr-obj-type,
-.xr-array-name {
-  margin-left: 2px;
-  margin-right: 10px;
-}
-
-.xr-obj-type {
-  color: var(--xr-font-color2);
-}
-
-.xr-sections {
-  padding-left: 0 !important;
-  display: grid;
-  grid-template-columns: 150px auto auto 1fr 20px 20px;
-}
-
-.xr-section-item {
-  display: contents;
-}
-
-.xr-section-item input {
-  display: none;
-}
-
-.xr-section-item input + label {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-item input:enabled + label {
-  cursor: pointer;
-  color: var(--xr-font-color2);
-}
-
-.xr-section-item input:enabled + label:hover {
-  color: var(--xr-font-color0);
-}
-
-.xr-section-summary {
-  grid-column: 1;
-  color: var(--xr-font-color2);
-  font-weight: 500;
-}
-
-.xr-section-summary > span {
-  display: inline-block;
-  padding-left: 0.5em;
-}
-
-.xr-section-summary-in:disabled + label {
-  color: var(--xr-font-color2);
-}
-
-.xr-section-summary-in + label:before {
-  display: inline-block;
-  content: '►';
-  font-size: 11px;
-  width: 15px;
-  text-align: center;
-}
-
-.xr-section-summary-in:disabled + label:before {
-  color: var(--xr-disabled-color);
-}
-
-.xr-section-summary-in:checked + label:before {
-  content: '▼';
-}
-
-.xr-section-summary-in:checked + label > span {
-  display: none;
-}
-
-.xr-section-summary,
-.xr-section-inline-details {
-  padding-top: 4px;
-  padding-bottom: 4px;
-}
-
-.xr-section-inline-details {
-  grid-column: 2 / -1;
-}
-
-.xr-section-details {
-  display: none;
-  grid-column: 1 / -1;
-  margin-bottom: 5px;
-}
-
-.xr-section-summary-in:checked ~ .xr-section-details {
-  display: contents;
-}
-
-.xr-array-wrap {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: 20px auto;
-}
-
-.xr-array-wrap > label {
-  grid-column: 1;
-  vertical-align: top;
-}
-
-.xr-preview {
-  color: var(--xr-font-color3);
-}
-
-.xr-array-preview,
-.xr-array-data {
-  padding: 0 5px !important;
-  grid-column: 2;
-}
-
-.xr-array-data,
-.xr-array-in:checked ~ .xr-array-preview {
-  display: none;
-}
-
-.xr-array-in:checked ~ .xr-array-data,
-.xr-array-preview {
-  display: inline-block;
-}
-
-.xr-dim-list {
-  display: inline-block !important;
-  list-style: none;
-  padding: 0 !important;
-  margin: 0;
-}
-
-.xr-dim-list li {
-  display: inline-block;
-  padding: 0;
-  margin: 0;
-}
-
-.xr-dim-list:before {
-  content: '(';
-}
-
-.xr-dim-list:after {
-  content: ')';
-}
-
-.xr-dim-list li:not(:last-child):after {
-  content: ',';
-  padding-right: 5px;
-}
-
-.xr-has-index {
-  font-weight: bold;
-}
-
-.xr-var-list,
-.xr-var-item {
-  display: contents;
-}
-
-.xr-var-item > div,
-.xr-var-item label,
-.xr-var-item > .xr-var-name span {
-  background-color: var(--xr-background-color-row-even);
-  margin-bottom: 0;
-}
-
-.xr-var-item > .xr-var-name:hover span {
-  padding-right: 5px;
-}
-
-.xr-var-list > li:nth-child(odd) > div,
-.xr-var-list > li:nth-child(odd) > label,
-.xr-var-list > li:nth-child(odd) > .xr-var-name span {
-  background-color: var(--xr-background-color-row-odd);
-}
-
-.xr-var-name {
-  grid-column: 1;
-}
-
-.xr-var-dims {
-  grid-column: 2;
-}
-
-.xr-var-dtype {
-  grid-column: 3;
-  text-align: right;
-  color: var(--xr-font-color2);
-}
-
-.xr-var-preview {
-  grid-column: 4;
-}
-
-.xr-var-name,
-.xr-var-dims,
-.xr-var-dtype,
-.xr-preview,
-.xr-attrs dt {
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  padding-right: 10px;
-}
-
-.xr-var-name:hover,
-.xr-var-dims:hover,
-.xr-var-dtype:hover,
-.xr-attrs dt:hover {
-  overflow: visible;
-  width: auto;
-  z-index: 1;
-}
-
-.xr-var-attrs,
-.xr-var-data {
-  display: none;
-  background-color: var(--xr-background-color) !important;
-  padding-bottom: 5px !important;
-}
-
-.xr-var-attrs-in:checked ~ .xr-var-attrs,
-.xr-var-data-in:checked ~ .xr-var-data {
-  display: block;
-}
-
-.xr-var-data > table {
-  float: right;
-}
-
-.xr-var-name span,
-.xr-var-data,
-.xr-attrs {
-  padding-left: 25px !important;
-}
-
-.xr-attrs,
-.xr-var-attrs,
-.xr-var-data {
-  grid-column: 1 / -1;
-}
-
-dl.xr-attrs {
-  padding: 0;
-  margin: 0;
-  display: grid;
-  grid-template-columns: 125px auto;
-}
-
-.xr-attrs dt,
-.xr-attrs dd {
-  padding: 0;
-  margin: 0;
-  float: left;
-  padding-right: 10px;
-  width: auto;
-}
-
-.xr-attrs dt {
-  font-weight: normal;
-  grid-column: 1;
-}
-
-.xr-attrs dt:hover span {
-  display: inline-block;
-  background: var(--xr-background-color);
-  padding-right: 10px;
-}
-
-.xr-attrs dd {
-  grid-column: 2;
-  white-space: pre-wrap;
-  word-break: break-all;
-}
-
-.xr-icon-database,
-.xr-icon-file-text2 {
-  display: inline-block;
-  vertical-align: middle;
-  width: 1em;
-  height: 1.5em !important;
-  stroke-width: 0;
-  stroke: currentColor;
-  fill: currentColor;
-}
-</style><pre class='xr-text-repr-fallback'>&lt;xarray.Dataset&gt;
-Dimensions:    (caseid: 4, altid: 3)
-Coordinates:
-  * caseid     (caseid) int64 1 2 3 4
-  * altid      (altid) object &#x27;Bus&#x27; &#x27;Car&#x27; &#x27;Walk&#x27;
-Data variables:
-    Income     (caseid) int64 30000 30000 40000 50000
-    Chosen     (caseid) object &#x27;Car&#x27; &#x27;Bus&#x27; &#x27;Walk&#x27; &#x27;Walk&#x27;
-    Time       (caseid, altid) float64 40.0 30.0 20.0 35.0 ... 20.0 15.0 10.0
-    Cost       (caseid, altid) float64 100.0 150.0 0.0 100.0 ... 150.0 225.0 0.0
-    Chosen_ca  (caseid, altid) uint8 0 1 0 1 0 0 0 0 1 0 0 1
-Attributes:
-    _caseid_:  caseid
-    _altid_:   altid</pre><div class='xr-wrap' style='display:none'><div class='xr-header'><div class='xr-obj-type'>xarray.Dataset</div></div><ul class='xr-sections'><li class='xr-section-item'><input id='section-d70eb885-20aa-46fb-966b-29a4e44b631f' class='xr-section-summary-in' type='checkbox' disabled ><label for='section-d70eb885-20aa-46fb-966b-29a4e44b631f' class='xr-section-summary'  title='Expand/collapse section'>Dimensions:</label><div class='xr-section-inline-details'><ul class='xr-dim-list'><li><span class='xr-has-index'>caseid</span>: 4</li><li><span class='xr-has-index'>altid</span>: 3</li></ul></div><div class='xr-section-details'></div></li><li class='xr-section-item'><input id='section-9cc34df6-8e9e-4460-bd7b-940261af5546' class='xr-section-summary-in' type='checkbox'  checked><label for='section-9cc34df6-8e9e-4460-bd7b-940261af5546' class='xr-section-summary' >Coordinates: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>caseid</span></div><div class='xr-var-dims'>(caseid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>1 2 3 4</div><input id='attrs-e8c54c14-afd7-4fb4-86dc-b646191eb7a2' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-e8c54c14-afd7-4fb4-86dc-b646191eb7a2' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-3f2aad69-8324-4a49-baaa-43469e23da0e' class='xr-var-data-in' type='checkbox'><label for='data-3f2aad69-8324-4a49-baaa-43469e23da0e' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([1, 2, 3, 4])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span class='xr-has-index'>altid</span></div><div class='xr-var-dims'>(altid)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>&#x27;Bus&#x27; &#x27;Car&#x27; &#x27;Walk&#x27;</div><input id='attrs-eb0af922-ade4-4ef8-89f9-d8158f4c74ad' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-eb0af922-ade4-4ef8-89f9-d8158f4c74ad' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-d4835207-04f8-478f-913a-074138880ddc' class='xr-var-data-in' type='checkbox'><label for='data-d4835207-04f8-478f-913a-074138880ddc' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;Bus&#x27;, &#x27;Car&#x27;, &#x27;Walk&#x27;], dtype=object)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-c185f4d6-a3c5-4715-bb00-5965cf91f5ae' class='xr-section-summary-in' type='checkbox'  checked><label for='section-c185f4d6-a3c5-4715-bb00-5965cf91f5ae' class='xr-section-summary' >Data variables: <span>(5)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><ul class='xr-var-list'><li class='xr-var-item'><div class='xr-var-name'><span>Income</span></div><div class='xr-var-dims'>(caseid)</div><div class='xr-var-dtype'>int64</div><div class='xr-var-preview xr-preview'>30000 30000 40000 50000</div><input id='attrs-e642f991-7f52-43f9-a4e7-f8f3fc8d68f5' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-e642f991-7f52-43f9-a4e7-f8f3fc8d68f5' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9ba2546c-964f-4f81-8701-8beeae79ee76' class='xr-var-data-in' type='checkbox'><label for='data-9ba2546c-964f-4f81-8701-8beeae79ee76' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([30000, 30000, 40000, 50000])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Chosen</span></div><div class='xr-var-dims'>(caseid)</div><div class='xr-var-dtype'>object</div><div class='xr-var-preview xr-preview'>&#x27;Car&#x27; &#x27;Bus&#x27; &#x27;Walk&#x27; &#x27;Walk&#x27;</div><input id='attrs-807840b0-7be6-4a09-aecf-01fcaec7c75c' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-807840b0-7be6-4a09-aecf-01fcaec7c75c' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-18f5bacb-52ee-45ba-875e-0dac04ef4391' class='xr-var-data-in' type='checkbox'><label for='data-18f5bacb-52ee-45ba-875e-0dac04ef4391' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([&#x27;Car&#x27;, &#x27;Bus&#x27;, &#x27;Walk&#x27;, &#x27;Walk&#x27;], dtype=object)</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Time</span></div><div class='xr-var-dims'>(caseid, altid)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>40.0 30.0 20.0 ... 20.0 15.0 10.0</div><input id='attrs-d358d2be-df33-4e77-817c-1326d0827ba4' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-d358d2be-df33-4e77-817c-1326d0827ba4' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-11943204-656e-4259-bbeb-d1bbb824875b' class='xr-var-data-in' type='checkbox'><label for='data-11943204-656e-4259-bbeb-d1bbb824875b' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[40., 30., 20.],
-       [35., 25., nan],
-       [50., 40., 30.],
-       [20., 15., 10.]])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Cost</span></div><div class='xr-var-dims'>(caseid, altid)</div><div class='xr-var-dtype'>float64</div><div class='xr-var-preview xr-preview'>100.0 150.0 0.0 ... 150.0 225.0 0.0</div><input id='attrs-1c848cc7-2184-4c9b-b137-33ad53f28282' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-1c848cc7-2184-4c9b-b137-33ad53f28282' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-6debddc4-7ed1-436f-8c9c-650d2498cad1' class='xr-var-data-in' type='checkbox'><label for='data-6debddc4-7ed1-436f-8c9c-650d2498cad1' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[100., 150.,   0.],
-       [100., 125.,  nan],
-       [ 75., 125.,   0.],
-       [150., 225.,   0.]])</pre></div></li><li class='xr-var-item'><div class='xr-var-name'><span>Chosen_ca</span></div><div class='xr-var-dims'>(caseid, altid)</div><div class='xr-var-dtype'>uint8</div><div class='xr-var-preview xr-preview'>0 1 0 1 0 0 0 0 1 0 0 1</div><input id='attrs-679197be-6770-4a80-8257-7b49d104071f' class='xr-var-attrs-in' type='checkbox' disabled><label for='attrs-679197be-6770-4a80-8257-7b49d104071f' title='Show/Hide attributes'><svg class='icon xr-icon-file-text2'><use xlink:href='#icon-file-text2'></use></svg></label><input id='data-9e486c89-087f-46d1-a01d-66f935f77c6c' class='xr-var-data-in' type='checkbox'><label for='data-9e486c89-087f-46d1-a01d-66f935f77c6c' title='Show/Hide data repr'><svg class='icon xr-icon-database'><use xlink:href='#icon-database'></use></svg></label><div class='xr-var-attrs'><dl class='xr-attrs'></dl></div><div class='xr-var-data'><pre>array([[0, 1, 0],
-       [1, 0, 0],
-       [0, 0, 1],
-       [0, 0, 1]], dtype=uint8)</pre></div></li></ul></div></li><li class='xr-section-item'><input id='section-31a098f1-786f-4e56-8ec5-eca458f337e7' class='xr-section-summary-in' type='checkbox'  checked><label for='section-31a098f1-786f-4e56-8ec5-eca458f337e7' class='xr-section-summary' >Attributes: <span>(2)</span></label><div class='xr-section-inline-details'></div><div class='xr-section-details'><dl class='xr-attrs'><dt><span>_caseid_ :</span></dt><dd>caseid</dd><dt><span>_altid_ :</span></dt><dd>altid</dd></dl></div></li></ul></div></div></div></div>
+<span class="ne">NameError</span>: name &#39;dataset&#39; is not defined
+</pre></div>
 </div>
 </div>
 </div>
-</div>
+</section>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -3688,9 +1999,11 @@ Attributes:
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="choice-models.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -3706,24 +2019,28 @@ Attributes:
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Jeffrey Newman<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Jeffrey Newman<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>

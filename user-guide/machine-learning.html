@@ -4,11 +4,13 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Machine Learning &#8212; v5.7.0</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Machine Learning &#8212; v5.6.2.dev26+g82cf4dd5</title>
     
-  <link href="../_static/css/theme.css" rel="stylesheet">
-  <link href="../_static/css/index.ff1ffe594081f20da1ef19478df9384b.css" rel="stylesheet">
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
 
     
   <link rel="stylesheet"
@@ -18,32 +20,32 @@
   <link rel="preload" as="font" type="font/woff2" crossorigin
     href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
 
-    
-      
-
-    
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sphinx-book-theme.css?digest=c3fdc42140077d1ad13ad2f1588a4309" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=62ba249389abaaa9ffc34bf36a076bdc1d65ee18" type="text/css" />
     <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
     <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
     <link rel="stylesheet" type="text/css" href="../_static/larch-book.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
-  <link rel="preload" as="script" href="../_static/js/index.be7d3bbb2ef33a8344ce.js">
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
     <script src="../_static/underscore.js"></script>
     <script src="../_static/doctools.js"></script>
-    <script src="../_static/togglebutton.js"></script>
     <script src="../_static/clipboard.min.js"></script>
     <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=f31d14ad54b65d19161ba51d4ffff3a77ae00456"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
-    <script src="../_static/sphinx-book-theme.d59cb220de22ca1c485ebbdc042f0030.js"></script>
+    <script src="../_static/design-tabs.js"></script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
 const thebe_selector = ".thebe,.cell"
 const thebe_selector_input = "pre"
@@ -66,7 +68,21 @@ const thebe_selector_output = ".output, .cell_output"
     <!-- Google Analytics -->
     
   </head>
-  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
     
     <div class="container-fluid" id="banner"></div>
 
@@ -75,9 +91,10 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="container-xl">
       <div class="row">
           
-<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
-    
-        <div class="navbar-brand-box">
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
     <a class="navbar-brand text-wrap" href="../index.html">
       
         <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
@@ -87,7 +104,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="../_static/larch-logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">v5.7.0</h1>
+      <h1 class="site-logo" id="site-title">v5.6.2.dev26+g82cf4dd5</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
@@ -155,181 +172,20 @@ const thebe_selector_output = ".output, .cell_output"
    </i>
   </label>
   <ul>
-   <li class="toctree-l2 has-children">
+   <li class="toctree-l2">
     <a class="reference internal" href="../api/dataset.html">
      Dataset
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
-    <label for="toctree-checkbox-3">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.html">
-       larch.Dataset
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.construct.html">
-       larch.Dataset.construct
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.dims.html">
-       larch.Dataset.dims
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.sizes.html">
-       larch.Dataset.sizes
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.data_vars.html">
-       larch.Dataset.data_vars
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.coords.html">
-       larch.Dataset.coords
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.attrs.html">
-       larch.Dataset.attrs
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.encoding.html">
-       larch.Dataset.encoding
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.indexes.html">
-       larch.Dataset.indexes
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.chunks.html">
-       larch.Dataset.chunks
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.chunksizes.html">
-       larch.Dataset.chunksizes
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.nbytes.html">
-       larch.Dataset.nbytes
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.Dataset.set_dtypes.html">
-       larch.Dataset.set_dtypes
-      </a>
-     </li>
-    </ul>
    </li>
-   <li class="toctree-l2 has-children">
+   <li class="toctree-l2">
     <a class="reference internal" href="../api/datatree.html">
      DataTree
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
-    <label for="toctree-checkbox-4">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.html">
-       larch.DataTree
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.root_node_name.html">
-       larch.DataTree.root_node_name
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.subspaces.html">
-       larch.DataTree.subspaces
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.relationships_are_digitized.html">
-       larch.DataTree.relationships_are_digitized
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.n_cases.html">
-       larch.DataTree.n_cases
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.n_alts.html">
-       larch.DataTree.n_alts
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.CASEID.html">
-       larch.DataTree.CASEID
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.ALTID.html">
-       larch.DataTree.ALTID
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.add_dataset.html">
-       larch.DataTree.add_dataset
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.add_relationship.html">
-       larch.DataTree.add_relationship
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.digitize_relationships.html">
-       larch.DataTree.digitize_relationships
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.query_cases.html">
-       larch.DataTree.query_cases
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.replace_datasets.html">
-       larch.DataTree.replace_datasets
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataTree.setup_flow.html">
-       larch.DataTree.setup_flow
-      </a>
-     </li>
-    </ul>
    </li>
-   <li class="toctree-l2 has-children">
+   <li class="toctree-l2">
     <a class="reference internal" href="../api/dataframes.html">
      DataFrames
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
-    <label for="toctree-checkbox-5">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.DataFrames.html">
-       larch.DataFrames
-      </a>
-     </li>
-    </ul>
    </li>
   </ul>
  </li>
@@ -337,218 +193,16 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../api/~models.html">
    Models
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
-  <label for="toctree-checkbox-6">
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
    <i class="fas fa-chevron-down">
    </i>
   </label>
   <ul>
-   <li class="toctree-l2 has-children">
+   <li class="toctree-l2">
     <a class="reference internal" href="../api/model.html">
      Model
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
-    <label for="toctree-checkbox-7">
-     <i class="fas fa-chevron-down">
-     </i>
-    </label>
-    <ul>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.html">
-       larch.numba.Model
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.datatree.html">
-       larch.numba.Model.datatree
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.dataset.html">
-       larch.numba.Model.dataset
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.n_cases.html">
-       larch.numba.Model.n_cases
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.choice_ca_var.html">
-       larch.numba.Model.choice_ca_var
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.choice_co_vars.html">
-       larch.numba.Model.choice_co_vars
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.choice_co_code.html">
-       larch.numba.Model.choice_co_code
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.availability_ca_var.html">
-       larch.numba.Model.availability_ca_var
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.availability_co_vars.html">
-       larch.numba.Model.availability_co_vars
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.utility_ca.html">
-       larch.numba.Model.utility_ca
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.utility_co.html">
-       larch.numba.Model.utility_co
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.quantity_ca.html">
-       larch.numba.Model.quantity_ca
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.pf.html">
-       larch.numba.Model.pf
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.most_recent_estimation_result.html">
-       larch.numba.Model.most_recent_estimation_result
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.possible_overspecification.html">
-       larch.numba.Model.possible_overspecification
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.set_values.html">
-       larch.numba.Model.set_values
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.lock_value.html">
-       larch.numba.Model.lock_value
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.set_cap.html">
-       larch.numba.Model.set_cap
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.remove_unused_parameters.html">
-       larch.numba.Model.remove_unused_parameters
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.maximize_loglike.html">
-       larch.numba.Model.maximize_loglike
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.calculate_parameter_covariance.html">
-       larch.numba.Model.calculate_parameter_covariance
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike_nil.html">
-       larch.numba.Model.loglike_nil
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike_null.html">
-       larch.numba.Model.loglike_null
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.rho_sq_nil.html">
-       larch.numba.Model.rho_sq_nil
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.rho_sq_null.html">
-       larch.numba.Model.rho_sq_null
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.parameter_summary.html">
-       larch.numba.Model.parameter_summary
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.estimation_statistics.html">
-       larch.numba.Model.estimation_statistics
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.to_xlsx.html">
-       larch.numba.Model.to_xlsx
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.bhhh.html">
-       larch.numba.Model.bhhh
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.check_d_loglike.html">
-       larch.numba.Model.check_d_loglike
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.d_loglike.html">
-       larch.numba.Model.d_loglike
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.d_loglike_casewise.html">
-       larch.numba.Model.d_loglike_casewise
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike.html">
-       larch.numba.Model.loglike
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.loglike_casewise.html">
-       larch.numba.Model.loglike_casewise
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.logsums.html">
-       larch.numba.Model.logsums
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.probability.html">
-       larch.numba.Model.probability
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.quantity.html">
-       larch.numba.Model.quantity
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.total_weight.html">
-       larch.numba.Model.total_weight
-      </a>
-     </li>
-     <li class="toctree-l3">
-      <a class="reference internal" href="../api/generated/larch.numba.Model.utility.html">
-       larch.numba.Model.utility
-      </a>
-     </li>
-    </ul>
    </li>
    <li class="toctree-l2">
     <a class="reference internal" href="../api/linear.html">
@@ -559,8 +213,8 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal" href="../api/nesting.html">
      NestingTree
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
-    <label for="toctree-checkbox-8">
+    <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+    <label for="toctree-checkbox-4">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -601,8 +255,8 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal" href="../api/modelgroup.html">
      ModelGroup
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
-    <label for="toctree-checkbox-9">
+    <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+    <label for="toctree-checkbox-5">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -657,8 +311,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../example/mtc.html">
    MTC Mode Choice
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
-  <label for="toctree-checkbox-10">
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -704,8 +358,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../example/swissmetro.html">
    Swissmetro
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
-  <label for="toctree-checkbox-11">
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -731,8 +385,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../example/exampville.html">
    Exampville
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
-  <label for="toctree-checkbox-12">
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -763,8 +417,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../example/itinerary.html">
    Itinerary Choice
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
-  <label for="toctree-checkbox-13">
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -785,8 +439,8 @@ const thebe_selector_output = ".output, .cell_output"
   <a class="reference internal" href="../example/legacy.html">
    Legacy Examples
   </a>
-  <input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/>
-  <label for="toctree-checkbox-14">
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
    <i class="fas fa-chevron-down">
    </i>
   </label>
@@ -795,8 +449,8 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal" href="../example/legacy/mtc.html">
      MTC Mode Choice Examples
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/>
-    <label for="toctree-checkbox-15">
+    <input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/>
+    <label for="toctree-checkbox-11">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -972,8 +626,8 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal" href="../example/legacy/swissmetro.html">
      Swissmetro Examples
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/>
-    <label for="toctree-checkbox-16">
+    <input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/>
+    <label for="toctree-checkbox-12">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -1009,8 +663,8 @@ const thebe_selector_output = ".output, .cell_output"
     <a class="reference internal" href="../example/legacy/itinerary.html">
      Itinerary Choice Examples
     </a>
-    <input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/>
-    <label for="toctree-checkbox-17">
+    <input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/>
+    <label for="toctree-checkbox-13">
      <i class="fas fa-chevron-down">
      </i>
     </label>
@@ -1037,86 +691,176 @@ const thebe_selector_output = ".output, .cell_output"
 </ul>
 
     </div>
-</nav> <!-- To handle the deprecated key -->
-
-</div>
-
-
-          
-
-
-          
-<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
-    
-    <div class="topbar container-xl fixed-top">
-    <div class="topbar-contents row">
-        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
-        <div class="col pl-md-4 topbar-main">
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
             
-            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
-                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
-                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
-                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
-                <i class="fas fa-bars"></i>
-                <i class="fas fa-arrow-left"></i>
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            
-            
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
-            class="fas fa-download"></i></button>
-
-    <div class="dropdown-buttons">
-        <!-- ipynb file if we had a myst markdown file -->
-        
-        <!-- Download raw file -->
-        <a class="dropdown-buttons" href="../_sources/user-guide/machine-learning.ipynb"><button type="button"
-                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
-                data-placement="left">.ipynb</button></a>
-        <!-- Download PDF via print -->
-        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
-                onclick="printPdf(this)" data-toggle="tooltip" data-placement="left">.pdf</button>
-    </div>
-</div>
-
-            <!-- Source interaction buttons -->
-
-<div class="dropdown-buttons-trigger">
-    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
-        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
-    <div class="dropdown-buttons sourcebuttons">
-        <a class="repository-button"
-            href="https://github.com/jpn--/larch"><button type="button" class="btn btn-secondary topbarbtn"
-                data-toggle="tooltip" data-placement="left" title="Source repository"><i
-                    class="fab fa-github"></i>repository</button></a>
-        <a class="issues-button"
-            href="https://github.com/jpn--/larch/issues/new?title=Issue%20on%20page%20%2Fuser-guide/machine-learning.html&body=Your%20issue%20content%20here."><button
-                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
-                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
-        
-    </div>
-</div>
-
-            <!-- Full screen (wrap in <a> to have style consistency -->
-
-<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
-        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
-        title="Fullscreen mode"><i
-            class="fas fa-expand"></i></button></a>
-
-            <!-- Launch buttons -->
-
         </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
 
-        <!-- Table of contents -->
-        <div class="d-none d-md-block col-md-2 bd-toc show noprint">
-            
-            <div class="tocsection onthispage pt-5 pb-3">
-                <i class="fas fa-list"></i> Contents
-            </div>
-            <nav id="bd-toc-nav" aria-label="Page">
-                <ul class="visible nav section-nav flex-column">
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/jpn--/larch"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/jpn--/larch/issues/new?title=Issue%20on%20page%20%2Fuser-guide/machine-learning.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../_sources/user-guide/machine-learning.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
  <li class="toc-h2 nav-item toc-entry">
   <a class="reference internal nav-link" href="#using-larch-within-scikit-learn">
    Using Larch within Scikit-Learn
@@ -1129,12 +873,11 @@ const thebe_selector_output = ".output, .cell_output"
  </li>
 </ul>
 
-            </nav>
-        </div>
-    </div>
+    </nav>
 </div>
-    <div id="main-content" class="row">
-        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
             <!-- Table of contents that is only displayed when printing the page -->
             <div id="jb-print-docs-body" class="onlyprint">
                 <h1>Machine Learning</h1>
@@ -1163,23 +906,75 @@ const thebe_selector_output = ".output, .cell_output"
                     </div>
                 </div>
             </div>
-            
+            <main id="main-content" role="main">
+                
               <div>
                 
-  <div class="tex2jax_ignore mathjax_ignore section" id="machine-learning">
-<h1>Machine Learning<a class="headerlink" href="#machine-learning" title="Permalink to this headline">¶</a></h1>
+  <section class="tex2jax_ignore mathjax_ignore" id="machine-learning">
+<h1>Machine Learning<a class="headerlink" href="#machine-learning" title="Permalink to this headline">#</a></h1>
 <p>Larch is (mostly) compatible with the <a class="reference external" href="https://scikit-learn.org">scikit-learn</a> stucture for machine learning.
 Within this structure, the larch.Model object can be used as an <code class="docutils literal notranslate"><span class="pre">estimator</span></code>
 and as a <code class="docutils literal notranslate"><span class="pre">predictor</span></code>.</p>
 <p>Note this page applies to the legacy interface for Larch.
 Updates to enable these features for the numba-based version are coming eventually.</p>
-<div class="section" id="using-larch-within-scikit-learn">
-<h2>Using Larch within Scikit-Learn<a class="headerlink" href="#using-larch-within-scikit-learn" title="Permalink to this headline">¶</a></h2>
+<section id="using-larch-within-scikit-learn">
+<h2>Using Larch within Scikit-Learn<a class="headerlink" href="#using-larch-within-scikit-learn" title="Permalink to this headline">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">larch</span>
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">larch</span> <span class="kn">import</span> <span class="n">PX</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="nn">Input In [2],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">larch</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">larch</span> <span class="kn">import</span> <span class="n">PX</span><span class="p">,</span> <span class="n">P</span><span class="p">,</span> <span class="n">X</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">68</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">66</span> <span class="kn">from</span> <span class="nn">.model</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="kn">from</span> <span class="nn">.dataframes</span> <span class="kn">import</span> <span class="n">DataFrames</span>
+<span class="ne">---&gt; </span><span class="mi">68</span> <span class="kn">from</span> <span class="nn">.dataset</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataTree</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span> <span class="kn">from</span> <span class="nn">.examples</span> <span class="kn">import</span> <span class="n">example</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span> <span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">figures</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">dataset</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">30</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span> <span class="nn">xarray.core</span> <span class="kn">import</span> <span class="n">dtypes</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">Any</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span>     <span class="n">overload</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">30</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">construct</span><span class="p">,</span> <span class="n">patch</span><span class="p">,</span> <span class="n">flow</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="kn">from</span> <span class="nn">.patch</span> <span class="kn">import</span> <span class="n">register_dataarray_classmethod</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="k">try</span><span class="p">:</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">dataset</span><span class="o">/</span><span class="n">construct</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">sharrow.dataset</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">sharrow.dataset</span> <span class="kn">import</span> <span class="n">construct</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span> <span class="nn">.patch</span> <span class="kn">import</span> <span class="n">register_dataset_classmethod</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">xarray</span> <span class="kn">import</span> <span class="n">DataArray</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">example_data</span><span class="p">,</span> <span class="n">selectors</span><span class="p">,</span> <span class="n">shared_memory</span><span class="p">,</span> <span class="n">sparse</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">._version</span> <span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">__version__</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">.dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="n">shared_memory</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="ne">---&gt; </span><span class="mi">10</span> <span class="kn">import</span> <span class="nn">sparse</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="k">try</span><span class="p">:</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;sparse&#39;
 </pre></div>
 </div>
 </div>
@@ -1189,6 +984,57 @@ Updates to enable these features for the numba-based version are coming eventual
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">larch.data_warehouse</span> <span class="kn">import</span> <span class="n">example_file</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">example_file</span><span class="p">(</span><span class="s2">&quot;MTCwork.csv.gz&quot;</span><span class="p">))</span>
 <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;casenum&#39;</span><span class="p">,</span><span class="s1">&#39;altnum&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="nn">Input In [3],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">larch.data_warehouse</span> <span class="kn">import</span> <span class="n">example_file</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">example_file</span><span class="p">(</span><span class="s2">&quot;MTCwork.csv.gz&quot;</span><span class="p">))</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">df</span><span class="o">.</span><span class="n">set_index</span><span class="p">([</span><span class="s1">&#39;casenum&#39;</span><span class="p">,</span><span class="s1">&#39;altnum&#39;</span><span class="p">],</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">drop</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">68</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">66</span> <span class="kn">from</span> <span class="nn">.model</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="kn">from</span> <span class="nn">.dataframes</span> <span class="kn">import</span> <span class="n">DataFrames</span>
+<span class="ne">---&gt; </span><span class="mi">68</span> <span class="kn">from</span> <span class="nn">.dataset</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataTree</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span> <span class="kn">from</span> <span class="nn">.examples</span> <span class="kn">import</span> <span class="n">example</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span> <span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">figures</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">dataset</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">30</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span> <span class="nn">xarray.core</span> <span class="kn">import</span> <span class="n">dtypes</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">Any</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span>     <span class="n">overload</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">30</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">construct</span><span class="p">,</span> <span class="n">patch</span><span class="p">,</span> <span class="n">flow</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="kn">from</span> <span class="nn">.patch</span> <span class="kn">import</span> <span class="n">register_dataarray_classmethod</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="k">try</span><span class="p">:</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">dataset</span><span class="o">/</span><span class="n">construct</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">sharrow.dataset</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">sharrow.dataset</span> <span class="kn">import</span> <span class="n">construct</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span> <span class="nn">.patch</span> <span class="kn">import</span> <span class="n">register_dataset_classmethod</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">xarray</span> <span class="kn">import</span> <span class="n">DataArray</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">example_data</span><span class="p">,</span> <span class="n">selectors</span><span class="p">,</span> <span class="n">shared_memory</span><span class="p">,</span> <span class="n">sparse</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">._version</span> <span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">__version__</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">.dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="n">shared_memory</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="ne">---&gt; </span><span class="mi">10</span> <span class="kn">import</span> <span class="nn">sparse</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="k">try</span><span class="p">:</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;sparse&#39;
 </pre></div>
 </div>
 </div>
@@ -1209,6 +1055,22 @@ although we don’t need to actually connect the model to the data yet.</p>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [4],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="n">m</span><span class="o">.</span><span class="n">utility_ca</span> <span class="o">=</span> <span class="p">(</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span>     <span class="n">PX</span><span class="p">(</span><span class="s1">&#39;tottime&#39;</span><span class="p">)</span> 
+<span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="o">+</span> <span class="n">PX</span><span class="p">(</span><span class="s1">&#39;totcost&#39;</span><span class="p">)</span> 
+<span class="g g-Whitespace">      </span><span class="mi">6</span>     <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;ASC_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;altnum==</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
+<span class="g g-Whitespace">      </span><span class="mi">7</span>     <span class="o">+</span> <span class="nb">sum</span><span class="p">(</span><span class="n">P</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;HHINC#</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;(altnum==</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s1">)*hhinc&#39;</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">,</span><span class="mi">4</span><span class="p">,</span><span class="mi">5</span><span class="p">,</span><span class="mi">6</span><span class="p">])</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;larch&#39; is not defined
+</pre></div>
+</div>
+</div>
 </div>
 <p>Because the larch.Model object is an estimator, if offers a <code class="docutils literal notranslate"><span class="pre">fit</span></code>
 method to estimate the fitted (likelihood maximizing) parameters.  This method
@@ -1223,173 +1085,12 @@ in the method call:</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>req_data does not request avail_ca or avail_co but it is set and being provided
-</pre></div>
-</div>
-<div class="output text_html"><h3>Iteration 010 [Optimization terminated successfully.] </h3></div><div class="output text_html"><p>Best LL = -3626.1862555129305</p></div><div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [5],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">chose</span><span class="p">)</span>
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>value</th>
-      <th>initvalue</th>
-      <th>nullvalue</th>
-      <th>minimum</th>
-      <th>maximum</th>
-      <th>holdfast</th>
-      <th>note</th>
-      <th>best</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ASC_2</th>
-      <td>-2.178014</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-2.178014</td>
-    </tr>
-    <tr>
-      <th>ASC_3</th>
-      <td>-3.725078</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-3.725078</td>
-    </tr>
-    <tr>
-      <th>ASC_4</th>
-      <td>-0.670861</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-0.670861</td>
-    </tr>
-    <tr>
-      <th>ASC_5</th>
-      <td>-2.376328</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-2.376328</td>
-    </tr>
-    <tr>
-      <th>ASC_6</th>
-      <td>-0.206775</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-0.206775</td>
-    </tr>
-    <tr>
-      <th>HHINC#2</th>
-      <td>-0.002170</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-0.002170</td>
-    </tr>
-    <tr>
-      <th>HHINC#3</th>
-      <td>0.000358</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>0.000358</td>
-    </tr>
-    <tr>
-      <th>HHINC#4</th>
-      <td>-0.005286</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-0.005286</td>
-    </tr>
-    <tr>
-      <th>HHINC#5</th>
-      <td>-0.012808</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-0.012808</td>
-    </tr>
-    <tr>
-      <th>HHINC#6</th>
-      <td>-0.009686</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-0.009686</td>
-    </tr>
-    <tr>
-      <th>totcost</th>
-      <td>-0.004920</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-0.004920</td>
-    </tr>
-    <tr>
-      <th>tottime</th>
-      <td>-0.051342</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-      <td>-0.051342</td>
-    </tr>
-  </tbody>
-</table>
-</div></div><div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;larch.Model (MNL)&gt;
+<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1405,22 +1106,12 @@ use the <code class="docutils literal notranslate"><span class="pre">predict</sp
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>req_data does not request avail_ca or avail_co but it is set and being provided
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>      altnum
-0     1         1.0
-      2         0.0
-      3         0.0
-      4         0.0
-      5         0.0
-               ... 
-5028  2         0.0
-      3         0.0
-      4         0.0
-      5         0.0
-      6         0.0
-Length: 22033, dtype: float64
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [7],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1433,21 +1124,13 @@ Length: 22033, dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>req_data does not request avail_ca or avail_co but it is set and being provided
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>   altnum
-0  1         0.817458
-   2         0.077710
-   3         0.017906
-   4         0.071428
-   5         0.015497
-1  1         0.336928
-   2         0.074339
-   3         0.052072
-   4         0.498117
-   5         0.038545
-dtype: float64
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [8],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">proba</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">predict_proba</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">proba</span><span class="o">.</span><span class="n">head</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1460,10 +1143,13 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>req_data does not request avail_ca or avail_co but it is set and being provided
-</pre></div>
-</div>
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-0.7210551313408093
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [9],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">score</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">df</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">df</span><span class="o">.</span><span class="n">chose</span><span class="p">)</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">score</span>
+
+<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1475,14 +1161,19 @@ dtype: float64
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>-3626.18625551293
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [10],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">score</span> <span class="o">*</span> <span class="n">m</span><span class="o">.</span><span class="n">dataframes</span><span class="o">.</span><span class="n">n_cases</span>
+
+<span class="ne">NameError</span>: name &#39;score&#39; is not defined
 </pre></div>
 </div>
 </div>
 </div>
-</div>
-<div class="section" id="using-scikit-learn-within-larch">
-<h2>Using Scikit-Learn within Larch<a class="headerlink" href="#using-scikit-learn-within-larch" title="Permalink to this headline">¶</a></h2>
+</section>
+<section id="using-scikit-learn-within-larch">
+<h2>Using Scikit-Learn within Larch<a class="headerlink" href="#using-scikit-learn-within-larch" title="Permalink to this headline">#</a></h2>
 <p>It is also possible to use machine learning methods in a chained model with Larch.
 This can be implemented through a “prelearning” step, which builds a predictor
 using some other machine learning method, and then adding the result of that
@@ -1497,10 +1188,69 @@ necessarily a sign that you have a good model.</p>
 </pre></div>
 </div>
 </div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="nn">Input In [12],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="kn">import</span> <span class="nn">larch.prelearning</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">68</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">     </span><span class="mi">66</span> <span class="kn">from</span> <span class="nn">.model</span> <span class="kn">import</span> <span class="n">Model</span>
+<span class="g g-Whitespace">     </span><span class="mi">67</span> <span class="kn">from</span> <span class="nn">.dataframes</span> <span class="kn">import</span> <span class="n">DataFrames</span>
+<span class="ne">---&gt; </span><span class="mi">68</span> <span class="kn">from</span> <span class="nn">.dataset</span> <span class="kn">import</span> <span class="n">Dataset</span><span class="p">,</span> <span class="n">DataTree</span>
+<span class="g g-Whitespace">     </span><span class="mi">70</span> <span class="kn">from</span> <span class="nn">.examples</span> <span class="kn">import</span> <span class="n">example</span>
+<span class="g g-Whitespace">     </span><span class="mi">71</span> <span class="kn">from</span> <span class="nn">.util</span> <span class="kn">import</span> <span class="n">figures</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">dataset</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">30</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">from</span> <span class="nn">xarray.core</span> <span class="kn">import</span> <span class="n">dtypes</span>
+<span class="g g-Whitespace">     </span><span class="mi">10</span> <span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span>     <span class="n">TYPE_CHECKING</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">12</span>     <span class="n">Any</span><span class="p">,</span>
+   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
+<span class="g g-Whitespace">     </span><span class="mi">28</span>     <span class="n">overload</span><span class="p">,</span>
+<span class="g g-Whitespace">     </span><span class="mi">29</span> <span class="p">)</span>
+<span class="ne">---&gt; </span><span class="mi">30</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">construct</span><span class="p">,</span> <span class="n">patch</span><span class="p">,</span> <span class="n">flow</span>
+<span class="g g-Whitespace">     </span><span class="mi">31</span> <span class="kn">from</span> <span class="nn">.patch</span> <span class="kn">import</span> <span class="n">register_dataarray_classmethod</span>
+<span class="g g-Whitespace">     </span><span class="mi">33</span> <span class="k">try</span><span class="p">:</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">dataset</span><span class="o">/</span><span class="n">construct</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">4</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="g g-Whitespace">      </span><span class="mi">3</span> <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="ne">----&gt; </span><span class="mi">4</span> <span class="kn">import</span> <span class="nn">sharrow.dataset</span> <span class="k">as</span> <span class="nn">sd</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">sharrow.dataset</span> <span class="kn">import</span> <span class="n">construct</span>
+<span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="kn">from</span> <span class="nn">.patch</span> <span class="kn">import</span> <span class="n">register_dataset_classmethod</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="fm">__init__</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">3</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">1</span> <span class="kn">from</span> <span class="nn">xarray</span> <span class="kn">import</span> <span class="n">DataArray</span>
+<span class="ne">----&gt; </span><span class="mi">3</span> <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">example_data</span><span class="p">,</span> <span class="n">selectors</span><span class="p">,</span> <span class="n">shared_memory</span><span class="p">,</span> <span class="n">sparse</span>
+<span class="g g-Whitespace">      </span><span class="mi">4</span> <span class="kn">from</span> <span class="nn">._version</span> <span class="kn">import</span> <span class="n">version</span> <span class="k">as</span> <span class="n">__version__</span>
+<span class="g g-Whitespace">      </span><span class="mi">5</span> <span class="kn">from</span> <span class="nn">.dataset</span> <span class="kn">import</span> <span class="n">Dataset</span>
+
+<span class="n">File</span> <span class="o">~/</span><span class="n">work</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">larch</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="n">sharrow</span><span class="o">/</span><span class="n">shared_memory</span><span class="o">.</span><span class="n">py</span><span class="p">:</span><span class="mi">10</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+<span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="kn">import</span> <span class="nn">dask.array</span> <span class="k">as</span> <span class="nn">da</span>
+<span class="g g-Whitespace">      </span><span class="mi">9</span> <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="ne">---&gt; </span><span class="mi">10</span> <span class="kn">import</span> <span class="nn">sparse</span>
+<span class="g g-Whitespace">     </span><span class="mi">11</span> <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="g g-Whitespace">     </span><span class="mi">13</span> <span class="k">try</span><span class="p">:</span>
+
+<span class="ne">ModuleNotFoundError</span>: No module named &#39;sparse&#39;
+</pre></div>
+</div>
+</div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dfs</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">DataFrames</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;casenum&#39;</span><span class="p">,</span><span class="s1">&#39;altnum&#39;</span><span class="p">]),</span> <span class="n">ch</span><span class="o">=</span><span class="s1">&#39;chose&#39;</span><span class="p">,</span> <span class="n">crack</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
+<span class="nn">Input In [13],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
+<span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">dfs</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">DataFrames</span><span class="p">(</span><span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;casenum&#39;</span><span class="p">,</span><span class="s1">&#39;altnum&#39;</span><span class="p">]),</span> <span class="n">ch</span><span class="o">=</span><span class="s1">&#39;chose&#39;</span><span class="p">,</span> <span class="n">crack</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="ne">NameError</span>: name &#39;larch&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1518,7 +1268,7 @@ necessarily a sign that you have a good model.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ModuleNotFoundError</span><span class="g g-Whitespace">                       </span>Traceback (most recent call last)
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
 <span class="nn">Input In [14],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">prelearned</span> <span class="o">=</span> <span class="n">larch</span><span class="o">.</span><span class="n">prelearning</span><span class="o">.</span><span class="n">XGBoostPrelearner</span><span class="p">(</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span>     <span class="n">dfs</span><span class="p">,</span>
@@ -1527,18 +1277,7 @@ necessarily a sign that you have a good model.</p>
 <span class="g g-Whitespace">      </span><span class="mi">5</span>     <span class="n">eval_metric</span><span class="o">=</span><span class="s1">&#39;logloss&#39;</span><span class="p">,</span>
 <span class="g g-Whitespace">      </span><span class="mi">6</span> <span class="p">)</span>
 
-<span class="nn">File ~/work/larch/larch/larch/larch/prelearning.py:396,</span> in <span class="ni">XGBoostPrelearner.__init__</span><span class="nt">(self, dataframes, ca_columns, co_columns, cache_file, fit, output_name, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">386</span> <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">387</span> 		<span class="bp">self</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">388</span> 		<span class="n">dataframes</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">394</span> 		<span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">395</span> <span class="p">):</span>
-<span class="ne">--&gt; </span><span class="mi">396</span> 	<span class="kn">from</span> <span class="nn">xgboost</span> <span class="kn">import</span> <span class="n">XGBRegressor</span><span class="p">,</span> <span class="n">XGBClassifier</span>
-<span class="g g-Whitespace">    </span><span class="mi">398</span> 	<span class="n">training_Y</span> <span class="o">=</span> <span class="n">dataframes</span><span class="o">.</span><span class="n">array_ch_as_ce</span><span class="p">()</span>
-<span class="g g-Whitespace">    </span><span class="mi">399</span> 	<span class="n">use_soft</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">any</span><span class="p">((</span><span class="n">training_Y</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">training_Y</span> <span class="o">!=</span> <span class="mf">1.0</span><span class="p">))</span>
-
-<span class="ne">ModuleNotFoundError</span>: No module named &#39;xgboost&#39;
+<span class="ne">NameError</span>: name &#39;larch&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1589,7 +1328,7 @@ necessarily a sign that you have a good model.</p>
 <span class="g g-Whitespace">      </span><span class="mi">7</span> <span class="p">)</span>
 <span class="g g-Whitespace">      </span><span class="mi">8</span> <span class="n">m</span><span class="o">.</span><span class="n">utility_co</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;ASC_SR2&quot;</span><span class="p">)</span>  <span class="o">+</span> <span class="n">P</span><span class="p">(</span><span class="s2">&quot;hhinc#2&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">X</span><span class="p">(</span><span class="s2">&quot;hhinc&quot;</span><span class="p">)</span>
 
-<span class="ne">NameError</span>: name &#39;dfs1&#39; is not defined
+<span class="ne">NameError</span>: name &#39;larch&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1603,14 +1342,12 @@ necessarily a sign that you have a good model.</p>
 </div>
 <div class="cell_output docutils container">
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">ValueError</span><span class="g g-Whitespace">                                </span>Traceback (most recent call last)
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
 <span class="nn">Input In [17],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">load_data</span><span class="p">()</span>
 <span class="g g-Whitespace">      </span><span class="mi">2</span> <span class="n">m</span><span class="o">.</span><span class="n">loglike</span><span class="p">()</span>
 
-<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:597,</span> in <span class="ni">larch.model.controller.Model5c.load_data</span><span class="nt">()</span>
-
-<span class="ne">ValueError</span>: dataservice is not defined
+<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
@@ -1622,215 +1359,18 @@ necessarily a sign that you have a good model.</p>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_html"><h3>Iteration 000 [Exception] </h3></div><div class="output text_html"><p>LL = ...</p></div><div class="output text_html"><div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>value</th>
-      <th>initvalue</th>
-      <th>nullvalue</th>
-      <th>minimum</th>
-      <th>maximum</th>
-      <th>holdfast</th>
-      <th>note</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>ASC_2</th>
-      <td>-2.178014</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>ASC_3</th>
-      <td>-3.725078</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>ASC_4</th>
-      <td>-0.670861</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>ASC_5</th>
-      <td>-2.376328</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>ASC_6</th>
-      <td>-0.206775</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>HHINC#2</th>
-      <td>-0.002170</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>HHINC#3</th>
-      <td>0.000358</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>HHINC#4</th>
-      <td>-0.005286</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>HHINC#5</th>
-      <td>-0.012808</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>HHINC#6</th>
-      <td>-0.009686</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>totcost</th>
-      <td>-0.004920</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-    <tr>
-      <th>tottime</th>
-      <td>-0.051342</td>
-      <td>0.0</td>
-      <td>0.0</td>
-      <td>-inf</td>
-      <td>inf</td>
-      <td>0</td>
-      <td></td>
-    </tr>
-  </tbody>
-</table>
-</div></div><div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>error in maximize_loglike
-Traceback (most recent call last):
-  File &quot;/home/runner/work/larch/larch/larch/larch/model/optimization.py&quot;, line 258, in maximize_loglike
-    current_ll, tolerance, iter_bhhh, steps_bhhh, message = model.simple_fit_bhhh(
-  File &quot;larch/model/abstract_model.pyx&quot;, line 357, in larch.model.abstract_model.AbstractChoiceModel.simple_fit_bhhh
-  File &quot;larch/model/abstract_model.pyx&quot;, line 199, in larch.model.abstract_model.AbstractChoiceModel._loglike2_bhhh_tuple
-  File &quot;larch/model/controller.pyx&quot;, line 787, in larch.model.controller.Model5c.loglike2_bhhh
-  File &quot;larch/model/controller.pyx&quot;, line 852, in larch.model.controller.Model5c.__prepare_for_compute
-larch.exceptions.MissingDataError: model.dataframes does not define data_ch
-</pre></div>
-</div>
 <div class="output traceback highlight-ipythontb notranslate"><div class="highlight"><pre><span></span><span class="gt">---------------------------------------------------------------------------</span>
-<span class="ne">MissingDataError</span><span class="g g-Whitespace">                          </span>Traceback (most recent call last)
+<span class="ne">NameError</span><span class="g g-Whitespace">                                 </span>Traceback (most recent call last)
 <span class="nn">Input In [18],</span> in <span class="ni">&lt;cell line: 1&gt;</span><span class="nt">()</span>
 <span class="ne">----&gt; </span><span class="mi">1</span> <span class="n">m</span><span class="o">.</span><span class="n">maximize_loglike</span><span class="p">()</span>
 
-<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:641,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.maximize_loglike</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/larch/model/optimization.py:258,</span> in <span class="ni">maximize_loglike</span><span class="nt">(model, method, method2, quiet, screen_update_throttle, final_screen_update, check_for_overspecification, return_tags, reuse_tags, iteration_number, iteration_number_tail, options, maxiter, bhhh_start, jumpstart, jumpstart_split, leave_out, keep_only, subsample, return_dashboard, dashboard, prior_result, **kwargs)</span>
-<span class="g g-Whitespace">    </span><span class="mi">241</span>         <span class="n">current_ll</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">iter_bhhh</span><span class="p">,</span> <span class="n">steps_bhhh</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">fit_bhhh</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">242</span>             <span class="c1"># steplen=1.0,</span>
-<span class="g g-Whitespace">    </span><span class="mi">243</span>             <span class="c1"># momentum=5,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">255</span>             <span class="c1"># max_constraint_sharpness=1e6,</span>
-<span class="g g-Whitespace">    </span><span class="mi">256</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">257</span>     <span class="k">else</span><span class="p">:</span>
-<span class="ne">--&gt; </span><span class="mi">258</span>         <span class="n">current_ll</span><span class="p">,</span> <span class="n">tolerance</span><span class="p">,</span> <span class="n">iter_bhhh</span><span class="p">,</span> <span class="n">steps_bhhh</span><span class="p">,</span> <span class="n">message</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">simple_fit_bhhh</span><span class="p">(</span>
-<span class="g g-Whitespace">    </span><span class="mi">259</span>             <span class="n">ctol</span><span class="o">=</span><span class="n">stopping_tol</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">260</span>             <span class="n">maxiter</span><span class="o">=</span><span class="n">max_iter</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">261</span>             <span class="n">callback</span><span class="o">=</span><span class="n">callback</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">262</span>             <span class="n">jumpstart</span><span class="o">=</span><span class="n">jumpstart</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">263</span>             <span class="n">jumpstart_split</span><span class="o">=</span><span class="n">jumpstart_split</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">264</span>             <span class="n">leave_out</span><span class="o">=</span><span class="n">leave_out</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">265</span>             <span class="n">keep_only</span><span class="o">=</span><span class="n">keep_only</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">266</span>             <span class="n">subsample</span><span class="o">=</span><span class="n">subsample</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">267</span>         <span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">268</span>     <span class="n">raw_result</span> <span class="o">=</span> <span class="p">{</span>
-<span class="g g-Whitespace">    </span><span class="mi">269</span>         <span class="s1">&#39;loglike&#39;</span> <span class="p">:</span><span class="n">current_ll</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">270</span>         <span class="s1">&#39;x&#39;</span><span class="p">:</span> <span class="n">model</span><span class="o">.</span><span class="n">pvals</span><span class="p">,</span>
-   <span class="p">(</span><span class="o">...</span><span class="p">)</span>
-<span class="g g-Whitespace">    </span><span class="mi">273</span>         <span class="s1">&#39;message&#39;</span> <span class="p">:</span><span class="n">message</span><span class="p">,</span>
-<span class="g g-Whitespace">    </span><span class="mi">274</span>     <span class="p">}</span>
-<span class="g g-Whitespace">    </span><span class="mi">275</span> <span class="k">except</span> <span class="ne">NotImplementedError</span><span class="p">:</span>
-
-<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:357,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel.simple_fit_bhhh</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/larch/model/abstract_model.pyx:199,</span> in <span class="ni">larch.model.abstract_model.AbstractChoiceModel._loglike2_bhhh_tuple</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:787,</span> in <span class="ni">larch.model.controller.Model5c.loglike2_bhhh</span><span class="nt">()</span>
-
-<span class="nn">File ~/work/larch/larch/larch/larch/model/controller.pyx:852,</span> in <span class="ni">larch.model.controller.Model5c.__prepare_for_compute</span><span class="nt">()</span>
-
-<span class="ne">MissingDataError</span>: model.dataframes does not define data_ch
+<span class="ne">NameError</span>: name &#39;m&#39; is not defined
 </pre></div>
 </div>
 </div>
 </div>
-</div>
-</div>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1854,9 +1394,11 @@ larch.exceptions.MissingDataError: model.dataframes does not define data_ch
 
               </div>
               
-            
-                <!-- Previous / next buttons -->
-<div class='prev-next-area'> 
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
     <a class='left-prev' id="prev-link" href="linear-funcs.html" title="previous page">
         <i class="fas fa-angle-left"></i>
         <div class="prev-next-info">
@@ -1872,24 +1414,28 @@ larch.exceptions.MissingDataError: model.dataframes does not define data_ch
     <i class="fas fa-angle-right"></i>
     </a>
 </div>
-            
+            </footer>
         </div>
     </div>
-    <footer class="footer">
-  <p>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By Jeffrey Newman<br/>
+  
+      &copy; Copyright 2022.<br/>
+</p>
+        </footer>
+    </div>
     
-      By Jeffrey Newman<br/>
-    
-        &copy; Copyright 2021.<br/>
-  </p>
-</footer>
-</main>
+</div>
 
 
       </div>
     </div>
   
-  <script src="../_static/js/index.be7d3bbb2ef33a8344ce.js"></script>
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
 
   </body>
 </html>
