@@ -52,3 +52,4 @@ dependencies:
   - xlsxwriter
   - xmle >=0.1.3
   - zarr
+  - xgboost
