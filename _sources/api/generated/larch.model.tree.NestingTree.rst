@@ -21,6 +21,7 @@
       ~NestingTree.add_nodes_from
       ~NestingTree.add_weighted_edges_from
       ~NestingTree.adjacency
+      ~NestingTree.as_arrays
       ~NestingTree.clear
       ~NestingTree.clear_edges
       ~NestingTree.copy
