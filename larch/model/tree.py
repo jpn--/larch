@@ -956,7 +956,7 @@ class NestingTree(nx.DiGraph):
 
         return mu, muslots, up, dn, num, start, val
 
-    def as_arrays(self, model=np.float32, trim=False, parameter_dict=None):
+    def as_arrays(self, model=np.float32, trim=True, parameter_dict=None):
         """
         Express this tree as a dict of arrays for use with sharrow.
 
@@ -965,7 +965,7 @@ class NestingTree(nx.DiGraph):
         model : Model or dtype
             Give a model to extract MU values as parameter slot positions,
             or a dtype to extract as
-        trim : bool, default False
+        trim : bool, default True
             Trim the node slot arrays to be only for nests.
         parameter_dict : Mapping[str,Number], optional
             Maps named parameters to values.
