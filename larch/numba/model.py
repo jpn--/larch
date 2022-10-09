@@ -91,6 +91,9 @@ def quantity_from_data_ca(
         holdfast_arr,                   # float input shape=[n_params]
         array_av,                       # int8 input shape=[n_alts]
         array_ca,                       # float input shape=[n_alts, n_ca_vars]
+        array_ce_data,                  # float input shape=[n_casealts, n_ca_vars]
+        array_ce_indices,               # int input shape=[n_casealts]
+        array_ce_ptr,                   # int input shape=[2]
         utility_elem,                   # float output shape=[n_alts]
         dutility_elem,                  # float output shape=[n_alts, n_params]
 ):
@@ -103,26 +106,19 @@ def quantity_from_data_ca(
         scale_param_value = 1.0
         scale_param_holdfast = 1
 
-    for j in range(n_alts):
-
-        # if self._array_ce_reversemap is not None:
-        #     if c >= self._array_ce_reversemap.shape[0] or j >= self._array_ce_reversemap.shape[1]:
-        #         row = -1
-        #     else:
-        #         row = self._array_ce_reversemap[c, j]
-        row = -1
-
-        if array_av[j]: # and row != -1:
-
+    if array_ce_data.shape[0] > 0:
+        j = 0
+        for row in range(array_ce_ptr[0], array_ce_ptr[1]):
+            while array_ce_indices[row] > j:
+                # skipped alts are unavail, i.e. have zero size
+                utility_elem[j] = 0
+                j += 1
             if model_q_ca_param.shape[0]:
                 for i in range(model_q_ca_param.shape[0]):
-                    # if row >= 0:
-                    #     _temp = self._array_ce[row, self.model_quantity_ca_data[i]]
-                    # else:
                     _temp = (
-                        array_ca[j, model_q_ca_data[i]]
-                        * model_q_ca_param_scale[i]
-                        * np.exp(parameter_arr[model_q_ca_param[i]])
+                            array_ce_data[row, model_q_ca_data[i]]
+                            * model_q_ca_param_scale[i]
+                            * np.exp(parameter_arr[model_q_ca_param[i]])
                     )
                     utility_elem[j] += _temp
                     if not holdfast_arr[model_q_ca_param[i]]:
@@ -137,8 +133,44 @@ def quantity_from_data_ca(
                 if (model_q_scale_param[0] >= 0) and not scale_param_holdfast:
                     dutility_elem[j, model_q_scale_param[0]] += _tempsize
 
-        else:
-            utility_elem[j] = -np.inf
+            j += 1
+        while n_alts > j:
+            # skipped alts are unavail, i.e. have zero size
+            utility_elem[j] = 0
+            j += 1
+    else:
+
+        for j in range(n_alts):
+
+            row = -1
+
+            if array_av[j]: # and row != -1:
+
+                if model_q_ca_param.shape[0]:
+                    for i in range(model_q_ca_param.shape[0]):
+                        # if row >= 0:
+                        #     _temp = self._array_ce[row, self.model_quantity_ca_data[i]]
+                        # else:
+                        _temp = (
+                            array_ca[j, model_q_ca_data[i]]
+                            * model_q_ca_param_scale[i]
+                            * np.exp(parameter_arr[model_q_ca_param[i]])
+                        )
+                        utility_elem[j] += _temp
+                        if not holdfast_arr[model_q_ca_param[i]]:
+                            dutility_elem[j, model_q_ca_param[i]] += _temp * scale_param_value
+
+                    for i in range(model_q_ca_param.shape[0]):
+                        if not holdfast_arr[model_q_ca_param[i]]:
+                            dutility_elem[j, model_q_ca_param[i]] /= utility_elem[j]
+
+                    _tempsize = np.log(utility_elem[j])
+                    utility_elem[j] = _tempsize * scale_param_value
+                    if (model_q_scale_param[0] >= 0) and not scale_param_holdfast:
+                        dutility_elem[j, model_q_scale_param[0]] += _tempsize
+
+            else:
+                utility_elem[j] = -np.inf
 
 
 @njit(error_model='numpy', fastmath=True, cache=True)
@@ -554,6 +586,9 @@ def _numba_master(
         holdfast_arr,            # float input shape=[n_params]
         array_av,                # int8 input shape=[n_nodes]
         array_ca,                # float input shape=[n_alts, n_ca_vars]
+        array_ce_data,           # float input shape=[n_casealts, n_ca_vars]
+        array_ce_indices,        # int input shape=[n_casealts]
+        array_ce_ptr,            # int input shape=[2]
         utility[:n_alts],        # float output shape=[n_alts]
         dutility[:n_alts],
     )
@@ -1372,7 +1407,7 @@ class NumbaModel(_BaseModel):
                 else:
                     penalty = 0.0
 
-        except:
+        except Exception as error:
             shp = lambda y: getattr(y, 'shape', 'scalar')
             dtp = lambda y: getattr(y, 'dtype', f'{type(y)} ')
             import inspect
@@ -1392,7 +1427,8 @@ class NumbaModel(_BaseModel):
             for n, (a, s) in enumerate(zip(self.work_arrays, out_sig_shapes), start=n+1):
                 s = s.rstrip(" ),")
                 print(f" {arg_names[n]:{arg_name_width}} [{n:2}] {s.strip():9}: {dtp(a)}{shp(a)}")
-            raise
+            if not isinstance(error, RuntimeError):
+                raise
         return result_arrays, penalty
 
     @property

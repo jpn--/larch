@@ -1153,3 +1153,54 @@ def test_eville_mode_with_dataset():
     m.datatree = tree
     assert m.loglike() == approx(-8047.006193851376)
     assert m.n_cases == 20739
+
+
+def test_eville_idce_quant():
+    from larch.numba import example, DataTree
+    hh, pp, tour, skims, emp = example(200, ['hh', 'pp', 'tour', 'skims', 'emp'])
+    tour = tour.drop(
+        columns=["TOURMODE", "TOURPURP", "N_STOPS", "N_TRIPS", "N_TRIPS_HBW", "N_TRIPS_HBO", "N_TRIPS_NHB"])
+    tour = tour.merge(hh[["HHID", "HOMETAZ"]], on="HHID")
+    observations = tour[["TOURID", "DTAZ", "HOMETAZ"]].copy()
+    observations.TOURID += 1
+    # turn idco tours into idca and attach distance and employment
+    distance = pd.DataFrame(
+        np.array(skims['AUTO_DIST'])
+    ).rename_axis(index='otaz').unstack().reset_index().rename(columns={"level_0": "dtaz", 0: "distance"})
+    distance.dtaz += 1
+    distance.otaz += 1
+    obs_ca = pd.merge(
+        emp[["TOTAL_EMP"]].reset_index(),
+        observations,
+        how="cross"
+    )
+    assert observations.shape[0] * emp.shape[0] == obs_ca.shape[0]
+    obs_ca = obs_ca.merge(
+        distance.rename(columns={"otaz": "HOMETAZ", "dtaz": "TAZ"}),
+        on=["HOMETAZ", "TAZ"],
+        how="left")
+    obs_ca["chosen"] = (obs_ca.DTAZ == obs_ca.TAZ).astype('int')
+    obs_ca = obs_ca.set_index(["TOURID", "TAZ"])
+    obs_ca['avail'] = 1
+    # Sample x% to produce idce data
+    frac_to_keep = 0.9
+    obs_idce = pd.concat([
+        obs_ca.loc[obs_ca.chosen == 0].sample(frac=frac_to_keep, replace=False, random_state=1),
+        obs_ca.loc[obs_ca.chosen == 1]
+    ]).sort_index()
+    tree = DataTree(
+        obs=Dataset.construct.from_idce(obs_idce, crack=False),
+    )
+    mx = NumbaModel(datatree=tree)
+    mx.choice_ca_var = "chosen"
+    mx.quantity_ca = P.emp_p * X('TOTAL_EMP')
+    mx.quantity_scale = P.Theta
+    mx.utility_ca = P.distance * X.distance
+    mx.availability_var = 'avail'
+    mx.lock_values(emp_p=0, Theta=1)
+    mx.set_cap(10)
+    ll_init = mx.loglike()
+    assert ll_init == approx(-75619.33743479446)
+    result = mx.maximize_loglike()
+    assert result.loglike == approx(-69408.93781754425)
+    assert result.x['distance'] == approx(-0.37974107678625235)

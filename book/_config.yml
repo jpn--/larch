@@ -1,7 +1,7 @@
 # Book settings
 # Learn more at https://jupyterbook.org/customize/config.html
 
-title: "v5.7.0"
+title: "v5.7.1"
 author: Jeffrey Newman
 logo: img/larch-logo.png
 
@@ -99,6 +99,6 @@ sphinx:
       switcher:
         json_url: https://larch.newman.me/_static/switcher.json
         url_template: https://larch.newman.me/v{version}/
-        version_match: 5.7.0
+        version_match: 5.7.1
       navbar_end:
       - version-switcher

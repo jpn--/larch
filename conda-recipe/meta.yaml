@@ -1,6 +1,6 @@
 package:
   name: larch
-  version: "5.7.0"
+  version: "5.7.1"
 
 source:
   path: ../
@@ -34,7 +34,7 @@ requirements:
     - llvm-openmp  # [osx]
     - {{ pin_compatible('numpy', upper_bound='1.22') }}
     - scipy >=1.1
-    - pandas >=0.24
+    - pandas >=0.24,<1.5
     - pytables >=3.4.4  # https://github.com/conda-forge/pytables-feedstock/issues/31
     - blosc >=1.14.3
     - matplotlib >=3.0
