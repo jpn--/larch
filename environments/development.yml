@@ -31,7 +31,7 @@ dependencies:
   - numexpr
   - openmatrix
   - openpyxl
-  - pandas >=1.2
+  - pandas >=1.2,<1.5
   - pillow
   - pyarrow
   - pydot
