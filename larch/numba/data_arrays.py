@@ -222,7 +222,7 @@ def prepare_data(
             model_dataset['ch'] = da_ch
     if 'choice_co_code' in request:
         log.debug(f"requested choice_co_code data: {request['choice_co_code']}")
-        choicecodes = datasource[request['choice_co_code']]
+        choicecodes = datatree_co[request['choice_co_code']]
         da_ch = DataArray(
             float_dtype(0),
             dims=[datatree.CASEID, datatree.ALTID],
