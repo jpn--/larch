@@ -1,6 +1,8 @@
 larch
 =====
 
+**We've moved!  Find version 6 and up at [https://github.com/driftlesslabs/larch].**
+
 .. image:: https://img.shields.io/conda/v/conda-forge/larch
     :target: https://anaconda.org/conda-forge/larch
     :class: statusbadge
